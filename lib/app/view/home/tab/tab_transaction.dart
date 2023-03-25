@@ -1,12 +1,12 @@
-import 'package:fwheirs/app/data/data_file.dart';
-import 'package:fwheirs/app/models/model_portfolio.dart';
-import 'package:fwheirs/base/color_data.dart';
-import 'package:fwheirs/base/resizer/fetch_pixels.dart';
-import 'package:fwheirs/base/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:fwheirs/app/data/data_file.dart';
+import 'package:fwheirs/app/models/model_portfolio.dart';
+import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
+import 'package:fwheirs/base/resizer/fetch_pixels.dart';
+import 'package:fwheirs/base/widget_utils.dart';
 
 class TabTransaction extends StatefulWidget {
   const TabTransaction({Key? key}) : super(key: key);
@@ -63,7 +63,7 @@ class _TabTransactionState extends State<TabTransaction> {
   Container priceAlertWidget() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).secondaryHeaderColor,
           boxShadow: [
             BoxShadow(
                 color: shadowColor, blurRadius: 23, offset: const Offset(0, 7))
@@ -76,8 +76,11 @@ class _TabTransactionState extends State<TabTransaction> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          getCustomFont("Portfolio price alert", 15, Colors.black, 1,
-              fontWeight: FontWeight.w600),
+          getMediumCustomFont(
+            context,
+            "Portfolio price alert",
+            fontWeight: FontWeight.w600,
+          ),
           CupertinoSwitch(
             value: isSwitch,
             onChanged: (value) {
@@ -96,7 +99,7 @@ class _TabTransactionState extends State<TabTransaction> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: horspace, vertical: horspace),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).secondaryHeaderColor,
           boxShadow: [
             BoxShadow(
                 color: shadowColor, blurRadius: 23, offset: const Offset(0, 7))
@@ -104,14 +107,17 @@ class _TabTransactionState extends State<TabTransaction> {
           borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(14))),
       child: Column(
         children: [
-          getCustomFont("Total Balance", 15, Colors.black, 1,
-              fontWeight: FontWeight.w400),
+          getMediumCustomFont(
+            context,
+            "Total Balance",
+            fontWeight: FontWeight.w400,
+          ),
           getVerSpace(FetchPixels.getPixelHeight(6)),
           getCustomFont("\$0.00", 18, blueColor, 1,
               fontWeight: FontWeight.w600),
           getVerSpace(FetchPixels.getPixelHeight(20)),
-          getButtonWithIcon(
-              context, buttonColor, "Deposit INR", Colors.black, () {}, 15,
+          getButtonWithIcon(context, Theme.of(context).scaffoldBackgroundColor,
+              "Deposit INR", Colors.black, () {}, 15,
               weight: FontWeight.w400,
               borderRadius:
                   BorderRadius.circular(FetchPixels.getPixelHeight(12)),
@@ -126,7 +132,7 @@ class _TabTransactionState extends State<TabTransaction> {
   Container currentValueWidget() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).secondaryHeaderColor,
           boxShadow: [
             BoxShadow(
                 color: shadowColor, blurRadius: 23, offset: const Offset(0, 7))
@@ -145,8 +151,12 @@ class _TabTransactionState extends State<TabTransaction> {
                     getCustomFont("Current value", 15, textColor, 1,
                         fontWeight: FontWeight.w400),
                     getVerSpace(FetchPixels.getPixelHeight(6)),
-                    getCustomFont("\$25.56", 18, Colors.black, 1,
-                        fontWeight: FontWeight.w600),
+                    getMediumCustomFont(
+                      context,
+                      "\$25.56",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                     getVerSpace(FetchPixels.getPixelHeight(20)),
                   ],
                 ),
@@ -161,8 +171,12 @@ class _TabTransactionState extends State<TabTransaction> {
                     getCustomFont("Invested value", 15, textColor, 1,
                         fontWeight: FontWeight.w400),
                     getVerSpace(FetchPixels.getPixelHeight(6)),
-                    getCustomFont("\$30.86", 18, Colors.black, 1,
-                        fontWeight: FontWeight.w600),
+                    getMediumCustomFont(
+                      context,
+                      "\$30.86",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                     getVerSpace(FetchPixels.getPixelHeight(20)),
                   ],
                 ),
@@ -224,7 +238,7 @@ class _TabTransactionState extends State<TabTransaction> {
               top: FetchPixels.getPixelHeight(16),
               bottom: FetchPixels.getPixelHeight(16)),
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).secondaryHeaderColor,
               boxShadow: [
                 BoxShadow(
                     color: shadowColor,
@@ -245,9 +259,11 @@ class _TabTransactionState extends State<TabTransaction> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      getCustomFont(
-                          modelPortfolio.name ?? "", 15, Colors.black, 1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(
+                        context,
+                        modelPortfolio.name ?? "",
+                        fontWeight: FontWeight.w400,
+                      ),
                       getVerSpace(FetchPixels.getPixelHeight(4)),
                       getCustomFont(
                           modelPortfolio.profit ?? "",
@@ -261,8 +277,12 @@ class _TabTransactionState extends State<TabTransaction> {
                   )
                 ],
               ),
-              getCustomFont("\$${modelPortfolio.price}", 18, Colors.black, 1,
-                  fontWeight: FontWeight.w600)
+              getMediumCustomFont(
+                context,
+                "\$${modelPortfolio.price}",
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              )
             ],
           ),
         );
@@ -280,7 +300,7 @@ class _TabTransactionState extends State<TabTransaction> {
           title: "Transaction",
           fontsize: 24,
           weight: FontWeight.w700,
-          textColor: Colors.black,
+          textColor: Theme.of(context).textTheme.bodyLarge!.color!,
           isleftimage: true,
           isrightimage: true,
           rightimage: "more.svg"),

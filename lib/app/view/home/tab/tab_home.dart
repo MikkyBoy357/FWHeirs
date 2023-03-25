@@ -53,12 +53,14 @@ class _TabHomeState extends State<TabHome> {
             return Stack(
               children: [
                 Container(
-                  color: blueColor,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? blueColor
+                      : Theme.of(context).secondaryHeaderColor,
                   padding:
                       EdgeInsets.only(top: FetchPixels.getPixelHeight(268)),
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                   ),
                 ),
@@ -122,9 +124,12 @@ class _TabHomeState extends State<TabHome> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      getCustomFont(
-                                          "Investments", 18, Colors.black, 1,
-                                          fontWeight: FontWeight.w600),
+                                      getMediumCustomFont(
+                                        context,
+                                        "Investments",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                       GestureDetector(
                                         onTap: () {
                                           Constant.navigatePush(
@@ -399,7 +404,7 @@ class _TabHomeState extends State<TabHome> {
                 bottom: FetchPixels.getPixelHeight(16),
               ),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).secondaryHeaderColor,
                   boxShadow: [
                     BoxShadow(
                         color: shadowColor,
@@ -442,19 +447,17 @@ class _TabHomeState extends State<TabHome> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          getCustomFont(
-                              "PLAN: ${currentInvestment.planId}" ?? "",
-                              15,
-                              Colors.black,
-                              1,
-                              fontWeight: FontWeight.w600),
+                          getMediumCustomFont(
+                            context,
+                            "PLAN: ${currentInvestment.planId}" ?? "",
+                            fontWeight: FontWeight.w600,
+                          ),
                           getVerSpace(FetchPixels.getPixelHeight(4)),
-                          getCustomFont(
-                              "BROKER: ${currentInvestment.brokerId}" ?? "",
-                              15,
-                              Colors.black,
-                              1,
-                              fontWeight: FontWeight.w600),
+                          getMediumCustomFont(
+                            context,
+                            "BROKER: ${currentInvestment.brokerId}" ?? "",
+                            fontWeight: FontWeight.w600,
+                          ),
                           // getVerSpace(FetchPixels.getPixelHeight(4)),
                           // getCustomFont(
                           //     "modelPortfolio.profit" ?? "",

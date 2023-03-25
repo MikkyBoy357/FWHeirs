@@ -107,12 +107,14 @@ Widget getMediumCustomFont(
   String text, {
   double? fontSize,
   Color? fontColor,
+  FontWeight? fontWeight,
 }) {
   return Text(
     text,
     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: fontColor,
           fontSize: fontSize,
+          fontWeight: fontWeight,
         ),
     softWrap: true,
     textScaleFactor: FetchPixels.getTextScale(),
@@ -281,10 +283,11 @@ Widget getButtonWithIcon(BuildContext context, Color bgColor, String text,
               (prefixIcon)
                   ? getHorSpace(FetchPixels.getPixelHeight(12))
                   : getHorSpace(0),
-              getCustomFont(text, fontsize, textColor, 1,
-                  textAlign: TextAlign.center,
-                  fontWeight: weight,
-                  fontFamily: fontFamily)
+              getMediumCustomFont(
+                context,
+                text,
+                fontSize: fontsize,
+              )
             ],
           ),
           Row(

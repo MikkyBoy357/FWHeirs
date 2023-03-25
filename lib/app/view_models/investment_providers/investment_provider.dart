@@ -120,6 +120,14 @@ class InvestmentProvider extends ChangeNotifier {
       // investments = response.data['data'];
       notifyListeners();
       Navigator.of(context, rootNavigator: true).pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return SuccessDialog(
+            text: "${response.data['message']}",
+          );
+        },
+      );
     } on DioError catch (e) {
       print("Error => $e");
       print(e.message);

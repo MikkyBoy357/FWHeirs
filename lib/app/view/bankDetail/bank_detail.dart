@@ -42,7 +42,6 @@ class _BankDetailState extends State<BankDetail> {
       builder: (context, referralsProvider, _) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
           body: SafeArea(
             child: getPaddingWidget(
               EdgeInsets.symmetric(horizontal: horSpace),
@@ -63,13 +62,7 @@ class _BankDetailState extends State<BankDetail> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 getVerSpace(FetchPixels.getPixelHeight(39)),
-                                getCustomFont(
-                                  "Your cards",
-                                  16,
-                                  Colors.black,
-                                  1,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                getMediumCustomFont(context, "Your banks:"),
                                 getVerSpace(FetchPixels.getPixelHeight(16)),
                                 Builder(builder: (context) {
                                   if (referralsProvider.myBanks.isNotEmpty) {
@@ -139,7 +132,7 @@ class _BankDetailState extends State<BankDetail> {
                         horizontal: FetchPixels.getPixelHeight(10),
                         vertical: FetchPixels.getPixelHeight(10)),
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).secondaryHeaderColor,
                         boxShadow: [
                           BoxShadow(
                               color: shadowColor,
@@ -157,7 +150,8 @@ class _BankDetailState extends State<BankDetail> {
                               height: FetchPixels.getPixelHeight(62),
                               width: FetchPixels.getPixelHeight(62),
                               decoration: BoxDecoration(
-                                  color: paymentBg,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius: BorderRadius.circular(
                                       FetchPixels.getPixelHeight(12))),
                               padding: EdgeInsets.symmetric(
@@ -169,17 +163,23 @@ class _BankDetailState extends State<BankDetail> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                getCustomFont(bankModel.bankName ?? "", 15,
-                                    Colors.black, 1,
-                                    fontWeight: FontWeight.w600),
+                                getMediumCustomFont(
+                                  context,
+                                  bankModel.bankName ?? "",
+                                  fontWeight: FontWeight.w600,
+                                ),
                                 getVerSpace(FetchPixels.getPixelHeight(4)),
-                                getCustomFont(bankModel.accountNumber ?? '', 15,
-                                    Colors.black, 1,
-                                    fontWeight: FontWeight.w400),
+                                getMediumCustomFont(
+                                  context,
+                                  bankModel.accountNumber ?? "",
+                                  fontWeight: FontWeight.w400,
+                                ),
                                 getVerSpace(FetchPixels.getPixelHeight(4)),
-                                getCustomFont(bankModel.accountName ?? "", 15,
-                                    Colors.black, 1,
-                                    fontWeight: FontWeight.w600),
+                                getMediumCustomFont(
+                                  context,
+                                  bankModel.accountName ?? "",
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ],
                             )
                           ],
@@ -246,7 +246,7 @@ class _BankDetailState extends State<BankDetail> {
       title: "Bank Details",
       fontsize: 24,
       weight: FontWeight.w700,
-      textColor: Colors.black,
+      textColor: Theme.of(context).textTheme.bodyMedium!.color!,
     );
   }
 }

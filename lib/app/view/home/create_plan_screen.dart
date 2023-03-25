@@ -49,14 +49,12 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
         builder: (context, investmentProvider, _) {
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.white,
             bottomNavigationBar: Container(
               padding: EdgeInsets.symmetric(
                   horizontal: horSpace,
                   vertical: FetchPixels.getPixelHeight(30)),
-              child: getButton(
-                  context, blueColor, "Save", Colors.white, () {
-                    investmentProvider.createInvestment(context);
+              child: getButton(context, blueColor, "Save", Colors.white, () {
+                investmentProvider.createInvestment(context);
               }, 16,
                   weight: FontWeight.w600,
                   borderRadius:
@@ -151,7 +149,7 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
       title: "Create Plan",
       fontsize: 24,
       weight: FontWeight.w700,
-      textColor: Colors.black,
+      textColor: Theme.of(context).textTheme.bodyMedium!.color!,
     );
   }
 }

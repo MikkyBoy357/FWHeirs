@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_history.dart';
 import 'package:fwheirs/app/view/dialog/statement_dialog.dart';
@@ -5,8 +7,6 @@ import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
@@ -29,12 +29,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return WillPopScope(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           appBar: buildAppBar(),
           body: SafeArea(
-            child: getPaddingWidget(
-              EdgeInsets.symmetric(horizontal: horSpace),
-              Column(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
                 children: [
                   getVerSpace(
                     FetchPixels.getPixelHeight(20),
@@ -85,7 +86,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               horizontal: FetchPixels.getPixelHeight(16),
                               vertical: FetchPixels.getPixelHeight(16)),
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).secondaryHeaderColor,
                               boxShadow: [
                                 BoxShadow(
                                     color: shadowColor,
@@ -107,14 +108,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      getCustomFont(modelHistory.name ?? "", 15,
-                                          Colors.black, 1,
-                                          fontWeight: FontWeight.w600),
+                                      getMediumCustomFont(
+                                        context,
+                                        modelHistory.name ?? "",
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                       getVerSpace(
                                           FetchPixels.getPixelHeight(3)),
-                                      getCustomFont(modelHistory.btc ?? "", 15,
-                                          Colors.black, 1,
-                                          fontWeight: FontWeight.w400)
+                                      getMediumCustomFont(
+                                        context,
+                                        modelHistory.btc ?? "",
+                                        fontWeight: FontWeight.w400,
+                                      )
                                     ],
                                   )
                                 ],
@@ -180,19 +185,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   AppBar buildAppBar() {
     return AppBar(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
+      automaticallyImplyLeading: false,
       elevation: 0,
       toolbarHeight: FetchPixels.getPixelHeight(66),
       leading: getPaddingWidget(
-          EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(21)),
-          GestureDetector(
-            child: getSvgImage("back.svg"),
-            onTap: () {
-              backToPrev();
-            },
-          )),
-      title: getCustomFont("History", 22, Colors.black, 1,
-          fontWeight: FontWeight.w700),
+        EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(21)),
+        GestureDetector(
+          child: getSvgImage("back.svg"),
+          onTap: () {
+            backToPrev();
+          },
+        ),
+      ),
+      title: getCustomFont(
+        "History",
+        22,
+        Theme.of(context).textTheme.bodyLarge!.color!,
+        1,
+        fontWeight: FontWeight.w700,
+      ),
       centerTitle: true,
       actions: [
         Row(

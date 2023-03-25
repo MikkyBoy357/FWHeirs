@@ -26,79 +26,60 @@ class _TabProfileState extends State<TabProfile> {
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
-    return SafeArea(
-      child: Scaffold(
-        body: Consumer2<ProfileProvider, AuthProvider>(
-          builder: (context, profileProvider, authProvider, _) {
-            return Column(
-              children: [
-                getVerSpace(FetchPixels.getPixelHeight(14)),
-                appBar(context),
-                getVerSpace(FetchPixels.getPixelHeight(39)),
-                Expanded(
-                  flex: 1,
-                  child: SingleChildScrollView(
-                    // ignore: prefer_const_constructors
-                    physics: BouncingScrollPhysics(),
-                    child: AnimationLimiter(
-                      child: getPaddingWidget(
-                        EdgeInsets.symmetric(horizontal: horspace),
-                        Column(
-                          children: AnimationConfiguration.toStaggeredList(
-                            duration: const Duration(milliseconds: 200),
-                            childAnimationBuilder: (widget) => SlideAnimation(
-                              horizontalOffset: 44.0,
-                              child: FadeInAnimation(child: widget),
-                            ),
-                            children: [
-                              profileImageWidget(),
-                              getVerSpace(FetchPixels.getPixelHeight(20)),
-                              getCustomFont(
-                                  "${profileProvider.myProfileInfo.firstname} ${profileProvider.myProfileInfo.lastname}",
-                                  18,
-                                  Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .color!,
-                                  1,
-                                  fontWeight: FontWeight.w600,
-                                  textAlign: TextAlign.center),
-                              getVerSpace(FetchPixels.getPixelHeight(6)),
-                              getCustomFont(
-                                  "${profileProvider.myProfileInfo.email}",
-                                  15,
-                                  Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .color!,
-                                  1,
-                                  fontWeight: FontWeight.w400,
-                                  textAlign: TextAlign.center),
-                              getVerSpace(FetchPixels.getPixelHeight(30)),
-                              myProfileButton(context),
-                              getVerSpace(FetchPixels.getPixelHeight(20)),
-                              bankDetailButton(context),
-                              getVerSpace(FetchPixels.getPixelHeight(20)),
-                              historyButton(context),
-                              getVerSpace(FetchPixels.getPixelHeight(40)),
-                              logoutButton(
-                                context,
-                                onTap: () => authProvider.logout(context),
-                              ),
-                              getVerSpace(FetchPixels.getPixelHeight(20)),
-                              terminateAccountButton(context),
-                              getVerSpace(FetchPixels.getPixelHeight(40)),
-                            ],
-                          ),
-                        ),
-                      ),
+    return Scaffold(
+      appBar: buildAppBar(),
+      body: Consumer2<ProfileProvider, AuthProvider>(
+        builder: (context, profileProvider, authProvider, _) {
+          return SingleChildScrollView(
+            // ignore: prefer_const_constructors
+            physics: BouncingScrollPhysics(),
+            child: AnimationLimiter(
+              child: getPaddingWidget(
+                EdgeInsets.symmetric(horizontal: horspace),
+                Column(
+                  children: AnimationConfiguration.toStaggeredList(
+                    duration: const Duration(milliseconds: 200),
+                    childAnimationBuilder: (widget) => SlideAnimation(
+                      horizontalOffset: 44.0,
+                      child: FadeInAnimation(child: widget),
                     ),
+                    children: [
+                      getVerSpace(FetchPixels.getPixelHeight(39)),
+                      profileImageWidget(),
+                      getVerSpace(FetchPixels.getPixelHeight(20)),
+                      getCustomFont(
+                          "${profileProvider.myProfileInfo.firstname} ${profileProvider.myProfileInfo.lastname}",
+                          18,
+                          Theme.of(context).textTheme.bodyMedium!.color!,
+                          1,
+                          fontWeight: FontWeight.w600,
+                          textAlign: TextAlign.center),
+                      getVerSpace(FetchPixels.getPixelHeight(6)),
+                      getCustomFont("${profileProvider.myProfileInfo.email}",
+                          15, Theme.of(context).textTheme.bodyMedium!.color!, 1,
+                          fontWeight: FontWeight.w400,
+                          textAlign: TextAlign.center),
+                      getVerSpace(FetchPixels.getPixelHeight(30)),
+                      myProfileButton(context),
+                      getVerSpace(FetchPixels.getPixelHeight(20)),
+                      bankDetailButton(context),
+                      getVerSpace(FetchPixels.getPixelHeight(20)),
+                      historyButton(context),
+                      getVerSpace(FetchPixels.getPixelHeight(40)),
+                      logoutButton(
+                        context,
+                        onTap: () => authProvider.logout(context),
+                      ),
+                      getVerSpace(FetchPixels.getPixelHeight(20)),
+                      terminateAccountButton(context),
+                      getVerSpace(FetchPixels.getPixelHeight(40)),
+                    ],
                   ),
-                )
-              ],
-            );
-          },
-        ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -307,6 +288,32 @@ class _TabProfileState extends State<TabProfile> {
           rightimage: "setting.svg", rightFunction: () {
         Constant.navigatePush(context, SettingScreen());
       }),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      // backgroundColor: Colors.white,
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      toolbarHeight: FetchPixels.getPixelHeight(66),
+      title: getCustomFont(
+          "Profile", 22, Theme.of(context).textTheme.bodyLarge!.color!, 1,
+          fontWeight: FontWeight.w700),
+      centerTitle: true,
+      actions: [
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Constant.navigatePush(context, SettingScreen());
+              },
+              child: getSvgImage("setting.svg"),
+            ),
+            getHorSpace(FetchPixels.getPixelHeight(20))
+          ],
+        )
+      ],
     );
   }
 }

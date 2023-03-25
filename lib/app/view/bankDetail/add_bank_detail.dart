@@ -33,7 +33,6 @@ class _AddBankDetailState extends State<AddBankDetail> {
         builder: (context, referralsProvider, _) {
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.white,
             bottomNavigationBar: Container(
               padding: EdgeInsets.symmetric(
                   horizontal: horSpace,
@@ -134,7 +133,7 @@ class _AddBankDetailState extends State<AddBankDetail> {
       title: "Add Bank Details",
       fontsize: 24,
       weight: FontWeight.w700,
-      textColor: Colors.black,
+      textColor: Theme.of(context).textTheme.bodyMedium!.color!,
     );
   }
 }

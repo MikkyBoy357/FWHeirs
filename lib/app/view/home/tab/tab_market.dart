@@ -45,11 +45,24 @@ class _TabMarketState extends State<TabMarket> {
   Widget build(BuildContext context) {
     FetchPixels(context);
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        title: appBar(context),
+        leading: getPaddingWidget(
+          EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(21)),
+          GestureDetector(
+            child: getSvgImage("back.svg"),
+            onTap: () {
+              Constant.backToPrev(context);
+            },
+          ),
+        ),
+        title: getCustomFont(
+          "Referral",
+          22,
+          Theme.of(context).textTheme.bodyLarge!.color!,
+          1,
+          fontWeight: FontWeight.w700,
+        ),
         elevation: 0,
       ),
       body: Column(
@@ -61,7 +74,7 @@ class _TabMarketState extends State<TabMarket> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                height: 60,
+                // height: 60,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
@@ -129,7 +142,7 @@ class _TabMarketState extends State<TabMarket> {
                       top: FetchPixels.getPixelHeight(16),
                       bottom: FetchPixels.getPixelHeight(18)),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).secondaryHeaderColor,
                       boxShadow: [
                         BoxShadow(
                             color: shadowColor,
@@ -150,22 +163,29 @@ class _TabMarketState extends State<TabMarket> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              getCustomFont(
-                                  modelTrend.name ?? "", 15, Colors.black, 1,
-                                  fontWeight: FontWeight.w600),
+                              getMediumCustomFont(
+                                context,
+                                modelTrend.name ?? "",
+                                fontWeight: FontWeight.w600,
+                              ),
                               getVerSpace(FetchPixels.getPixelHeight(3)),
-                              getCustomFont(modelTrend.currency ?? "", 15,
-                                  subtextColor, 1,
-                                  fontWeight: FontWeight.w400)
+                              getMediumCustomFont(
+                                context,
+                                modelTrend.currency ?? "",
+                                fontColor: textColor,
+                                fontWeight: FontWeight.w400,
+                              )
                             ],
                           )
                         ],
                       ),
                       Column(
                         children: [
-                          getCustomFont(
-                              "\$${modelTrend.price}", 15, Colors.black, 1,
-                              fontWeight: FontWeight.w600),
+                          getMediumCustomFont(
+                            context,
+                            "\$${modelTrend.price}",
+                            fontWeight: FontWeight.w600,
+                          ),
                           getVerSpace(FetchPixels.getPixelHeight(5)),
                           Wrap(
                             children: [
@@ -287,7 +307,7 @@ class _TabMarketState extends State<TabMarket> {
           title: "Referrals",
           fontsize: 24,
           weight: FontWeight.w700,
-          textColor: Colors.black,
+          textColor: Theme.of(context).textTheme.bodyLarge!.color!,
           isleftimage: false,
           isrightimage: true,
           rightimage: "more.svg"),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fwheirs/app/view/profile/edit_profile.dart';
 import 'package:fwheirs/app/view_models/profile_providers/profile_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
@@ -48,7 +47,6 @@ class _MyProfileState extends State<MyProfile> {
     return WillPopScope(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
           // bottomNavigationBar: Container(
           //   padding: EdgeInsets.symmetric(
           //       horizontal: horspace, vertical: FetchPixels.getPixelHeight(30)),
@@ -70,6 +68,14 @@ class _MyProfileState extends State<MyProfile> {
           body: SafeArea(
             child: Consumer<ProfileProvider>(
               builder: (context, profileProvider, _) {
+                Color titleColor =
+                    Theme.of(context).brightness == Brightness.light
+                        ? textColor
+                        : textColor;
+                Color hintColor =
+                    Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white;
                 return getPaddingWidget(
                   EdgeInsets.symmetric(horizontal: horspace),
                   Column(
@@ -80,45 +86,56 @@ class _MyProfileState extends State<MyProfile> {
                       getVerSpace(FetchPixels.getPixelHeight(29)),
                       profileImageWidget(),
                       getVerSpace(FetchPixels.getPixelHeight(30)),
-                      getCustomFont("First Name", 15, textColor, 1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(
+                        context,
+                        "First Name",
+                        fontColor: titleColor,
+                      ),
                       getVerSpace(FetchPixels.getPixelHeight(4)),
-                      getCustomFont(
-                          "${profileProvider.myProfileInfo.firstname}",
-                          15,
-                          Colors.black,
-                          1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(
+                        context,
+                        "${profileProvider.myProfileInfo.firstname}",
+                        fontColor: hintColor,
+                      ),
                       getVerSpace(FetchPixels.getPixelHeight(12)),
                       getDivider(
                           deviderColor, 0, FetchPixels.getPixelHeight(1)),
                       getVerSpace(FetchPixels.getPixelHeight(24)),
-                      getCustomFont("Last Name", 15, textColor, 1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(
+                        context,
+                        "Last Name",
+                        fontColor: titleColor,
+                      ),
                       getVerSpace(FetchPixels.getPixelHeight(4)),
-                      getCustomFont("${profileProvider.myProfileInfo.lastname}",
-                          15, Colors.black, 1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(
+                        context,
+                        "${profileProvider.myProfileInfo.lastname}",
+                        fontColor: hintColor,
+                      ),
                       getVerSpace(FetchPixels.getPixelHeight(12)),
                       getDivider(
                           deviderColor, 0, FetchPixels.getPixelHeight(1)),
                       getVerSpace(FetchPixels.getPixelHeight(24)),
-                      getCustomFont("Email", 15, textColor, 1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(context, "Email",
+                          fontColor: titleColor),
                       getVerSpace(FetchPixels.getPixelHeight(4)),
-                      getCustomFont("${profileProvider.myProfileInfo.email}",
-                          15, Colors.black, 1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(
+                        context,
+                        "${profileProvider.myProfileInfo.email}",
+                        fontColor: hintColor,
+                      ),
                       getVerSpace(FetchPixels.getPixelHeight(12)),
                       getDivider(
                           deviderColor, 0, FetchPixels.getPixelHeight(1)),
                       getVerSpace(FetchPixels.getPixelHeight(24)),
-                      getCustomFont("Phone No", 15, textColor, 1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(context, "Phone No.",
+                          fontColor: titleColor),
                       getVerSpace(FetchPixels.getPixelHeight(4)),
-                      getCustomFont("${profileProvider.myProfileInfo.phone}",
-                          15, Colors.black, 1,
-                          fontWeight: FontWeight.w400),
+                      getMediumCustomFont(
+                        context,
+                        "${profileProvider.myProfileInfo.phone}",
+                        fontColor: hintColor,
+                      ),
                       getVerSpace(FetchPixels.getPixelHeight(12)),
                       getDivider(
                           deviderColor, 0, FetchPixels.getPixelHeight(1)),
@@ -155,7 +172,7 @@ class _MyProfileState extends State<MyProfile> {
       title: "My Profile",
       fontsize: 24,
       weight: FontWeight.w700,
-      textColor: Colors.black,
+      textColor: Theme.of(context).textTheme.bodyMedium!.color!,
     );
   }
 }

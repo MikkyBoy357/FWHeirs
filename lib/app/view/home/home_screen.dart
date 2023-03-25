@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fwheirs/app/data/data_file.dart';
@@ -66,9 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Container bottomNavigationBar() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: FetchPixels.getPixelHeight(20)),
-      height: FetchPixels.getPixelHeight(66),
+      height: Platform.isAndroid
+          ? FetchPixels.getPixelHeight(66)
+          : FetchPixels.getPixelHeight(86),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).secondaryHeaderColor,
         boxShadow: [
           BoxShadow(
               color: shadowColor, blurRadius: 23, offset: const Offset(0, -2)),
@@ -112,9 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? Row(
                         children: [
                           getHorSpace(FetchPixels.getPixelHeight(8)),
-                          getCustomFont(
-                              modelItem.name ?? '', 13, Colors.black, 1,
-                              fontWeight: FontWeight.w500)
+                          getMediumCustomFont(context, modelItem.name ?? '')
                         ],
                       )
                     : Container()
