@@ -8,7 +8,7 @@ class NameTextField extends StatelessWidget {
     Key? key,
     required this.controller,
     this.title = 'Title',
-    this.hintText = 'Type here',
+    this.hintText = 'Name',
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -22,6 +22,29 @@ class NameTextField extends StatelessWidget {
       controller: controller,
       validateFunction: Validations.validateString,
       textInputType: TextInputType.text,
+    );
+  }
+}
+
+class NumberTextField extends StatelessWidget {
+  const NumberTextField({
+    Key? key,
+    required this.controller,
+    this.title = 'Title',
+    this.hintText = 'Name',
+  }) : super(key: key);
+
+  final TextEditingController controller;
+  final String title;
+  final String hintText;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextField(
+      hintText: hintText,
+      controller: controller,
+      validateFunction: Validations.validateString,
+      textInputType: TextInputType.number,
     );
   }
 }

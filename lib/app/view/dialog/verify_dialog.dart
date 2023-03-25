@@ -1,9 +1,10 @@
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:flutter/material.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
+
+import '../login/login_screen.dart';
 
 class VerifyDialog extends StatefulWidget {
   const VerifyDialog({Key? key}) : super(key: key);
@@ -71,7 +72,7 @@ class _VerifyDialogState extends State<VerifyDialog>
                 EdgeInsets.symmetric(
                     horizontal: FetchPixels.getPixelHeight(20)),
                 getButton(context, blueColor, "Ok", Colors.white, () {
-                  Constant.sendToNext(context, Routes.loginRoute);
+                  Constant.navigatePush(context, LoginScreen());
                 }, 16,
                     weight: FontWeight.w600,
                     borderRadius:

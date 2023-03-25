@@ -17,6 +17,17 @@ class Constant {
     return (percent * total) / 100;
   }
 
+  static navigatePush(BuildContext context, Widget nextScreen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return nextScreen;
+        },
+      ),
+    );
+  }
+
   static backToPrev(BuildContext context) {
     Navigator.of(context).pop();
   }

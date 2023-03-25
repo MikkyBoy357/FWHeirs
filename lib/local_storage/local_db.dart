@@ -57,6 +57,10 @@ class AppDataBaseService {
     await Hive.box(dbName).clear();
   }
 
+  Future<void> deleteToken() async {
+    await Hive.box(dbName).clear();
+  }
+
   // static Future<void> clearDB() async {
   //   await Hive.box(dbName).clear();
   // }

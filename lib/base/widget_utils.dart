@@ -102,6 +102,23 @@ DecorationImage getDecorationAssetImage(BuildContext buildContext, String image,
       scale: FetchPixels.getScale());
 }
 
+Widget getMediumCustomFont(
+  BuildContext context,
+  String text, {
+  double? fontSize,
+  Color? fontColor,
+}) {
+  return Text(
+    text,
+    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: fontColor,
+          fontSize: fontSize,
+        ),
+    softWrap: true,
+    textScaleFactor: FetchPixels.getTextScale(),
+  );
+}
+
 Widget getCustomFont(String text, double fontSize, Color fontColor, int maxLine,
     {String fontFamily = Constant.fontsFamily,
     TextOverflow overflow = TextOverflow.ellipsis,

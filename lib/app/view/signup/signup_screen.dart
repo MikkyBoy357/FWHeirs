@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:fwheirs/app/view/login/login_screen.dart';
 import 'package:fwheirs/app/view_models/auth_providers/auth_provider.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/pref_data.dart';
@@ -88,6 +88,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             hintText: "Phone Number",
                           ),
                           getVerSpace(FetchPixels.getPixelHeight(20)),
+                          NameTextField(
+                            controller: authProvider.refCodeController,
+                            hintText: "Referral Code",
+                            title: "Referral Code",
+                          ),
+                          getVerSpace(FetchPixels.getPixelHeight(20)),
                           PasswordField(
                             controller: authProvider.passwordController2,
                             title: "Password",
@@ -154,8 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   fontWeight: FontWeight.w400),
                               GestureDetector(
                                 onTap: () {
-                                  Constant.sendToNext(
-                                      context, Routes.loginRoute);
+                                  Constant.navigatePush(context, LoginScreen());
                                 },
                                 child: getCustomFont("Login", 15, blueColor, 1,
                                     fontWeight: FontWeight.w600),

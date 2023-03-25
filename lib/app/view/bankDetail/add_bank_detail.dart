@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:fwheirs/app/view_models/referrals_providers.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
-import 'package:fwheirs/base/pref_data.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fwheirs/widgets/name_text_field.dart';
+import 'package:provider/provider.dart';
 
 class AddBankDetail extends StatefulWidget {
   const AddBankDetail({Key? key}) : super(key: key);
@@ -19,97 +20,76 @@ class _AddBankDetailState extends State<AddBankDetail> {
   }
 
   var horSpace = FetchPixels.getPixelHeight(20);
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneNoController = TextEditingController();
-
-  Future<void> getData() async {
-    firstNameController.text = await PrefData.getFirstName();
-    lastNameController.text = await PrefData.getLastName();
-    emailController.text = await PrefData.getEmail();
-    phoneNoController.text = await PrefData.getPhoneNo();
-  }
 
   @override
   void initState() {
     super.initState();
-    getData().then((value) {
-      setState(() {});
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: horSpace, vertical: FetchPixels.getPixelHeight(30)),
-            child: getButton(context, blueColor, "Save", Colors.white, () {
-              PrefData.setFirstName(firstNameController.text);
-              PrefData.setLastName(lastNameController.text);
-              PrefData.setEmail(emailController.text);
-              PrefData.setPhoneNo(phoneNoController.text);
-              backToPrev();
-              backToPrev();
-            }, 16,
-                weight: FontWeight.w600,
-                borderRadius:
-                    BorderRadius.circular(FetchPixels.getPixelHeight(15)),
-                buttonHeight: FetchPixels.getPixelHeight(60)),
-          ),
-          body: SafeArea(
-            child: getPaddingWidget(
-              EdgeInsets.symmetric(horizontal: horSpace),
-              Column(
-                children: [
-                  getVerSpace(FetchPixels.getPixelHeight(14)),
-                  appBar(context),
-                  // getVerSpace(FetchPixels.getPixelHeight(29)),
-                  // profileImageWidget(),
-                  getVerSpace(FetchPixels.getPixelHeight(30)),
-                  getDefaultTextFiledWithLabel(
-                      context, "Bank Name", firstNameController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
-                  getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "Account Name", lastNameController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
-                  getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "Account Number", emailController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
-                  getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "Account Type", phoneNoController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly
-                      ]),
-                ],
+      child: Consumer<ReferralsProvider>(
+        builder: (context, referralsProvider, _) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.white,
+            bottomNavigationBar: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: horSpace,
+                  vertical: FetchPixels.getPixelHeight(30)),
+              child: getButton(context, blueColor, "Save", Colors.white, () {
+                referralsProvider.addBank(context);
+              }, 16,
+                  weight: FontWeight.w600,
+                  borderRadius:
+                      BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                  buttonHeight: FetchPixels.getPixelHeight(60)),
+            ),
+            body: SafeArea(
+              child: getPaddingWidget(
+                EdgeInsets.symmetric(horizontal: horSpace),
+                Form(
+                  key: referralsProvider.addBankFormKey,
+                  child: Column(
+                    children: [
+                      getVerSpace(FetchPixels.getPixelHeight(14)),
+                      appBar(context),
+                      // getVerSpace(FetchPixels.getPixelHeight(29)),
+                      // profileImageWidget(),
+                      getVerSpace(FetchPixels.getPixelHeight(30)),
+                      NameTextField(
+                        controller: referralsProvider.bankNameController,
+                        hintText: "Bank Name",
+                      ),
+                      getVerSpace(horSpace),
+                      NameTextField(
+                        controller: referralsProvider.accountNameController,
+                        hintText: "Account Name",
+                      ),
+                      getVerSpace(horSpace),
+                      NameTextField(
+                        controller: referralsProvider.accountNumberController,
+                        hintText: "Account Number",
+                      ),
+                      getVerSpace(horSpace),
+                      NameTextField(
+                        controller: referralsProvider.bankCodeNoController,
+                        hintText: "Bank Code",
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        onWillPop: () async {
-          backToPrev();
-          return false;
-        });
+          );
+        },
+      ),
+      onWillPop: () async {
+        backToPrev();
+        return false;
+      },
+    );
   }
 
   Align profileImageWidget() {

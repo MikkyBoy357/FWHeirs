@@ -1,12 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_payment.dart';
+import 'package:fwheirs/app/view/bankDetail/add_bank_detail.dart';
+import 'package:fwheirs/app/view_models/referrals_providers.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:fwheirs/app/view/bankDetail/add_bank_detail.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/bank_model.dart';
 
 class BankDetail extends StatefulWidget {
   const BankDetail({Key? key}) : super(key: key);
@@ -24,10 +28,19 @@ class _BankDetailState extends State<BankDetail> {
   List<ModelPayment> paymentLists = DataFile.paymentList;
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Provider.of<ReferralsProvider>(context, listen: false).getBanks(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     FetchPixels(context);
-    return WillPopScope(
-        child: Scaffold(
+    return WillPopScope(child: Consumer<ReferralsProvider>(
+      builder: (context, referralsProvider, _) {
+        return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -58,7 +71,17 @@ class _BankDetailState extends State<BankDetail> {
                                   fontWeight: FontWeight.w400,
                                 ),
                                 getVerSpace(FetchPixels.getPixelHeight(16)),
-                                cardList(),
+                                Builder(builder: (context) {
+                                  if (referralsProvider.myBanks.isNotEmpty) {
+                                    return cardList(
+                                        myBanks: referralsProvider.myBanks);
+                                  } else {
+                                    return Text(
+                                      "Nothing to show, Click the button below to add bank details.",
+                                      style: TextStyle(fontSize: 18),
+                                    );
+                                  }
+                                }),
                               ],
                             ),
                             Container(
@@ -86,22 +109,24 @@ class _BankDetailState extends State<BankDetail> {
               ),
             ),
           ),
-        ),
-        onWillPop: () async {
-          backToPrev();
-          return false;
-        });
+        );
+      },
+    ), onWillPop: () async {
+      backToPrev();
+      return false;
+    });
   }
 
-  AnimationLimiter cardList() {
+  AnimationLimiter cardList({required List<BankModel> myBanks}) {
     return AnimationLimiter(
       child: ListView.builder(
         primary: false,
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
-        itemCount: paymentLists.length,
+        itemCount: myBanks.length,
         itemBuilder: (context, index) {
-          ModelPayment modelPayment = paymentLists[index];
+          BankModel bankModel = myBanks[index];
+          ModelPayment modelPayment = paymentLists[0];
           return AnimationConfiguration.staggeredList(
               position: index,
               duration: const Duration(milliseconds: 200),
@@ -144,18 +169,34 @@ class _BankDetailState extends State<BankDetail> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                getCustomFont(modelPayment.name ?? "", 15,
+                                getCustomFont(bankModel.bankName ?? "", 15,
                                     Colors.black, 1,
                                     fontWeight: FontWeight.w600),
                                 getVerSpace(FetchPixels.getPixelHeight(4)),
-                                getCustomFont(modelPayment.cardNo ?? '', 15,
+                                getCustomFont(bankModel.accountNumber ?? '', 15,
                                     Colors.black, 1,
-                                    fontWeight: FontWeight.w400)
+                                    fontWeight: FontWeight.w400),
+                                getVerSpace(FetchPixels.getPixelHeight(4)),
+                                getCustomFont(bankModel.accountName ?? "", 15,
+                                    Colors.black, 1,
+                                    fontWeight: FontWeight.w600),
                               ],
                             )
                           ],
                         ),
-                        getSvgImage("more.svg")
+                        IconButton(
+                          onPressed: () {
+                            print("Delete Bank");
+                            Provider.of<ReferralsProvider>(context,
+                                    listen: false)
+                                .deleteBank(context, id: "${bankModel.id}");
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.redAccent,
+                            size: 30,
+                          ),
+                        )
                       ],
                     ),
                   ))));

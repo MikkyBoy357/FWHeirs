@@ -1,12 +1,17 @@
-import 'package:fwheirs/app/routes/app_routes.dart';
-import 'package:fwheirs/base/constant.dart';
-import 'package:fwheirs/base/resizer/fetch_pixels.dart';
-import 'package:fwheirs/base/widget_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:fwheirs/app/view/home/home_screen.dart';
+import 'package:fwheirs/app/view/setting/help_screen.dart';
+import 'package:fwheirs/app/view/setting/privacy_screen.dart';
+import 'package:fwheirs/base/constant.dart';
+import 'package:fwheirs/base/resizer/fetch_pixels.dart';
+import 'package:fwheirs/base/theme/theme_manager.dart';
+import 'package:fwheirs/base/widget_utils.dart';
+import 'package:provider/provider.dart';
 
 import '../../../base/color_data.dart';
+import '../price_alert/price_alert_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -18,28 +23,33 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   void backToPrev() {
     // Constant.backToPrev(context);
-    Constant.sendToNext(context, Routes.homeScreenRoute);
+    Constant.navigatePush(context, HomeScreen());
   }
 
   var horSpace = FetchPixels.getPixelHeight(20);
   bool isSwitch = true;
+  bool isDark = true;
 
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
     return WillPopScope(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: getPaddingWidget(
-              EdgeInsets.symmetric(horizontal: horSpace),
-              Column(
-                children: [
-                  getVerSpace(FetchPixels.getPixelHeight(14)),
-                  appBar(context),
-                  getVerSpace(FetchPixels.getPixelHeight(39)),
-                  Expanded(
+      child: Consumer<ThemeManager>(
+        builder: (context, themeProvider, _) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            // backgroundColor: ,
+            // backgroundColor: Colors.white,
+            body: SafeArea(
+              bottom: false,
+              child: getPaddingWidget(
+                EdgeInsets.symmetric(horizontal: horSpace),
+                Column(
+                  children: [
+                    getVerSpace(FetchPixels.getPixelHeight(14)),
+                    appBar(context),
+                    getVerSpace(FetchPixels.getPixelHeight(39)),
+                    Expanded(
                       flex: 1,
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
@@ -60,6 +70,20 @@ class _SettingScreenState extends State<SettingScreen> {
                                 getVerSpace(horSpace),
                                 notificationButton(),
                                 getVerSpace(horSpace),
+                                themeButton(
+                                  switchWidget: CupertinoSwitch(
+                                    value: themeProvider.themeMode ==
+                                        ThemeMode.dark,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isDark = value;
+                                        themeProvider.toggleTheme(isDark);
+                                      });
+                                    },
+                                    activeColor: blueColor,
+                                  ),
+                                ),
+                                getVerSpace(horSpace),
                                 helpButton(context),
                                 getVerSpace(horSpace),
                                 privacyButton(context),
@@ -69,16 +93,20 @@ class _SettingScreenState extends State<SettingScreen> {
                             ),
                           ),
                         ),
-                      ))
-                ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
-        onWillPop: () async {
-          backToPrev();
-          return false;
-        });
+          );
+        },
+      ),
+      onWillPop: () async {
+        backToPrev();
+        return false;
+      },
+    );
   }
 
   GestureDetector rateUsButton() {
@@ -89,7 +117,7 @@ class _SettingScreenState extends State<SettingScreen> {
             horizontal: FetchPixels.getPixelHeight(16),
             vertical: FetchPixels.getPixelHeight(16)),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).secondaryHeaderColor,
             boxShadow: [
               BoxShadow(
                   color: shadowColor,
@@ -105,8 +133,7 @@ class _SettingScreenState extends State<SettingScreen> {
               children: [
                 getSvgImage("shield_check.svg"),
                 getHorSpace(FetchPixels.getPixelHeight(16)),
-                getCustomFont("Rate us", 15, Colors.black, 1,
-                    fontWeight: FontWeight.w500)
+                getMediumCustomFont(context, "Rate us")
               ],
             ),
             getSvgImage("arrow_right.svg")
@@ -119,14 +146,14 @@ class _SettingScreenState extends State<SettingScreen> {
   GestureDetector privacyButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constant.sendToNext(context, Routes.privacyScreenroute);
+        Constant.navigatePush(context, PrivacyScreen());
       },
       child: Container(
         padding: EdgeInsets.symmetric(
             horizontal: FetchPixels.getPixelHeight(16),
             vertical: FetchPixels.getPixelHeight(16)),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).secondaryHeaderColor,
             boxShadow: [
               BoxShadow(
                   color: shadowColor,
@@ -142,8 +169,7 @@ class _SettingScreenState extends State<SettingScreen> {
               children: [
                 getSvgImage("shield_check.svg"),
                 getHorSpace(FetchPixels.getPixelHeight(16)),
-                getCustomFont("Terms & Privacy", 15, Colors.black, 1,
-                    fontWeight: FontWeight.w500)
+                getMediumCustomFont(context, "Terms & Privacy")
               ],
             ),
             getSvgImage("arrow_right.svg")
@@ -156,14 +182,14 @@ class _SettingScreenState extends State<SettingScreen> {
   GestureDetector helpButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constant.sendToNext(context, Routes.helpScreenRoute);
+        Constant.navigatePush(context, HelpScreen());
       },
       child: Container(
         padding: EdgeInsets.symmetric(
             horizontal: FetchPixels.getPixelHeight(16),
             vertical: FetchPixels.getPixelHeight(16)),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).secondaryHeaderColor,
             boxShadow: [
               BoxShadow(
                   color: shadowColor,
@@ -179,8 +205,7 @@ class _SettingScreenState extends State<SettingScreen> {
               children: [
                 getSvgImage("info.svg"),
                 getHorSpace(FetchPixels.getPixelHeight(16)),
-                getCustomFont("Help & Support", 15, Colors.black, 1,
-                    fontWeight: FontWeight.w500)
+                getMediumCustomFont(context, "Help & Support")
               ],
             ),
             getSvgImage("arrow_right.svg")
@@ -196,7 +221,7 @@ class _SettingScreenState extends State<SettingScreen> {
           horizontal: FetchPixels.getPixelHeight(16),
           vertical: FetchPixels.getPixelHeight(16)),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).secondaryHeaderColor,
           boxShadow: [
             BoxShadow(
                 color: shadowColor, blurRadius: 23, offset: const Offset(0, 7))
@@ -209,8 +234,7 @@ class _SettingScreenState extends State<SettingScreen> {
             children: [
               getSvgImage("notification.svg"),
               getHorSpace(FetchPixels.getPixelHeight(16)),
-              getCustomFont("Notifications", 15, Colors.black, 1,
-                  fontWeight: FontWeight.w500)
+              getMediumCustomFont(context, "Notifications")
             ],
           ),
           getSvgImage("arrow_right.svg")
@@ -222,7 +246,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Container referAndEarnButton() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).secondaryHeaderColor,
           boxShadow: [
             BoxShadow(
                 color: shadowColor, blurRadius: 23, offset: const Offset(0, 7))
@@ -246,8 +270,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      getCustomFont("Refer & Earn", 15, Colors.black, 1,
-                          fontWeight: FontWeight.w500),
+                      getMediumCustomFont(context, "Refer & Earn"),
                       getVerSpace(FetchPixels.getPixelHeight(5)),
                       getMultilineCustomFont(
                           "Get up to \$162 per referral", 15, textColor,
@@ -268,7 +291,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Container portfolioPriceAlertButton() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).secondaryHeaderColor,
           boxShadow: [
             BoxShadow(
                 color: shadowColor, blurRadius: 23, offset: const Offset(0, 7))
@@ -292,9 +315,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      getCustomFont(
-                          "Portfolio price alert", 15, Colors.black, 1,
-                          fontWeight: FontWeight.w500),
+                      getMediumCustomFont(context, "Portfolio price alert"),
                       getVerSpace(FetchPixels.getPixelHeight(5)),
                       getMultilineCustomFont(
                           "Get price alerts for all coins on your portfolio",
@@ -322,14 +343,59 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
+  Container themeButton({required Widget switchWidget}) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).secondaryHeaderColor,
+          boxShadow: [
+            BoxShadow(
+                color: shadowColor, blurRadius: 23, offset: const Offset(0, 7))
+          ],
+          borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(12))),
+      padding: EdgeInsets.symmetric(
+          horizontal: FetchPixels.getPixelHeight(16),
+          vertical: FetchPixels.getPixelHeight(16)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                getSvgImage("price_alert.svg"),
+                getHorSpace(FetchPixels.getPixelHeight(16)),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      getMediumCustomFont(context, "Dark Theme"),
+                      getVerSpace(FetchPixels.getPixelHeight(5)),
+                      getMultilineCustomFont(
+                          "Use app in Dark mode", 15, textColor,
+                          fontWeight: FontWeight.w400,
+                          txtHeight: FetchPixels.getPixelHeight(1.3))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          switchWidget,
+        ],
+      ),
+    );
+  }
+
   GestureDetector priceAlertButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constant.sendToNext(context, Routes.priceAlertRoute);
+        Constant.navigatePush(context, PriceAlertScreen());
       },
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).secondaryHeaderColor,
             boxShadow: [
               BoxShadow(
                   color: shadowColor,
@@ -356,8 +422,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        getCustomFont("Price Alerts", 15, Colors.black, 1,
-                            fontWeight: FontWeight.w500),
+                        getMediumCustomFont(context, "Price Alerts"),
                         getVerSpace(FetchPixels.getPixelHeight(5)),
                         getMultilineCustomFont(
                             "Create customised price alerts", 15, textColor,

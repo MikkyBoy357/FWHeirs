@@ -18,22 +18,22 @@ class DataFile {
         1,
         intro1,
         "intro1.png",
-        "Secure Crypto Wallet",
-        "A crypto wallet is a physical medium, program which stores the keys for crypto transactions.",
+        "Profitable Forex",
+        "Get started with trading forex profitably without necessarily possessing advanced knowledge of how trading works.",
         "Next"),
     ModelIntro(
         2,
         intro2,
         "intro2.png",
-        "Interchange Coins",
-        "A crypto exchange is a business that allows customers to trade cryptocurrencies for other assets.",
+        "Grow your Money",
+        "Consistently grow your portfolio using our sophisticated forex minter.",
         "Next"),
     ModelIntro(
         3,
         intro3,
         "intro3.png",
-        "Payment Success",
-        "Some crypto schemes use validators to maintain the cryptocurrency. In a proof-of-stake model.",
+        "Be an Expert",
+        "Whether you are new to forex or not, be confident of getting results like an Expert.",
         "Get Started"),
   ];
 

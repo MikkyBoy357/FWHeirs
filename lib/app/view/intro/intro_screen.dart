@@ -1,12 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:fwheirs/app/data/data_file.dart';
-import 'package:fwheirs/app/routes/app_routes.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
 
 import '../../models/intro_model.dart';
+import '../login/login_screen.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
@@ -31,7 +31,9 @@ class _IntroScreenState extends State<IntroScreen> {
     return WillPopScope(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
+          backgroundColor: introLists[select].color,
           body: SafeArea(
+            bottom: false,
             child: SizedBox(
               height: double.infinity,
               width: double.infinity,
@@ -56,7 +58,7 @@ class _IntroScreenState extends State<IntroScreen> {
                           left: FetchPixels.getPixelHeight(20),
                           right: FetchPixels.getPixelHeight(20),
                           child: Container(
-                            height: FetchPixels.getPixelHeight(392),
+                            height: FetchPixels.getPixelHeight(372),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(
@@ -126,6 +128,78 @@ class _IntroScreenState extends State<IntroScreen> {
                                                 FetchPixels.getPixelHeight(
                                                     1.3)),
                                       ),
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            getVerSpace(
+                                                FetchPixels.getPixelHeight(30)),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: List.generate(
+                                                introLists.length,
+                                                (position) {
+                                                  return getPaddingWidget(
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: FetchPixels
+                                                              .getPixelHeight(
+                                                                  5)),
+                                                      getSvgImage(position ==
+                                                              select
+                                                          ? "selected_dot.svg"
+                                                          : "dot.svg"));
+                                                },
+                                              ),
+                                            ),
+                                            getVerSpace(
+                                                FetchPixels.getPixelHeight(30)),
+                                            getButton(
+                                                context,
+                                                blueColor,
+                                                select == 2
+                                                    ? "Get Started"
+                                                    : 'Next',
+                                                Colors.white, () {
+                                              if (select <= 1) {
+                                                setState(() {
+                                                  select = select + 1;
+                                                });
+                                              } else {
+                                                Constant.navigatePush(
+                                                    context, LoginScreen());
+                                              }
+                                              _controller.animateToPage(select,
+                                                  duration: const Duration(
+                                                      milliseconds: 250),
+                                                  curve: Curves.easeInSine);
+                                            }, 16,
+                                                weight: FontWeight.w600,
+                                                buttonHeight:
+                                                    FetchPixels.getPixelHeight(
+                                                        60),
+                                                insetsGeometry:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: FetchPixels
+                                                            .getPixelWidth(50)),
+                                                borderRadius: BorderRadius
+                                                    .circular(FetchPixels
+                                                        .getPixelHeight(15))),
+                                            getVerSpace(
+                                                FetchPixels.getPixelHeight(30)),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Constant.navigatePush(
+                                                    context, LoginScreen());
+                                              },
+                                              child: getCustomFont(
+                                                  "Skip", 16, skipColor, 1,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ],
+                                        ),
+                                      )
 
                                       // getVerSpace(
                                       //     FetchPixels.getPixelHeight(30)),
@@ -135,61 +209,6 @@ class _IntroScreenState extends State<IntroScreen> {
                       );
                     },
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            introLists.length,
-                            (position) {
-                              return getPaddingWidget(
-                                  EdgeInsets.symmetric(
-                                      horizontal:
-                                          FetchPixels.getPixelHeight(5)),
-                                  getSvgImage(position == select
-                                      ? "selected_dot.svg"
-                                      : "dot.svg"));
-                            },
-                          ),
-                        ),
-                        getVerSpace(FetchPixels.getPixelHeight(38.12)),
-                        getButton(
-                            context,
-                            blueColor,
-                            select == 2 ? "Get Started" : 'Next',
-                            Colors.white, () {
-                          if (select <= 1) {
-                            setState(() {
-                              select = select + 1;
-                            });
-                          } else {
-                            Constant.sendToNext(context, Routes.loginRoute);
-                          }
-                          _controller.animateToPage(select,
-                              duration: const Duration(milliseconds: 250),
-                              curve: Curves.easeInSine);
-                        }, 16,
-                            weight: FontWeight.w600,
-                            buttonHeight: FetchPixels.getPixelHeight(60),
-                            insetsGeometry: EdgeInsets.symmetric(
-                                horizontal: FetchPixels.getPixelWidth(50)),
-                            borderRadius: BorderRadius.circular(
-                                FetchPixels.getPixelHeight(15))),
-                        getVerSpace(FetchPixels.getPixelHeight(30)),
-                        GestureDetector(
-                          onTap: () {
-                            Constant.sendToNext(context, Routes.loginRoute);
-                          },
-                          child: getCustomFont("Skip", 16, skipColor, 1,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        getVerSpace(FetchPixels.getPixelHeight(84))
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),

@@ -1,10 +1,17 @@
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:fwheirs/app/view/bankDetail/bank_detail.dart';
+import 'package:fwheirs/app/view/history/history_screen.dart';
+import 'package:fwheirs/app/view/profile/my_profile.dart';
+import 'package:fwheirs/app/view_models/profile_providers/profile_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:provider/provider.dart';
+
+import '../../../view_models/auth_providers/auth_provider.dart';
+import '../../setting/setting_screen.dart';
 
 class TabProfile extends StatefulWidget {
   const TabProfile({Key? key}) : super(key: key);
@@ -19,60 +26,86 @@ class _TabProfileState extends State<TabProfile> {
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
-    return Column(
-      children: [
-        getVerSpace(FetchPixels.getPixelHeight(14)),
-        appBar(context),
-        getVerSpace(FetchPixels.getPixelHeight(39)),
-        Expanded(
-            flex: 1,
-            child: SingleChildScrollView(
-              // ignore: prefer_const_constructors
-              physics: BouncingScrollPhysics(),
-              child: AnimationLimiter(
-                child: getPaddingWidget(
-                  EdgeInsets.symmetric(horizontal: horspace),
-                  Column(
-                    children: AnimationConfiguration.toStaggeredList(
-                      duration: const Duration(milliseconds: 200),
-                      childAnimationBuilder: (widget) => SlideAnimation(
-                        horizontalOffset: 44.0,
-                        child: FadeInAnimation(child: widget),
+    return SafeArea(
+      child: Scaffold(
+        body: Consumer2<ProfileProvider, AuthProvider>(
+          builder: (context, profileProvider, authProvider, _) {
+            return Column(
+              children: [
+                getVerSpace(FetchPixels.getPixelHeight(14)),
+                appBar(context),
+                getVerSpace(FetchPixels.getPixelHeight(39)),
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    // ignore: prefer_const_constructors
+                    physics: BouncingScrollPhysics(),
+                    child: AnimationLimiter(
+                      child: getPaddingWidget(
+                        EdgeInsets.symmetric(horizontal: horspace),
+                        Column(
+                          children: AnimationConfiguration.toStaggeredList(
+                            duration: const Duration(milliseconds: 200),
+                            childAnimationBuilder: (widget) => SlideAnimation(
+                              horizontalOffset: 44.0,
+                              child: FadeInAnimation(child: widget),
+                            ),
+                            children: [
+                              profileImageWidget(),
+                              getVerSpace(FetchPixels.getPixelHeight(20)),
+                              getCustomFont(
+                                  "${profileProvider.myProfileInfo.firstname} ${profileProvider.myProfileInfo.lastname}",
+                                  18,
+                                  Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .color!,
+                                  1,
+                                  fontWeight: FontWeight.w600,
+                                  textAlign: TextAlign.center),
+                              getVerSpace(FetchPixels.getPixelHeight(6)),
+                              getCustomFont(
+                                  "${profileProvider.myProfileInfo.email}",
+                                  15,
+                                  Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .color!,
+                                  1,
+                                  fontWeight: FontWeight.w400,
+                                  textAlign: TextAlign.center),
+                              getVerSpace(FetchPixels.getPixelHeight(30)),
+                              myProfileButton(context),
+                              getVerSpace(FetchPixels.getPixelHeight(20)),
+                              bankDetailButton(context),
+                              getVerSpace(FetchPixels.getPixelHeight(20)),
+                              historyButton(context),
+                              getVerSpace(FetchPixels.getPixelHeight(40)),
+                              logoutButton(
+                                context,
+                                onTap: () => authProvider.logout(context),
+                              ),
+                              getVerSpace(FetchPixels.getPixelHeight(20)),
+                              terminateAccountButton(context),
+                              getVerSpace(FetchPixels.getPixelHeight(40)),
+                            ],
+                          ),
+                        ),
                       ),
-                      children: [
-                        profileImageWidget(),
-                        getVerSpace(FetchPixels.getPixelHeight(20)),
-                        getCustomFont("Leslie Alexander", 18, Colors.black, 1,
-                            fontWeight: FontWeight.w600,
-                            textAlign: TextAlign.center),
-                        getVerSpace(FetchPixels.getPixelHeight(6)),
-                        getCustomFont(
-                            "lesliealexander@gmail.com", 15, textColor, 1,
-                            fontWeight: FontWeight.w400,
-                            textAlign: TextAlign.center),
-                        getVerSpace(FetchPixels.getPixelHeight(30)),
-                        myProfileButton(context),
-                        getVerSpace(FetchPixels.getPixelHeight(20)),
-                        bankDetailButton(context),
-                        getVerSpace(FetchPixels.getPixelHeight(20)),
-                        historyButton(context),
-                        getVerSpace(FetchPixels.getPixelHeight(40)),
-                        logoutButton(context),
-                        getVerSpace(FetchPixels.getPixelHeight(20)),
-                        terminateAccountButton(context),
-                        getVerSpace(FetchPixels.getPixelHeight(40)),
-                      ],
                     ),
                   ),
-                ),
-              ),
-            ))
-      ],
+                )
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 
-  Widget logoutButton(BuildContext context) {
-    return getButton(context, Colors.white, "Logout", blueColor, () {}, 16,
+  Widget logoutButton(BuildContext context, {required VoidCallback onTap}) {
+    return getButton(context, Theme.of(context).secondaryHeaderColor, "Logout",
+        blueColor, onTap, 16,
         weight: FontWeight.w600,
         borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(15)),
         buttonHeight: FetchPixels.getPixelHeight(60),
@@ -82,8 +115,8 @@ class _TabProfileState extends State<TabProfile> {
   }
 
   Widget terminateAccountButton(BuildContext context) {
-    return getButton(
-        context, Colors.white, "Terminate Account", Colors.red, () {}, 16,
+    return getButton(context, Theme.of(context).secondaryHeaderColor,
+        "Terminate Account", Colors.red, () {}, 16,
         weight: FontWeight.w600,
         borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(15)),
         buttonHeight: FetchPixels.getPixelHeight(60),
@@ -95,7 +128,7 @@ class _TabProfileState extends State<TabProfile> {
   GestureDetector historyButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constant.sendToNext(context, Routes.historyRoute);
+        Constant.navigatePush(context, HistoryScreen());
       },
       child: Container(
         padding: EdgeInsets.only(
@@ -104,7 +137,7 @@ class _TabProfileState extends State<TabProfile> {
             top: FetchPixels.getPixelHeight(16),
             bottom: FetchPixels.getPixelHeight(16)),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).secondaryHeaderColor,
             boxShadow: [
               BoxShadow(
                   color: shadowColor,
@@ -124,8 +157,7 @@ class _TabProfileState extends State<TabProfile> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    getCustomFont("History", 15, Colors.black, 1,
-                        fontWeight: FontWeight.w500),
+                    getMediumCustomFont(context, "History"),
                     getVerSpace(FetchPixels.getPixelHeight(5)),
                     SizedBox(
                       width: FetchPixels.getPixelHeight(220),
@@ -150,7 +182,7 @@ class _TabProfileState extends State<TabProfile> {
   GestureDetector bankDetailButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constant.sendToNext(context, Routes.bankDetailRoute);
+        Constant.navigatePush(context, BankDetail());
       },
       child: Container(
         padding: EdgeInsets.only(
@@ -159,7 +191,7 @@ class _TabProfileState extends State<TabProfile> {
             top: FetchPixels.getPixelHeight(16),
             bottom: FetchPixels.getPixelHeight(16)),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).secondaryHeaderColor,
             boxShadow: [
               BoxShadow(
                   color: shadowColor,
@@ -179,8 +211,7 @@ class _TabProfileState extends State<TabProfile> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    getCustomFont("Bank Details", 15, Colors.black, 1,
-                        fontWeight: FontWeight.w500),
+                    getMediumCustomFont(context, "Bank Details"),
                     getVerSpace(FetchPixels.getPixelHeight(5)),
                     SizedBox(
                       width: FetchPixels.getPixelHeight(220),
@@ -205,7 +236,7 @@ class _TabProfileState extends State<TabProfile> {
   GestureDetector myProfileButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constant.sendToNext(context, Routes.myProfileRoute);
+        Constant.navigatePush(context, MyProfile());
       },
       child: Container(
         padding: EdgeInsets.only(
@@ -214,7 +245,7 @@ class _TabProfileState extends State<TabProfile> {
             top: FetchPixels.getPixelHeight(16),
             bottom: FetchPixels.getPixelHeight(16)),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).secondaryHeaderColor,
             boxShadow: [
               BoxShadow(
                   color: shadowColor,
@@ -234,8 +265,7 @@ class _TabProfileState extends State<TabProfile> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    getCustomFont("My Profile", 15, Colors.black, 1,
-                        fontWeight: FontWeight.w500),
+                    getMediumCustomFont(context, "My Profile"),
                     getVerSpace(FetchPixels.getPixelHeight(5)),
                     SizedBox(
                       width: FetchPixels.getPixelHeight(220),
@@ -271,11 +301,11 @@ class _TabProfileState extends State<TabProfile> {
           title: "Profile",
           fontsize: 24,
           weight: FontWeight.w700,
-          textColor: Colors.black,
+          textColor: Theme.of(context).textTheme.bodyLarge?.color,
           isleftimage: false,
           isrightimage: true,
           rightimage: "setting.svg", rightFunction: () {
-        Constant.sendToNext(context, Routes.settingRoute);
+        Constant.navigatePush(context, SettingScreen());
       }),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:fwheirs/app/view/signup/signup_screen.dart';
 import 'package:fwheirs/app/view_models/auth_providers/auth_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
@@ -9,10 +9,9 @@ import 'package:fwheirs/widgets/custom_button.dart';
 import 'package:fwheirs/widgets/email_text_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../../dependency_injection/locator.dart';
-import '../../../local_storage/local_db.dart';
 import '../../../widgets/error_dialog.dart';
 import '../../../widgets/password_field.dart';
+import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -77,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       GestureDetector(
                         onTap: () {
-                          Constant.sendToNext(context, Routes.forgotRoute);
+                          Constant.navigatePush(context, ForgotPassword());
                         },
                         child: getCustomFont(
                             "Forgot Password?", 15, blueColor, 1,
@@ -154,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.w400),
                           GestureDetector(
                             onTap: () {
-                              Constant.sendToNext(context, Routes.signUpRoutes);
+                              Constant.navigatePush(context, SignUpScreen());
                             },
                             child: getCustomFont("Sign Up", 15, blueColor, 1,
                                 fontWeight: FontWeight.w600),

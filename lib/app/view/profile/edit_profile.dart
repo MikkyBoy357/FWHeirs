@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:fwheirs/app/view_models/profile_providers/profile_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
-import 'package:fwheirs/base/pref_data.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fwheirs/widgets/email_text_field.dart';
+import 'package:fwheirs/widgets/name_text_field.dart';
+import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -19,16 +21,12 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   var horSpace = FetchPixels.getPixelHeight(20);
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneNoController = TextEditingController();
 
   Future<void> getData() async {
-    firstNameController.text = await PrefData.getFirstName();
-    lastNameController.text = await PrefData.getLastName();
-    emailController.text = await PrefData.getEmail();
-    phoneNoController.text = await PrefData.getPhoneNo();
+    // firstNameController.text = await PrefData.getFirstName();
+    // lastNameController.text = await PrefData.getLastName();
+    // emailController.text = await PrefData.getEmail();
+    // phoneNoController.text = await PrefData.getPhoneNo();
   }
 
   @override
@@ -41,20 +39,16 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: Scaffold(
+    return WillPopScope(child: Consumer<ProfileProvider>(
+      builder: (context, profileProvider, _) {
+        return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(
                 horizontal: horSpace, vertical: FetchPixels.getPixelHeight(30)),
             child: getButton(context, blueColor, "Save", Colors.white, () {
-              PrefData.setFirstName(firstNameController.text);
-              PrefData.setLastName(lastNameController.text);
-              PrefData.setEmail(emailController.text);
-              PrefData.setPhoneNo(phoneNoController.text);
-              backToPrev();
-              backToPrev();
+              profileProvider.editProfileInfo(context);
             }, 16,
                 weight: FontWeight.w600,
                 borderRadius:
@@ -71,45 +65,35 @@ class _EditProfileState extends State<EditProfile> {
                   getVerSpace(FetchPixels.getPixelHeight(29)),
                   profileImageWidget(),
                   getVerSpace(FetchPixels.getPixelHeight(30)),
-                  getDefaultTextFiledWithLabel(
-                      context, "First Name", firstNameController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
+                  NameTextField(
+                    hintText: "First Name",
+                    controller: profileProvider.firstNameController,
+                  ),
                   getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "Last Name", lastNameController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
+                  NameTextField(
+                    hintText: "Last Name",
+                    controller: profileProvider.lastNameController,
+                  ),
                   getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "Email", emailController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
+                  EmailTextField(
+                    hintText: "Email",
+                    controller: profileProvider.emailController,
+                  ),
                   getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "Phone No", phoneNoController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly
-                      ]),
+                  NameTextField(
+                    hintText: "Phone No.",
+                    controller: profileProvider.firstNameController,
+                  ),
                 ],
               ),
             ),
           ),
-        ),
-        onWillPop: () async {
-          backToPrev();
-          return false;
-        });
+        );
+      },
+    ), onWillPop: () async {
+      backToPrev();
+      return false;
+    });
   }
 
   Align profileImageWidget() {

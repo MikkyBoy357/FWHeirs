@@ -1,11 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_price_alert.dart';
 import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:fwheirs/app/view/setting/setting_screen.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
 
 class PriceAlertScreen extends StatefulWidget {
   const PriceAlertScreen({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class PriceAlertScreen extends StatefulWidget {
 
 class _PriceAlertScreenState extends State<PriceAlertScreen> {
   void backToPrev() {
-    Constant.sendToNext(context, Routes.settingRoute);
+    Constant.navigatePush(context, SettingScreen());
   }
 
   var horSpace = FetchPixels.getPixelHeight(20);
@@ -34,10 +35,10 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
                 vertical: FetchPixels.getPixelHeight(30), horizontal: horSpace),
             child: getButton(
                 context, blueColor, "Create Price alert", Colors.white, () {
-              Navigator.pushNamed(context, Routes.createPriceAlertRoute)
-                  .then((value) {
-                setState(() {});
-              });
+              // Navigator.pushNamed(context, Routes.createPriceAlertRoute)
+              //     .then((value) {
+              //   setState(() {});
+              // });
             }, 16,
                 weight: FontWeight.w600,
                 borderRadius:

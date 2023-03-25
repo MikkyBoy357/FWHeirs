@@ -1,9 +1,9 @@
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:fwheirs/app/view/home/home_screen.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
 
 class CompleteDialog extends StatefulWidget {
   const CompleteDialog({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class _CompleteDialogState extends State<CompleteDialog>
                   EdgeInsets.symmetric(
                       horizontal: FetchPixels.getPixelHeight(30)),
                   getButton(context, blueColor, "Go to home", Colors.white, () {
-                    Constant.sendToNext(context, Routes.homeScreenRoute);
+                    Constant.navigatePush(context, HomeScreen());
                   }, 16,
                       weight: FontWeight.w600,
                       borderRadius:

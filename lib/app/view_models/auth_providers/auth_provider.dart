@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fwheirs/app/view/home/home_screen.dart';
+import 'package:fwheirs/app/view/splash_screen.dart';
 
 import '../../../base/constant.dart';
 import '../../../base/pref_data.dart';
@@ -7,7 +9,6 @@ import '../../../dependency_injection/locator.dart';
 import '../../../local_storage/local_db.dart';
 import '../../../widgets/error_dialog.dart';
 import '../../../widgets/loading_dialog.dart';
-import '../../routes/app_routes.dart';
 
 class AuthProvider extends ChangeNotifier {
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
@@ -21,6 +22,7 @@ class AuthProvider extends ChangeNotifier {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController2 = TextEditingController();
+  TextEditingController refCodeController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController passwordController2 = TextEditingController();
 
@@ -44,6 +46,12 @@ class AuthProvider extends ChangeNotifier {
       var response = await dio.post(
         "${Constant.liveUrl}/login",
         data: body,
+        options: Options(
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        ),
       );
       print("Response");
       print("Response => $response");
@@ -55,7 +63,7 @@ class AuthProvider extends ChangeNotifier {
       Navigator.of(context, rootNavigator: true).pop(context);
 
       PrefData.setLogIn(true);
-      Constant.sendToNext(context, Routes.homeScreenRoute);
+      Constant.navigatePush(context, HomeScreen());
 
       print("Login Successful!\n");
     } on DioError catch (e) {
@@ -91,6 +99,7 @@ class AuthProvider extends ChangeNotifier {
         "firstname": firstNameController.text,
         "lastname": lastNameController.text,
         "phone": phoneNumberController.text,
+        "referral": refCodeController.text,
         "email": emailController2.text,
         "password": passwordController2.text
       };
@@ -125,7 +134,7 @@ class AuthProvider extends ChangeNotifier {
       Navigator.of(context, rootNavigator: true).pop(context);
 
       PrefData.setLogIn(true);
-      Constant.sendToNext(context, Routes.homeScreenRoute);
+      Constant.navigatePush(context, HomeScreen());
 
       print("Login Successful!\n");
     } on DioError catch (e) {
@@ -142,6 +151,7 @@ class AuthProvider extends ChangeNotifier {
           },
         );
       } else {
+        print(e);
         print(e.response?.statusCode);
         showDialog(
           context: context,
@@ -153,5 +163,38 @@ class AuthProvider extends ChangeNotifier {
         );
       }
     }
+  }
+
+  Future<void> forgotPassword(BuildContext context) async {
+    print('Forgot Password...');
+    print(passwordController.text);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LoadingDialog();
+      },
+    );
+  }
+
+  void logout(BuildContext context) {
+    print("Logging Out...");
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LoadingDialog();
+      },
+    );
+    // locator<AppDataBaseService>().deleteToken();
+    print("Token => ${locator<AppDataBaseService>().getTokenString()}");
+    PrefData.setLogIn(false);
+    Navigator.of(context, rootNavigator: true).pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return SplashScreen();
+        },
+      ),
+    );
   }
 }

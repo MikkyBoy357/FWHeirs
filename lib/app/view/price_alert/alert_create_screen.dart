@@ -1,9 +1,9 @@
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:fwheirs/app/view/price_alert/price_alert_screen.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
 
 class AlertCreateScreen extends StatefulWidget {
   const AlertCreateScreen({Key? key}) : super(key: key);
@@ -66,7 +66,7 @@ class _AlertCreateScreenState extends State<AlertCreateScreen> {
                 EdgeInsets.symmetric(
                     horizontal: FetchPixels.getPixelHeight(50)),
                 getButton(context, blueColor, "Ok", Colors.white, () {
-                  Constant.sendToNext(context, Routes.priceAlertRoute);
+                  Constant.navigatePush(context, PriceAlertScreen());
                 }, 16,
                     weight: FontWeight.w600,
                     buttonHeight: FetchPixels.getPixelHeight(60),

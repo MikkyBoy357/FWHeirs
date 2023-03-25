@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:fwheirs/app/view_models/investment_providers/investment_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
-import 'package:fwheirs/base/pref_data.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fwheirs/widgets/name_text_field.dart';
+import 'package:provider/provider.dart';
 
 class CreatePlanScreen extends StatefulWidget {
   const CreatePlanScreen({Key? key}) : super(key: key);
@@ -19,10 +20,6 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
   }
 
   var horSpace = FetchPixels.getPixelHeight(20);
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneNoController = TextEditingController();
 
   // Future<void> getData() async {
   //   firstNameController.text = await PrefData.getFirstName();
@@ -34,82 +31,82 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
   @override
   void initState() {
     super.initState();
-    // getData().then((value) {
-    //   setState(() {});
-    // });
+    Future.delayed(
+      Duration.zero,
+      () {
+        Provider.of<InvestmentProvider>(context, listen: false)
+            .getBrokers(context);
+        Provider.of<InvestmentProvider>(context, listen: false)
+            .getPackages(context);
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: horSpace, vertical: FetchPixels.getPixelHeight(30)),
-            child: getButton(context, blueColor, "Save", Colors.white, () {
-              PrefData.setFirstName(firstNameController.text);
-              PrefData.setLastName(lastNameController.text);
-              PrefData.setEmail(emailController.text);
-              PrefData.setPhoneNo(phoneNoController.text);
-              backToPrev();
-              backToPrev();
-            }, 16,
-                weight: FontWeight.w600,
-                borderRadius:
-                    BorderRadius.circular(FetchPixels.getPixelHeight(15)),
-                buttonHeight: FetchPixels.getPixelHeight(60)),
-          ),
-          body: SafeArea(
-            child: getPaddingWidget(
-              EdgeInsets.symmetric(horizontal: horSpace),
-              Column(
-                children: [
-                  getVerSpace(FetchPixels.getPixelHeight(14)),
-                  appBar(context),
-                  // getVerSpace(FetchPixels.getPixelHeight(29)),
-                  // profileImageWidget(),
-                  getVerSpace(FetchPixels.getPixelHeight(30)),
-                  getDefaultTextFiledWithLabel(
-                      context, "Select Broker", firstNameController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
-                  getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "Select Package", lastNameController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
-                  getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "Enter Amount", emailController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60)),
-                  getVerSpace(horSpace),
-                  getDefaultTextFiledWithLabel(
-                      context, "40% - 70%", phoneNoController,
-                      withprefix: false,
-                      image: "message.svg",
-                      isEnable: false,
-                      height: FetchPixels.getPixelHeight(60),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly
-                      ]),
-                ],
+      child: Consumer<InvestmentProvider>(
+        builder: (context, investmentProvider, _) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.white,
+            bottomNavigationBar: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: horSpace,
+                  vertical: FetchPixels.getPixelHeight(30)),
+              child: getButton(
+                  context, blueColor, "Save", Colors.white, () {
+                    investmentProvider.createInvestment(context);
+              }, 16,
+                  weight: FontWeight.w600,
+                  borderRadius:
+                      BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                  buttonHeight: FetchPixels.getPixelHeight(60)),
+            ),
+            body: SafeArea(
+              child: getPaddingWidget(
+                EdgeInsets.symmetric(horizontal: horSpace),
+                Form(
+                  key: investmentProvider.createPlanFormKey,
+                  child: Column(
+                    children: [
+                      getVerSpace(FetchPixels.getPixelHeight(14)),
+                      appBar(context),
+                      // getVerSpace(FetchPixels.getPixelHeight(29)),
+                      // profileImageWidget(),
+                      getVerSpace(FetchPixels.getPixelHeight(30)),
+                      NumberTextField(
+                        hintText: "Select Broker",
+                        controller: investmentProvider.brokerController,
+                      ),
+                      getVerSpace(horSpace),
+                      NumberTextField(
+                        hintText: "Select Package",
+                        controller: investmentProvider.packageController,
+                      ),
+                      getVerSpace(horSpace),
+                      NumberTextField(
+                        hintText: "Duration in days",
+                        controller: investmentProvider.durationController,
+                      ),
+                      getVerSpace(horSpace),
+                      NumberTextField(
+                        hintText: "Amount",
+                        controller: investmentProvider.amountController,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        onWillPop: () async {
-          backToPrev();
-          return false;
-        });
+          );
+        },
+      ),
+      onWillPop: () async {
+        backToPrev();
+        return false;
+      },
+    );
   }
 
   Align profileImageWidget() {

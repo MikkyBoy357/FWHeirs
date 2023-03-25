@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_currency.dart';
 import 'package:fwheirs/app/models/model_price_alert.dart';
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:fwheirs/app/view/price_alert/alert_create_screen.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CreatePriceAlert extends StatefulWidget {
   const CreatePriceAlert({Key? key}) : super(key: key);
@@ -54,7 +54,7 @@ class _CreatePriceAlertState extends State<CreatePriceAlert> {
               }
               priceAlertLists.add(ModelPriceAlert(
                   image, selectCurrency, alerttype, priceController.text));
-              Constant.sendToNext(context, Routes.alertCreateRoute);
+              Constant.navigatePush(context, AlertCreateScreen());
             }, 16,
                 weight: FontWeight.w600,
                 borderRadius:

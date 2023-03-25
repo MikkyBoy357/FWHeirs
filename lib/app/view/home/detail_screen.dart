@@ -1,13 +1,14 @@
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_chartdata.dart';
-import 'package:fwheirs/app/routes/app_routes.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/pref_data.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
+
+import 'exchange_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({Key? key}) : super(key: key);
@@ -162,7 +163,7 @@ class _DetailScreenState extends State<DetailScreen> {
       children: [
         Expanded(
             child: getButton(context, Colors.black, "Buy", Colors.white, () {
-          Constant.sendToNext(context, Routes.exchangeRoute);
+          Constant.navigatePush(context, ExchangeScreen());
         }, 16,
                 weight: FontWeight.w600,
                 borderRadius:

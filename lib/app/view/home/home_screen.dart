@@ -6,13 +6,14 @@ import 'package:fwheirs/app/view/history/history_screen.dart';
 import 'package:fwheirs/app/view/home/tab/tab_home.dart';
 import 'package:fwheirs/app/view/home/tab/tab_market.dart';
 import 'package:fwheirs/app/view/home/tab/tab_profile.dart';
-import 'package:fwheirs/app/view_models/auth_providers/auth_provider.dart';
+import 'package:fwheirs/app/view_models/profile_providers/profile_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:provider/provider.dart';
 
 import '../../../base/widget_utils.dart';
+import '../../view_models/investment_providers/investment_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -41,7 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // Provider.of<AuthProvider>(context, listen: false).login(context);
+    Future.delayed(Duration.zero, () {
+      Provider.of<ProfileProvider>(context, listen: false)
+          .getProfileInfo(context);
+      Provider.of<InvestmentProvider>(context, listen: false)
+          .getInvestments(context);
+    });
   }
 
   @override

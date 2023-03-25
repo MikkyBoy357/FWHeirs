@@ -1,9 +1,12 @@
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:fwheirs/app/view/login/change_password.dart';
+import 'package:fwheirs/app/view_models/auth_providers/auth_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
+import 'package:fwheirs/widgets/email_text_field.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -21,8 +24,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: Scaffold(
+    return WillPopScope(child: Consumer<AuthProvider>(
+      builder: (context, authProvider, _) {
+        return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -50,12 +54,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       txtHeight: FetchPixels.getPixelHeight(1.3),
                       textAlign: TextAlign.center),
                   getVerSpace(FetchPixels.getPixelHeight(30)),
-                  getDefaultTextFiledWithLabel(
-                      context, "Email", emailController,
-                      isEnable: false, height: FetchPixels.getPixelHeight(60)),
+                  EmailTextField(controller: TextEditingController()),
                   getVerSpace(FetchPixels.getPixelHeight(30)),
                   getButton(context, blueColor, "Submit", Colors.white, () {
-                    Constant.sendToNext(context, Routes.changePasswordRoute);
+                    Constant.navigatePush(context, ChangePassword());
                   }, 16,
                       weight: FontWeight.w600,
                       borderRadius:
@@ -65,10 +67,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
             ),
           ),
-        ),
-        onWillPop: () async {
-          finish();
-          return false;
-        });
+        );
+      },
+    ), onWillPop: () async {
+      finish();
+      return false;
+    });
   }
 }

@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:fwheirs/app/view/home/home_screen.dart';
+import 'package:fwheirs/app/view/intro/intro_screen.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/pref_data.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
-import 'package:fwheirs/base/widget_utils.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -24,8 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
         const Duration(seconds: 3),
         () {
           (value)
-              ? Constant.sendToNext(context, Routes.homeScreenRoute)
-              : Constant.sendToNext(context, Routes.introRoute);
+              ? Constant.navigatePush(context, HomeScreen())
+              : Constant.navigatePush(context, IntroScreen());
         },
       );
     });
@@ -43,9 +43,8 @@ class _SplashScreenState extends State<SplashScreen> {
           body: Container(
             color: blueColor,
             child: Center(
-                child: getSvgImage(
-              "splash_logo.svg",
-            )),
+              child: Image.asset("assets/images/fwheirsappp_white.png"),
+            ),
           ),
         ),
         onWillPop: () async {

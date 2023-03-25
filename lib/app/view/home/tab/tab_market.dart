@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_trend.dart';
-import 'package:fwheirs/app/routes/app_routes.dart';
+import 'package:fwheirs/app/view/home/detail_screen.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/pref_data.dart';
@@ -115,7 +115,7 @@ class _TabMarketState extends State<TabMarket> {
                   PrefData.setTrendCurrency(modelTrend.currency ?? "");
                   PrefData.setTrendPrice(modelTrend.price ?? 0.00);
                   PrefData.setTrendProfit(modelTrend.profit ?? "");
-                  Constant.sendToNext(context, Routes.detailRoute);
+                  Constant.navigatePush(context, DetailScreen());
                 },
                 child: Container(
                   margin: EdgeInsets.only(
