@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../local_storage/local_db.dart';
+import '../local_storage/theme_db.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -30,6 +31,9 @@ class AppDependencies {
     );
     locator.registerLazySingleton<AppDataBaseService>(
       () => AppDataBaseService(),
+    );
+    locator.registerLazySingleton<ThemeDataBaseService>(
+      () => ThemeDataBaseService(),
     );
   }
 

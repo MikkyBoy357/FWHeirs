@@ -5,11 +5,13 @@ import 'package:fwheirs/base/constant.dart';
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
+  final bool isActive;
 
   const CustomButton({
     Key? key,
     required this.text,
     required this.onTap,
+    this.isActive = true,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,9 @@ class CustomButton extends StatelessWidget {
           height: 60,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: blueColor,
+            color: Theme.of(context).brightness == Brightness.light
+                ? (isActive ? blueColor : Colors.grey[600])
+                : (isActive ? blueColor : Colors.grey[600]),
             borderRadius: BorderRadius.all(
               Radius.circular(15),
             ),

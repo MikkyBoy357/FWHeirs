@@ -9,11 +9,13 @@ class EmailTextField extends StatelessWidget {
     required this.controller,
     this.title = 'Email Address',
     this.hintText = 'myemail@gmail.com',
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController controller;
   final String title;
   final String hintText;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class EmailTextField extends StatelessWidget {
       controller: controller,
       validateFunction: Validations.validateEmail,
       textInputType: TextInputType.emailAddress,
+      onChange: onChanged,
     );
   }
 }

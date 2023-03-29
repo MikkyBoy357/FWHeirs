@@ -11,8 +11,8 @@ import '../../../widgets/error_dialog.dart';
 import '../../../widgets/loading_dialog.dart';
 
 class AuthProvider extends ChangeNotifier {
-  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
+  // GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+  // GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
   // Login
   TextEditingController emailController = TextEditingController();
@@ -25,6 +25,10 @@ class AuthProvider extends ChangeNotifier {
   TextEditingController refCodeController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController passwordController2 = TextEditingController();
+
+  void changeNotifiers() async {
+    notifyListeners();
+  }
 
   Future<void> login(BuildContext context) async {
     try {

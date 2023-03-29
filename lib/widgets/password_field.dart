@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../base/constant.dart';
@@ -11,11 +12,15 @@ class PasswordField extends StatefulWidget {
     required this.controller,
     this.hintText = 'Password',
     this.title = 'Password',
+    this.textInputType = TextInputType.number,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController controller;
   final String hintText;
   final String title;
+  final TextInputType textInputType;
+  final void Function(String)? onChanged;
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
@@ -34,6 +39,13 @@ class _PasswordFieldState extends State<PasswordField> {
           obscureText: isObscure,
           enabled: true,
           validateFunction: Validations.validatePassword,
+          textInputType: widget.textInputType,
+          onChange: widget.onChanged,
+          textInputFormatters: [
+            LengthLimitingTextInputFormatter(
+              6,
+            ), //6 is maximum number of characters you want in textfield
+          ],
         ),
         Positioned(
           right: 15,

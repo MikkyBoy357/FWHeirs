@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fwheirs/base/theme/theme_constants.dart';
 import 'package:fwheirs/base/theme/theme_manager.dart';
+import 'package:fwheirs/local_storage/theme_db.dart';
 import 'package:provider/provider.dart';
 
 import 'app/view/splash_screen.dart';
@@ -18,6 +19,7 @@ void main() async {
   HttpOverrides.global = new MyHttpOverrides();
   await AppDependencies.register();
   await AppDataBaseService.startService();
+  await ThemeDataBaseService.startService();
 
   runApp(const MyApp());
 }

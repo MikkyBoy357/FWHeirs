@@ -10,11 +10,13 @@ class PhoneTextField extends StatelessWidget {
     required this.controller,
     this.title = 'Phone',
     this.hintText = 'Type here',
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController controller;
   final String title;
   final String hintText;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,9 @@ class PhoneTextField extends StatelessWidget {
       controller: controller,
       validateFunction: Validations.validateNumber,
       textInputType: TextInputType.text,
+      onChange: onChanged,
       prefixWidget: Row(
-        children: const [
+        children: [
           // Image.asset(
           //   Constant.assetImagePath + image,
           //   color: color,
@@ -45,7 +48,7 @@ class PhoneTextField extends StatelessWidget {
           Text(
             "+234",
             style: TextStyle(
-              color: Colors.black,
+              color: Theme.of(context).textTheme.bodyMedium!.color!,
               fontWeight: FontWeight.w400,
               fontSize: 16,
               fontFamily: Constant.fontsFamily,

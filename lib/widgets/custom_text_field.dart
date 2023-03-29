@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fwheirs/base/color_data.dart';
 
 import '../base/constant.dart';
@@ -12,6 +13,7 @@ class CustomTextField extends StatefulWidget {
   final int maxLines;
   final bool obscureText;
   final bool enabled;
+  final List<TextInputFormatter>? textInputFormatters;
   final FormFieldValidator<String>? validateFunction;
   final void Function(String)? onSaved, onChange;
   final TextInputType? textInputType;
@@ -43,6 +45,7 @@ class CustomTextField extends StatefulWidget {
     this.enableErrorMessage = true,
     this.streamText,
     this.suffixIcon,
+    this.textInputFormatters,
   }) : super(key: key);
 
   @override
@@ -81,6 +84,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       autovalidateMode: AutovalidateMode.disabled,
                       textCapitalization: TextCapitalization.sentences,
                       // initialValue: widget.initialValue,
+                      inputFormatters: widget.textInputFormatters,
                       enabled: widget.enabled,
                       onChanged: widget.onChange,
                       style: const TextStyle(

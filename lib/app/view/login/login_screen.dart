@@ -21,6 +21,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+
   void finishView() {
     Constant.closeApp();
   }
@@ -39,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return WillPopScope(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           body: Consumer<AuthProvider>(
             builder: (context, authProvider, _) {
               return SafeArea(
@@ -48,26 +50,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       getVerSpace(FetchPixels.getPixelHeight(98)),
-                      getCustomFont("Login", 24, Colors.black, 1,
+                      getCustomFont("Login", 24,
+                          Theme.of(context).textTheme.bodyLarge!.color!, 1,
                           fontWeight: FontWeight.w700,
                           textAlign: TextAlign.center),
                       getVerSpace(FetchPixels.getPixelHeight(10)),
-                      getMultilineCustomFont(
-                          "Hello, welcome back to FWHeirs.", 15, Colors.black,
-                          fontWeight: FontWeight.w400,
-                          textAlign: TextAlign.center,
-                          txtHeight: FetchPixels.getPixelHeight(1.3)),
+                      getMediumCustomFont(
+                        context,
+                        "Hello, welcome back to FWHeirs.",
+                        fontWeight: FontWeight.w400,
+                      ),
                       getVerSpace(FetchPixels.getPixelHeight(30)),
                       Form(
-                        key: authProvider.loginFormKey,
+                        key: loginFormKey,
                         child: Column(
                           children: [
                             EmailTextField(
-                                controller: authProvider.emailController),
+                              controller: authProvider.emailController,
+                              onChanged: (String? newVal) {
+                                authProvider.changeNotifiers();
+                              },
+                            ),
                             getVerSpace(FetchPixels.getPixelHeight(20)),
                             PasswordField(
                               controller: authProvider.passwordController,
-                              title: 'Old Password',
+                              onChanged: (String? newVal) {
+                                authProvider.changeNotifiers();
+                              },
                             ),
                             getVerSpace(FetchPixels.getPixelHeight(19)),
                           ],
@@ -87,9 +96,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       CustomButton(
                         text: 'Login',
                         // onTap: () {},
+                        isActive: loginFormKey.currentState != null &&
+                            loginFormKey.currentState!.validate(),
                         onTap: () async {
-                          if (authProvider.loginFormKey.currentState!
-                              .validate()) {
+                          if (loginFormKey.currentState!.validate()) {
                             await authProvider.login(context);
                           } else {
                             showDialog(
@@ -148,9 +158,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          getCustomFont(
-                              "Don’t have an account? ", 15, Colors.black, 1,
-                              fontWeight: FontWeight.w400),
+                          getMediumCustomFont(
+                            context,
+                            "Don’t have an account? ",
+                          ),
                           GestureDetector(
                             onTap: () {
                               Constant.navigatePush(context, SignUpScreen());
