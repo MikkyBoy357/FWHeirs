@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingDialog extends StatelessWidget {
   @override
@@ -13,7 +14,10 @@ class LoadingDialog extends StatelessWidget {
               Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),
-                  child: CircularProgressIndicator(),
+                  child: SpinKitFadingCircle(
+                    color: Colors.white,
+                    size: 50.0,
+                  ),
                 ),
               ),
             ],

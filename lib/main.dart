@@ -36,6 +36,11 @@ class MyHttpOverrides extends HttpOverrides {
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  static void setWholeAppState(BuildContext context) {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state!.setWholeAppState();
+  }
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -43,6 +48,10 @@ class MyApp extends StatefulWidget {
 ThemeManager _themeManager = ThemeManager();
 
 class _MyAppState extends State<MyApp> {
+  setWholeAppState() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

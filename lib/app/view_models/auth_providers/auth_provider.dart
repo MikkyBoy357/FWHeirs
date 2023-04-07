@@ -119,8 +119,8 @@ class AuthProvider extends ChangeNotifier {
       print(response.data['data']);
       final bool status = response.data['status'];
       final String message = response.data['message'];
+      Navigator.of(context, rootNavigator: true).pop(context);
       if (status == false) {
-        Navigator.of(context, rootNavigator: true).pop(context);
         showDialog(
           context: context,
           builder: (context) {
@@ -130,17 +130,28 @@ class AuthProvider extends ChangeNotifier {
           },
         );
         return;
+      } else if (status == true) {
+        print("User Created Successful!\n");
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SuccessDialog(
+              text: "${response.data["message"]}",
+              buttonLabel: "LOGIN",
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).pop(context);
+                Constant.backToPrev(context);
+              },
+            );
+          },
+        );
       }
-      final String accessToken = response.data['access_token'];
-      locator<AppDataBaseService>().saveToken(accessToken);
-      print("Token => ${locator<AppDataBaseService>().getTokenString()}");
+      // final String accessToken = response.data['access_token'];
+      // locator<AppDataBaseService>().saveToken(accessToken);
+      // print("Token => ${locator<AppDataBaseService>().getTokenString()}");
 
-      Navigator.of(context, rootNavigator: true).pop(context);
-
-      PrefData.setLogIn(true);
-      Constant.navigatePush(context, HomeScreen());
-
-      print("Login Successful!\n");
+      // PrefData.setLogIn(true);
+      // Constant.navigatePush(context, HomeScreen());
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
         print("Error => $e");

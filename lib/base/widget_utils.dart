@@ -169,7 +169,7 @@ Widget getMultilineCustomFont(String text, double fontSize, Color fontColor,
 }
 
 Widget getButton(BuildContext context, Color bgColor, String text,
-    Color textColor, Function function, double fontsize,
+    Color textColor, VoidCallback? function, double fontsize,
     {bool isBorder = false,
     EdgeInsetsGeometry? insetsGeometry,
     borderColor = Colors.transparent,
@@ -187,9 +187,7 @@ Widget getButton(BuildContext context, Color bgColor, String text,
     BorderRadius? borderRadius,
     double? borderWidth}) {
   return InkWell(
-    onTap: () {
-      function();
-    },
+    onTap: function,
     child: Container(
       margin: insetsGeometry,
       padding: insetsGeometrypadding,

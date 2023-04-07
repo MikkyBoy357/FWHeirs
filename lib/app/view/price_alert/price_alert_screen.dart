@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_price_alert.dart';
-import 'package:fwheirs/app/routes/app_routes.dart';
 import 'package:fwheirs/app/view/setting/setting_screen.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
@@ -29,7 +28,6 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
     return WillPopScope(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(
                 vertical: FetchPixels.getPixelHeight(30), horizontal: horSpace),
@@ -88,7 +86,7 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                   FetchPixels.getPixelHeight(16)),
-                              color: Colors.white),
+                              color: Theme.of(context).scaffoldBackgroundColor),
                           padding: EdgeInsets.symmetric(
                               horizontal: FetchPixels.getPixelHeight(20)),
                           child: Column(
@@ -98,7 +96,8 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .secondaryHeaderColor,
                                         borderRadius: BorderRadius.vertical(
                                             top: Radius.circular(
                                                 FetchPixels.getPixelHeight(
@@ -123,12 +122,11 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
                                                 FetchPixels.getPixelHeight(36)),
                                         getHorSpace(
                                             FetchPixels.getPixelHeight(10)),
-                                        getCustomFont(
-                                            modelPriceAlert.name ?? "",
-                                            15,
-                                            Colors.black,
-                                            1,
-                                            fontWeight: FontWeight.w600)
+                                        getMediumCustomFont(
+                                          context,
+                                          modelPriceAlert.name ?? "",
+                                          fontWeight: FontWeight.w600,
+                                        )
                                       ],
                                     ),
                                   ),
@@ -190,7 +188,7 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).secondaryHeaderColor,
                           borderRadius: BorderRadius.vertical(
                               top: Radius.circular(
                                   FetchPixels.getPixelHeight(14))),
@@ -209,8 +207,8 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
                               width: FetchPixels.getPixelHeight(36),
                               height: FetchPixels.getPixelHeight(36)),
                           getHorSpace(FetchPixels.getPixelHeight(10)),
-                          getCustomFont(
-                              modelPriceAlert.name ?? "", 15, Colors.black, 1,
+                          getMediumCustomFont(
+                              context, modelPriceAlert.name ?? "",
                               fontWeight: FontWeight.w600)
                         ],
                       ),
@@ -255,7 +253,7 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
       title: "Price Alert",
       fontsize: 24,
       weight: FontWeight.w700,
-      textColor: Colors.black,
+      textColor: Theme.of(context).textTheme.bodyLarge!.color!,
     );
   }
 }

@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+extension ApplyComma on String {
+  String get valueWithComma => replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
+
+  String asAmount() => toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
+}
+
 class Constant {
   static const String liveUrl = 'https://api.fwheirs.com/api/v2';
   static String assetImagePath = "assets/images/";

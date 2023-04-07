@@ -7,6 +7,8 @@ import 'package:fwheirs/base/widget_utils.dart';
 import 'package:fwheirs/widgets/name_text_field.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widgets/dropdown_text_field.dart';
+
 class CreatePlanScreen extends StatefulWidget {
   const CreatePlanScreen({Key? key}) : super(key: key);
 
@@ -35,9 +37,14 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
       Duration.zero,
       () {
         Provider.of<InvestmentProvider>(context, listen: false)
-            .getBrokers(context);
+            .setBrokersNames();
         Provider.of<InvestmentProvider>(context, listen: false)
-            .getPackages(context);
+            .setPackagesNames();
+        Provider.of<InvestmentProvider>(context, listen: false).initDropdowns();
+        // Provider.of<InvestmentProvider>(context, listen: false)
+        //     .getBrokers(context);
+        // Provider.of<InvestmentProvider>(context, listen: false)
+        //     .getPackages(context);
       },
     );
   }
@@ -47,6 +54,7 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
     return WillPopScope(
       child: Consumer<InvestmentProvider>(
         builder: (context, investmentProvider, _) {
+          print("${investmentProvider.brokers}");
           return Scaffold(
             resizeToAvoidBottomInset: false,
             bottomNavigationBar: Container(
@@ -67,20 +75,63 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
                 Form(
                   key: investmentProvider.createPlanFormKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       getVerSpace(FetchPixels.getPixelHeight(14)),
                       appBar(context),
                       // getVerSpace(FetchPixels.getPixelHeight(29)),
                       // profileImageWidget(),
                       getVerSpace(FetchPixels.getPixelHeight(30)),
-                      NumberTextField(
-                        hintText: "Select Broker",
+                      DropDownTextField(
+                        title: "Select Broker",
+                        hasPrefixImage: true,
                         controller: investmentProvider.brokerController,
+                        hintText: 'Select Broker',
+                        dropDownList: investmentProvider.brokersNames,
+                        onChanged: (newValue) {
+                          setState(() {
+                            // _armorcDues = newValue;
+                            investmentProvider.brokerController.text =
+                                newValue.toString();
+                            print("newBroker => $newValue");
+                            investmentProvider
+                                .setSelectedBroker(newValue.toString());
+                            print(
+                                "SelectedBroker => ${investmentProvider.selectedBroker.id}");
+                          });
+                        },
+                        value:
+                            investmentProvider.brokerController.text.isNotEmpty
+                                ? investmentProvider.brokerController.text
+                                : investmentProvider.brokers[0].name,
                       ),
-                      getVerSpace(horSpace),
-                      NumberTextField(
-                        hintText: "Select Package",
-                        controller: investmentProvider.packageController,
+                      getVerSpace(FetchPixels.getPixelHeight(10)),
+                      DropDownTextField(
+                        title: "Select Package",
+                        hasPrefixImage: false,
+                        controller: investmentProvider.brokerController,
+                        hintText: 'Select Package',
+                        dropDownList: investmentProvider.packagesNames,
+                        onChanged: (newValue) {
+                          setState(() {
+                            // _armorcDues = newValue;
+                            investmentProvider.packageController.text =
+                                newValue.toString();
+                            print("newPackage => $newValue");
+                            investmentProvider
+                                .setSelectedPackage(newValue.toString());
+                            print(
+                                "SelectedPackage => ${investmentProvider.selectedPackage.id}");
+                            // print(amorcDuesDropDown.indexOf(newValue));
+                            // var index = amorcDuesDropDown.indexOf(newValue);
+                            // payment.changeDuesAmount(index);
+                            // payment.calculateTotal();
+                          });
+                        },
+                        value:
+                            investmentProvider.packageController.text.isNotEmpty
+                                ? investmentProvider.packageController.text
+                                : investmentProvider.packages[0].name,
                       ),
                       getVerSpace(horSpace),
                       NumberTextField(
@@ -88,8 +139,25 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
                         controller: investmentProvider.durationController,
                       ),
                       getVerSpace(horSpace),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          getMediumCustomFont(context, "Amount"),
+                          Row(
+                            children: [
+                              getMediumCustomFont(
+                                context,
+                                "Min: ${investmentProvider.minVest} || Max: ${investmentProvider.maxVest}"
+                                    .valueWithComma,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      getVerSpace(5),
                       NumberTextField(
-                        hintText: "Amount",
+                        hintText:
+                            "${investmentProvider.minVest} - ${investmentProvider.minVest}",
                         controller: investmentProvider.amountController,
                       ),
                     ],

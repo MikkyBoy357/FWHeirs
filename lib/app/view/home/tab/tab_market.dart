@@ -3,11 +3,13 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_trend.dart';
 import 'package:fwheirs/app/view/home/detail_screen.dart';
+import 'package:fwheirs/app/view_models/profile_providers/profile_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/pref_data.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
+import 'package:provider/provider.dart';
 
 class TabMarket extends StatefulWidget {
   const TabMarket({Key? key}) : super(key: key);
@@ -47,22 +49,31 @@ class _TabMarketState extends State<TabMarket> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        leading: getPaddingWidget(
-          EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(21)),
-          GestureDetector(
-            child: getSvgImage("back.svg"),
-            onTap: () {
-              Constant.backToPrev(context);
-            },
-          ),
-        ),
+        // leading: getPaddingWidget(
+        //   EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(21)),
+        //   GestureDetector(
+        //     child: getSvgImage("back.svg"),
+        //     onTap: () {
+        //       Constant.backToPrev(context);
+        //     },
+        //   ),
+        // ),
         title: getCustomFont(
-          "Referral",
+          "Agent",
           22,
           Theme.of(context).textTheme.bodyLarge!.color!,
           1,
           fontWeight: FontWeight.w700,
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.info_outline,
+              color: blueColor,
+            ),
+          ),
+        ],
         elevation: 0,
       ),
       body: Column(
@@ -83,7 +94,7 @@ class _TabMarketState extends State<TabMarket> {
                     fontSize: 16,
                     fontStyle: FontStyle.normal,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   textScaleFactor: FetchPixels.getTextScale(),
                 ),
               ),
@@ -98,8 +109,53 @@ class _TabMarketState extends State<TabMarket> {
           getVerSpace(FetchPixels.getPixelHeight(24)),
           categoryList(),
           getVerSpace(FetchPixels.getPixelHeight(24)),
-          markettrendList()
+          Builder(builder: (context) {
+            print(Provider.of<ProfileProvider>(context).myProfileInfo.toJson());
+            if (select == 0) {
+              return Column(
+                children: [
+                  getMediumCustomFont(
+                    context,
+                    "Here is your referral code:",
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).secondaryHeaderColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      "${Provider.of<ProfileProvider>(context).myProfileInfo.refCode}",
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).secondaryHeaderColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      "Balance: ₦500000".valueWithComma,
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return markettrendList();
+            }
+          })
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: terminateAccountButton(
+          context,
+          label: "Withdraw",
+          color: blueColor,
+          onTap: () {},
+        ),
       ),
     );
   }
@@ -239,7 +295,8 @@ class _TabMarketState extends State<TabMarket> {
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        itemCount: categoryLists.length,
+        itemCount: 2,
+        // itemCount: categoryLists.length,
         itemBuilder: (context, index) {
           return Wrap(
             children: [
@@ -313,4 +370,16 @@ class _TabMarketState extends State<TabMarket> {
           rightimage: "more.svg"),
     );
   }
+}
+
+Widget terminateAccountButton(BuildContext context,
+    {String? label, Color? color, VoidCallback? onTap}) {
+  return getButton(context, Theme.of(context).secondaryHeaderColor,
+      label ?? "Terminate Investment", color ?? Colors.red, onTap, 16,
+      weight: FontWeight.w600,
+      borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+      buttonHeight: FetchPixels.getPixelHeight(60),
+      isBorder: true,
+      borderColor: color ?? Colors.red,
+      borderWidth: FetchPixels.getPixelHeight(2));
 }

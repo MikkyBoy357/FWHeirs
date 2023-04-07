@@ -62,8 +62,20 @@ class _TabProfileState extends State<TabProfile> {
                       getVerSpace(FetchPixels.getPixelHeight(30)),
                       myProfileButton(context),
                       getVerSpace(FetchPixels.getPixelHeight(20)),
-                      bankDetailButton(context),
-                      getVerSpace(FetchPixels.getPixelHeight(20)),
+                      Builder(
+                        builder: (context) {
+                          if (profileProvider.myProfileInfo.isActive == "0") {
+                            return Column(
+                              children: [
+                                bankDetailButton(context),
+                                getVerSpace(FetchPixels.getPixelHeight(20)),
+                              ],
+                            );
+                          } else {
+                            return SizedBox();
+                          }
+                        },
+                      ),
                       historyButton(context),
                       getVerSpace(FetchPixels.getPixelHeight(40)),
                       logoutButton(
@@ -71,8 +83,6 @@ class _TabProfileState extends State<TabProfile> {
                         onTap: () => authProvider.logout(context),
                       ),
                       getVerSpace(FetchPixels.getPixelHeight(20)),
-                      terminateAccountButton(context),
-                      getVerSpace(FetchPixels.getPixelHeight(40)),
                     ],
                   ),
                 ),

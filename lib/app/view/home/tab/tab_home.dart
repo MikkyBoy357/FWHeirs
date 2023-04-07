@@ -5,8 +5,6 @@ import 'package:fwheirs/app/models/investment_model.dart';
 import 'package:fwheirs/app/models/model_news.dart';
 import 'package:fwheirs/app/view/home/create_plan_screen.dart';
 import 'package:fwheirs/app/view/home/detail_screen.dart';
-import 'package:fwheirs/app/view/home/market_trend_screen.dart';
-import 'package:fwheirs/app/view/home/portfolio_screen.dart';
 import 'package:fwheirs/app/view/home/tab/tab_transaction.dart';
 import 'package:fwheirs/app/view/profile/my_profile.dart';
 import 'package:fwheirs/app/view_models/investment_providers/investment_provider.dart';
@@ -16,6 +14,7 @@ import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/pref_data.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
+import 'package:fwheirs/main.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/model_portfolio.dart';
@@ -65,138 +64,184 @@ class _TabHomeState extends State<TabHome> {
                   ),
                 ),
                 Positioned(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      Provider.of<InvestmentProvider>(context, listen: false)
+                          .getInvestments(context);
+                      MyApp.setWholeAppState(context);
+                    },
                     child: Column(
-                  children: [
-                    getVerSpace(FetchPixels.getPixelHeight(20)),
-                    appBar(
-                      context,
-                      firstName: profileProvider.myProfileInfo.firstname ?? "",
-                    ),
-                    getVerSpace(FetchPixels.getPixelHeight(20)),
-                    Expanded(
-                      flex: 1,
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        child: AnimationLimiter(
-                          child: Column(
-                            children: AnimationConfiguration.toStaggeredList(
-                              duration: const Duration(milliseconds: 200),
-                              childAnimationBuilder: (widget) => SlideAnimation(
-                                verticalOffset: 44.0,
-                                child: FadeInAnimation(child: widget),
-                              ),
-                              children: [
-                                Container(
-                                  height: FetchPixels.getPixelHeight(68),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(
-                                          FetchPixels.getPixelHeight(14))),
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: horspace),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: horspace),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      getCustomFont(
-                                          "Total Worth", 15, Colors.black, 1,
-                                          fontWeight: FontWeight.w600),
-                                      getCustomFont(
-                                          "\$420.26", 24, blueColor, 1,
-                                          fontWeight: FontWeight.w600)
-                                    ],
+                      children: [
+                        getVerSpace(FetchPixels.getPixelHeight(20)),
+                        appBar(
+                          context,
+                          firstName:
+                              profileProvider.myProfileInfo.firstname ?? "",
+                        ),
+                        getVerSpace(FetchPixels.getPixelHeight(20)),
+                        Expanded(
+                          flex: 1,
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            child: AnimationLimiter(
+                              child: Column(
+                                children:
+                                    AnimationConfiguration.toStaggeredList(
+                                  duration: const Duration(milliseconds: 200),
+                                  childAnimationBuilder: (widget) =>
+                                      SlideAnimation(
+                                    verticalOffset: 44.0,
+                                    child: FadeInAnimation(child: widget),
                                   ),
-                                ),
-                                getVerSpace(FetchPixels.getPixelHeight(19)),
-                                SizedBox(
-                                  height: FetchPixels.getPixelHeight(160),
-                                  child: buildPageView(),
-                                ),
-                                getVerSpace(FetchPixels.getPixelHeight(17)),
-                                indicator(),
-                                getVerSpace(FetchPixels.getPixelHeight(24)),
-                                getPaddingWidget(
-                                  EdgeInsets.symmetric(horizontal: horspace),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      getMediumCustomFont(
-                                        context,
-                                        "Investments",
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
+                                  children: [
+                                    Container(
+                                      height: FetchPixels.getPixelHeight(68),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                              FetchPixels.getPixelHeight(14))),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: horspace),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: horspace),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          getCustomFont("Total Worth", 15,
+                                              Colors.black, 1,
+                                              fontWeight: FontWeight.w600),
+                                          getCustomFont(
+                                              "₦${investmentProvider.totalWorth}"
+                                                  .valueWithComma,
+                                              24,
+                                              blueColor,
+                                              1,
+                                              fontWeight: FontWeight.w600)
+                                        ],
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Constant.navigatePush(
-                                              context, PortfolioScreen());
-                                        },
-                                        child: getCustomFont(
-                                            "View all", 15, subtextColor, 1,
-                                            fontWeight: FontWeight.w400),
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    getVerSpace(FetchPixels.getPixelHeight(19)),
+                                    SizedBox(
+                                      height: FetchPixels.getPixelHeight(160),
+                                      child: buildPageView(),
+                                    ),
+                                    getVerSpace(FetchPixels.getPixelHeight(17)),
+                                    indicator(),
+                                    getVerSpace(FetchPixels.getPixelHeight(24)),
+                                    getPaddingWidget(
+                                      EdgeInsets.symmetric(
+                                          horizontal: horspace),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          getMediumCustomFont(
+                                            context,
+                                            "Investments",
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          // GestureDetector(
+                                          //   onTap: () {
+                                          //     Constant.navigatePush(
+                                          //         context, PortfolioScreen());
+                                          //   },
+                                          //   child: getCustomFont(
+                                          //       "View all", 15, subtextColor, 1,
+                                          //       fontWeight: FontWeight.w400),
+                                          // )
+                                        ],
+                                      ),
+                                    ),
+                                    getVerSpace(FetchPixels.getPixelHeight(12)),
+                                    Builder(
+                                      builder: (context) {
+                                        if (investmentProvider
+                                            .investments.isNotEmpty) {
+                                          return portfolioList(
+                                              investments: investmentProvider
+                                                  .investments);
+                                        } else {
+                                          return Container(
+                                            height: 200,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                  child: getSvgImage(
+                                                    "transaction_minus.svg",
+                                                    width: 80,
+                                                    height: 80,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge!
+                                                        .color!,
+                                                  ),
+                                                ),
+                                                getMediumCustomFont(context,
+                                                    "No Investments yet")
+                                              ],
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    // getPaddingWidget(
+                                    //   EdgeInsets.symmetric(horizontal: horspace),
+                                    //   Row(
+                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //     children: [
+                                    //       getCustomFont("Market Trend", 18, Colors.black, 1,
+                                    //           fontWeight: FontWeight.w600),
+                                    //       GestureDetector(
+                                    //         onTap: () {
+                                    //           Constant.sendToNext(
+                                    //               context, Routes.marketTrendRoute);
+                                    //         },
+                                    //         child: getCustomFont(
+                                    //             "View all", 15, subtextColor, 1,
+                                    //             fontWeight: FontWeight.w400),
+                                    //       )
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    // getVerSpace(FetchPixels.getPixelHeight(12)),
+                                    // marketTrendList(),
+                                    // getVerSpace(FetchPixels.getPixelHeight(4)),
+                                    // getPaddingWidget(
+                                    //   EdgeInsets.symmetric(horizontal: horspace),
+                                    //   Row(
+                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //     children: [
+                                    //       getCustomFont("News", 18, Colors.black, 1,
+                                    //           fontWeight: FontWeight.w600),
+                                    //       GestureDetector(
+                                    //         onTap: () {
+                                    //           Constant.sendToNext(
+                                    //               context, Routes.marketTrendRoute);
+                                    //         },
+                                    //         child: getCustomFont(
+                                    //             "View all", 15, subtextColor, 1,
+                                    //             fontWeight: FontWeight.w400),
+                                    //       )
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    // getVerSpace(FetchPixels.getPixelHeight(12)),
+                                    // newsList()
+                                  ],
                                 ),
-                                getVerSpace(FetchPixels.getPixelHeight(12)),
-                                portfolioList(
-                                    investments:
-                                        investmentProvider.investments),
-                                // getPaddingWidget(
-                                //   EdgeInsets.symmetric(horizontal: horspace),
-                                //   Row(
-                                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //     children: [
-                                //       getCustomFont("Market Trend", 18, Colors.black, 1,
-                                //           fontWeight: FontWeight.w600),
-                                //       GestureDetector(
-                                //         onTap: () {
-                                //           Constant.sendToNext(
-                                //               context, Routes.marketTrendRoute);
-                                //         },
-                                //         child: getCustomFont(
-                                //             "View all", 15, subtextColor, 1,
-                                //             fontWeight: FontWeight.w400),
-                                //       )
-                                //     ],
-                                //   ),
-                                // ),
-                                // getVerSpace(FetchPixels.getPixelHeight(12)),
-                                // marketTrendList(),
-                                // getVerSpace(FetchPixels.getPixelHeight(4)),
-                                // getPaddingWidget(
-                                //   EdgeInsets.symmetric(horizontal: horspace),
-                                //   Row(
-                                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //     children: [
-                                //       getCustomFont("News", 18, Colors.black, 1,
-                                //           fontWeight: FontWeight.w600),
-                                //       GestureDetector(
-                                //         onTap: () {
-                                //           Constant.sendToNext(
-                                //               context, Routes.marketTrendRoute);
-                                //         },
-                                //         child: getCustomFont(
-                                //             "View all", 15, subtextColor, 1,
-                                //             fontWeight: FontWeight.w400),
-                                //       )
-                                //     ],
-                                //   ),
-                                // ),
-                                // getVerSpace(FetchPixels.getPixelHeight(12)),
-                                // newsList()
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ))
+                  ),
+                )
               ],
             );
           },
@@ -367,7 +412,8 @@ class _TabHomeState extends State<TabHome> {
         padding: EdgeInsets.zero,
         primary: false,
         shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
+        // physics: const BouncingScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         // itemCount: investments.length,
         itemCount: investments.length,
@@ -384,7 +430,9 @@ class _TabHomeState extends State<TabHome> {
                       child: SafeArea(
                         top: true,
                         bottom: false,
-                        child: TabTransaction(),
+                        child: TabTransaction(
+                          investment: currentInvestment,
+                        ),
                       ),
                     );
                   },
@@ -400,7 +448,7 @@ class _TabHomeState extends State<TabHome> {
               padding: EdgeInsets.only(
                 left: FetchPixels.getPixelHeight(16),
                 top: FetchPixels.getPixelHeight(16),
-                right: FetchPixels.getPixelHeight(32),
+                right: FetchPixels.getPixelHeight(15),
                 bottom: FetchPixels.getPixelHeight(16),
               ),
               decoration: BoxDecoration(
@@ -415,7 +463,7 @@ class _TabHomeState extends State<TabHome> {
                       BorderRadius.circular(FetchPixels.getPixelHeight(14))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Row(
                     children: [
@@ -449,13 +497,15 @@ class _TabHomeState extends State<TabHome> {
                         children: [
                           getMediumCustomFont(
                             context,
-                            "PLAN: ${currentInvestment.planId}" ?? "",
+                            "${currentInvestment.broker} Broker" ?? "",
                             fontWeight: FontWeight.w600,
                           ),
                           getVerSpace(FetchPixels.getPixelHeight(4)),
                           getMediumCustomFont(
                             context,
-                            "BROKER: ${currentInvestment.brokerId}" ?? "",
+                            "${currentInvestment.package}" ?? "",
+                            fontSize: 14,
+                            fontColor: mictextColor,
                             fontWeight: FontWeight.w600,
                           ),
                           // getVerSpace(FetchPixels.getPixelHeight(4)),
@@ -468,19 +518,34 @@ class _TabHomeState extends State<TabHome> {
                           //     1,
                           //     fontWeight: FontWeight.w400),
                           getVerSpace(FetchPixels.getPixelHeight(6)),
-                          getCustomFont("\$${currentInvestment.vestedAmount}",
-                              18, successColor, 1,
+                          getCustomFont(
+                              "₦${currentInvestment.vestedAmount}"
+                                  .valueWithComma,
+                              18,
+                              successColor,
+                              1,
                               fontWeight: FontWeight.w600),
                         ],
                       ),
                     ],
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        "created ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: currentInvestment.isActive == "0"
+                              ? Colors.orange
+                              : Colors.green,
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: Text(
+                          "${currentInvestment.isActive == "0" ? "Inactive" : "Active"}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
                       ),
                     ],
                   )
@@ -575,6 +640,21 @@ class _TabHomeState extends State<TabHome> {
   }
 
   Widget appBar(BuildContext context, {required String firstName}) {
+    String getGreeting() {
+      DateTime dateTime = DateTime.now();
+      print(dateTime);
+      String greeting = "Good Morning";
+
+      if (dateTime.hour >= 0 && dateTime.hour < 12) {
+        greeting = "Good Morning";
+      } else if (dateTime.hour >= 12 && dateTime.hour < 16) {
+        greeting = "Good Afternoon";
+      } else {
+        greeting = "Good Evening";
+      }
+      return greeting;
+    }
+
     return getPaddingWidget(
       EdgeInsets.symmetric(horizontal: horspace),
       Row(
@@ -586,17 +666,17 @@ class _TabHomeState extends State<TabHome> {
               getCustomFont("Hello, $firstName", 15, Colors.white, 1,
                   fontWeight: FontWeight.w400),
               getVerSpace(FetchPixels.getPixelHeight(4)),
-              getCustomFont("Manage Forex", 20, Colors.white, 1,
+              getCustomFont(getGreeting(), 20, Colors.white, 1,
                   fontWeight: FontWeight.w700)
             ],
           ),
           Row(
             children: [
-              GestureDetector(
-                  onTap: () {
-                    Constant.navigatePush(context, MarketTrendScreen());
-                  },
-                  child: getSvgImage("search.svg", color: Colors.white)),
+              // GestureDetector(
+              //     onTap: () {
+              //       Constant.navigatePush(context, MarketTrendScreen());
+              //     },
+              //     child: getSvgImage("search.svg", color: Colors.white)),
               getHorSpace(FetchPixels.getPixelHeight(18)),
               GestureDetector(
                 onTap: () {

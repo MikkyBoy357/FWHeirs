@@ -36,6 +36,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   getVerSpace(
                     FetchPixels.getPixelHeight(20),
@@ -43,7 +44,29 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   if (historyLists.isEmpty)
                     emptyWidget(context)
                   else
-                    historyList()
+                    // historyList()
+                    Center(
+                      child: Container(
+                        height: 200,
+                        child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: getSvgImage(
+                                "transaction_minus.svg",
+                                width: 80,
+                                height: 80,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color!,
+                              ),
+                            ),
+                            getMediumCustomFont(context, "Feature Coming Soon")
+                          ],
+                        ),
+                      ),
+                    )
                 ],
               ),
             ),
@@ -189,17 +212,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
       automaticallyImplyLeading: false,
       elevation: 0,
       toolbarHeight: FetchPixels.getPixelHeight(66),
-      leading: getPaddingWidget(
-        EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(21)),
-        GestureDetector(
-          child: getSvgImage("back.svg"),
-          onTap: () {
-            backToPrev();
-          },
-        ),
-      ),
+      // leading: getPaddingWidget(
+      //   EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(21)),
+      //   GestureDetector(
+      //     child: getSvgImage("back.svg"),
+      //     onTap: () {
+      //       backToPrev();
+      //     },
+      //   ),
+      // ),
       title: getCustomFont(
-        "History",
+        "Transactions",
         22,
         Theme.of(context).textTheme.bodyLarge!.color!,
         1,
@@ -211,7 +234,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           children: [
             getSvgImage("statement.svg"),
             getHorSpace(FetchPixels.getPixelHeight(1)),
-            getCustomFont("STATEMENT", 16, blueColor, 1,
+            getCustomFont("REPORT", 16, blueColor, 1,
                 fontWeight: FontWeight.w600),
             getHorSpace(FetchPixels.getPixelHeight(20))
           ],

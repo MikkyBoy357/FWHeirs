@@ -16,6 +16,7 @@ Color skipColor = "#6E768A".toColor();
 Color borderColor = "#BEC4CD".toColor();
 Color containerShadow = "#E0E9F5".toColor();
 Color subtextColor = "#6E768A".toColor();
+Color mictextColor = "##c0c4cf".toColor();
 Color errorColor = "#DD3333".toColor();
 Color successColor = "#04B155".toColor();
 Color orangeColor = "#F56D40".toColor();

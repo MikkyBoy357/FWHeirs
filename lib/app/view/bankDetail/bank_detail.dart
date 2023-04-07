@@ -42,64 +42,83 @@ class _BankDetailState extends State<BankDetail> {
       builder: (context, referralsProvider, _) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            child: getPaddingWidget(
-              EdgeInsets.symmetric(horizontal: horSpace),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  getVerSpace(FetchPixels.getPixelHeight(14)),
-                  appBar(context),
-                  if (paymentLists.isEmpty)
-                    emptyWidget(context)
-                  else
-                    Expanded(
-                        flex: 1,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                getVerSpace(FetchPixels.getPixelHeight(39)),
-                                getMediumCustomFont(context, "Your banks:"),
-                                getVerSpace(FetchPixels.getPixelHeight(16)),
-                                Builder(builder: (context) {
-                                  if (referralsProvider.myBanks.isNotEmpty) {
-                                    return cardList(
-                                        myBanks: referralsProvider.myBanks);
-                                  } else {
-                                    return Text(
-                                      "Nothing to show, Click the button below to add bank details.",
-                                      style: TextStyle(fontSize: 18),
-                                    );
-                                  }
-                                }),
-                              ],
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: FetchPixels.getPixelHeight(30)),
-                              child: getButton(
-                                context,
-                                blueColor,
-                                "Add New Card",
-                                Colors.white,
-                                () {
-                                  Constant.sendToScreen(
-                                      AddBankDetail(), context);
-                                },
-                                16,
-                                weight: FontWeight.w600,
-                                borderRadius: BorderRadius.circular(
-                                    FetchPixels.getPixelHeight(15)),
-                                buttonHeight: FetchPixels.getPixelHeight(60),
-                              ),
-                            ),
-                          ],
-                        ))
-                ],
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            centerTitle: true,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            leading: getPaddingWidget(
+              EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(18)),
+              GestureDetector(
+                child: getSvgImage("back.svg"),
+                onTap: () {
+                  Constant.backToPrev(context);
+                },
               ),
+            ),
+            title: getCustomFont(
+              "Bank Details",
+              22,
+              Theme.of(context).textTheme.bodyLarge!.color!,
+              1,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          body: getPaddingWidget(
+            EdgeInsets.symmetric(horizontal: horSpace),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // getVerSpace(FetchPixels.getPixelHeight(14)),
+                // appBar(context),
+                if (paymentLists.isEmpty)
+                  emptyWidget(context)
+                else
+                  Expanded(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              getVerSpace(FetchPixels.getPixelHeight(39)),
+                              getMediumCustomFont(context, "Your banks:"),
+                              getVerSpace(FetchPixels.getPixelHeight(16)),
+                              Builder(builder: (context) {
+                                if (referralsProvider.myBanks.isNotEmpty) {
+                                  return cardList(
+                                      myBanks: referralsProvider.myBanks);
+                                } else {
+                                  return Text(
+                                    "Nothing to show, Click the button below to add bank details.",
+                                    style: TextStyle(fontSize: 18),
+                                  );
+                                }
+                              }),
+                            ],
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: FetchPixels.getPixelHeight(30)),
+                            child: getButton(
+                              context,
+                              blueColor,
+                              "Add New Bank",
+                              Colors.white,
+                              () {
+                                Constant.sendToScreen(AddBankDetail(), context);
+                              },
+                              16,
+                              weight: FontWeight.w600,
+                              borderRadius: BorderRadius.circular(
+                                  FetchPixels.getPixelHeight(15)),
+                              buttonHeight: FetchPixels.getPixelHeight(60),
+                            ),
+                          ),
+                        ],
+                      ))
+              ],
             ),
           ),
         );

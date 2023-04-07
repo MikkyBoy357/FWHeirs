@@ -128,7 +128,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         // ),
                         // fillColor: Colors.white,
                         filled: false,
-                        hintText: widget.hintText,
+                        hintText: widget.hintText.valueWithComma,
                         hintStyle: TextStyle(
                           fontSize: 16,
                           color: textColor,

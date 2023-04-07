@@ -51,7 +51,7 @@ class DataFile {
   static List<ModelItem> itemList = [
     ModelItem("home.svg", "Home"),
     ModelItem("exchange.svg", "History"),
-    ModelItem("chart.svg", "Referral"),
+    ModelItem("chart.svg", "Agent"),
     ModelItem("profile.svg", "More")
   ];
 

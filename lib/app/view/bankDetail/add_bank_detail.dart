@@ -62,20 +62,20 @@ class _AddBankDetailState extends State<AddBankDetail> {
                         hintText: "Bank Name",
                       ),
                       getVerSpace(horSpace),
-                      NameTextField(
-                        controller: referralsProvider.accountNameController,
-                        hintText: "Account Name",
-                      ),
-                      getVerSpace(horSpace),
-                      NameTextField(
+                      NumberTextField(
                         controller: referralsProvider.accountNumberController,
                         hintText: "Account Number",
                       ),
                       getVerSpace(horSpace),
                       NameTextField(
-                        controller: referralsProvider.bankCodeNoController,
-                        hintText: "Bank Code",
+                        controller: referralsProvider.accountNameController,
+                        hintText: "Account Name",
                       ),
+                      // getVerSpace(horSpace),
+                      // NameTextField(
+                      //   controller: referralsProvider.bankCodeNoController,
+                      //   hintText: "Bank Code",
+                      // ),
                     ],
                   ),
                 ),

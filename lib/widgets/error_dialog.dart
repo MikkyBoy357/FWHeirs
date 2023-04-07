@@ -24,9 +24,15 @@ class ErrorDialog extends StatelessWidget {
 
 class SuccessDialog extends StatelessWidget {
   final String text;
+  final String buttonLabel;
+  final VoidCallback? onTap;
 
-  const SuccessDialog({Key? key, this.text = "Request was successful"})
-      : super(key: key);
+  const SuccessDialog({
+    Key? key,
+    this.text = "Request was successful",
+    this.buttonLabel = "Done",
+    this.onTap,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -34,10 +40,48 @@ class SuccessDialog extends StatelessWidget {
       content: Text(text),
       actions: [
         ElevatedButton(
-          child: Text("OK"),
+          child: Text(buttonLabel),
+          onPressed: onTap,
+        ),
+      ],
+    );
+  }
+}
+
+class ConfirmDialog extends StatelessWidget {
+  final String text;
+  final String yesLabel;
+  final String noLabel;
+  final VoidCallback? onYes;
+
+  const ConfirmDialog({
+    Key? key,
+    this.text = "Do you want to continue?",
+    this.yesLabel = "Yes",
+    this.noLabel = "No",
+    this.onYes,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Success"),
+      content: Text(text),
+      actions: [
+        TextButton(
+          child: Text(
+            noLabel,
+            style: TextStyle(color: Colors.redAccent),
+          ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop(context);
           },
+        ),
+        TextButton(
+          onPressed: onYes,
+          child: Text(
+            yesLabel,
+            style: TextStyle(color: Colors.green),
+          ),
         ),
       ],
     );
