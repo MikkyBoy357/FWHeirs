@@ -92,7 +92,7 @@ class _MarketTrendScreenState extends State<MarketTrendScreen> {
                       FontWeight.w400,
                       16,
                       "up 0.63% ",
-                      blueColor,
+                      redColor,
                       FontWeight.w600,
                       16,
                       "in last 24h"),

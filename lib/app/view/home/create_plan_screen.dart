@@ -61,7 +61,7 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
               padding: EdgeInsets.symmetric(
                   horizontal: horSpace,
                   vertical: FetchPixels.getPixelHeight(30)),
-              child: getButton(context, blueColor, "Save", Colors.white, () {
+              child: getButton(context, redColor, "Save", Colors.white, () {
                 investmentProvider.createInvestment(context);
               }, 16,
                   weight: FontWeight.w600,

@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 
 import '../../../base/widget_utils.dart';
 import '../../view_models/investment_providers/investment_provider.dart';
+import '../../view_models/referrals_providers.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .getBrokers(context);
       Provider.of<InvestmentProvider>(context, listen: false)
           .getPackages(context);
+      Provider.of<ReferralsProvider>(context, listen: false).getBanks(context);
     });
   }
 
@@ -100,9 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: FetchPixels.getPixelHeight(46),
                   decoration: position == index
                       ? BoxDecoration(
-                          color: position == index
-                              ? blueColor
-                              : Colors.transparent,
+                          color:
+                              position == index ? redColor : Colors.transparent,
                           shape: BoxShape.circle,
                           boxShadow: [
                               BoxShadow(

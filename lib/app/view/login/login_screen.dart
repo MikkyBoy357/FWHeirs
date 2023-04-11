@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Constant.navigatePush(context, ForgotPassword());
                         },
                         child: getCustomFont(
-                            "Forgot Password?", 15, blueColor, 1,
+                            "Forgot Password?", 15, redColor, 1,
                             fontWeight: FontWeight.w600,
                             textAlign: TextAlign.end),
                       ),
@@ -166,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onTap: () {
                               Constant.navigatePush(context, SignUpScreen());
                             },
-                            child: getCustomFont("Sign Up", 15, blueColor, 1,
+                            child: getCustomFont("Sign Up", 15, redColor, 1,
                                 fontWeight: FontWeight.w600),
                           )
                         ],

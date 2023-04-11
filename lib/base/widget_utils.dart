@@ -34,7 +34,7 @@ Widget getSvgImage(String image,
     BoxFit boxFit = BoxFit.contain}) {
   return SvgPicture.asset(
     Constant.assetImagePath + image,
-    color: color,
+    // color: color ?? redColor,
     width: width,
     height: height,
     fit: boxFit,
@@ -274,19 +274,27 @@ Widget getButtonWithIcon(BuildContext context, Color bgColor, String text,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              getHorSpace(FetchPixels.getPixelHeight(18)),
-              (prefixIcon) ? getSvgImage(prefixImage!) : getHorSpace(0),
-              (prefixIcon)
-                  ? getHorSpace(FetchPixels.getPixelHeight(12))
-                  : getHorSpace(0),
-              getMediumCustomFont(
-                context,
-                text,
-                fontSize: fontsize,
-              )
-            ],
+          Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Row(
+              children: [
+                // (prefixIcon)
+                //     ? getHorSpace(FetchPixels.getPixelHeight(12))
+                //     : getHorSpace(0),
+                // getMediumCustomFont(
+                //   context,
+                //   text,
+                //   fontSize: fontsize,
+                // ),
+                Container(
+                  width: MediaQuery.of(context).size.width - 135,
+                  child: Text(
+                    text,
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
+              ],
+            ),
           ),
           Row(
             children: [
@@ -332,7 +340,7 @@ Widget getDefaultTextFiledWithLabel(
           onFocusChange: (hasFocus) {
             if (hasFocus) {
               setState(() {
-                color = blueColor;
+                color = redColor;
                 myFocusNode.canRequestFocus = true;
               });
             } else {
@@ -680,7 +688,7 @@ Widget getCountryTextField(BuildContext context, String s,
           onFocusChange: (hasFocus) {
             if (hasFocus) {
               setState(() {
-                color = blueColor;
+                color = redColor;
                 myFocusNode.canRequestFocus = true;
               });
             } else {

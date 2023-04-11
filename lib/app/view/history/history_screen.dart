@@ -163,7 +163,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       modelHistory.price ?? "",
                                       15,
                                       modelHistory.price == "Need Help?"
-                                          ? blueColor
+                                          ? redColor
                                           : success,
                                       1,
                                       fontWeight: FontWeight.w400)
@@ -193,10 +193,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
             fontWeight: FontWeight.w400),
         getVerSpace(FetchPixels.getPixelHeight(40)),
         getButton(
-            context, Colors.white, "Go to transaction", blueColor, () {}, 16,
+            context, Colors.white, "Go to transaction", redColor, () {}, 16,
             weight: FontWeight.w600,
             isBorder: true,
-            borderColor: blueColor,
+            borderColor: redColor,
             borderWidth: FetchPixels.getPixelHeight(2),
             borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(14)),
             buttonHeight: FetchPixels.getPixelHeight(60),
@@ -234,7 +234,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           children: [
             getSvgImage("statement.svg"),
             getHorSpace(FetchPixels.getPixelHeight(1)),
-            getCustomFont("REPORT", 16, blueColor, 1,
+            getCustomFont("REPORT", 16, redColor, 1,
                 fontWeight: FontWeight.w600),
             getHorSpace(FetchPixels.getPixelHeight(20))
           ],

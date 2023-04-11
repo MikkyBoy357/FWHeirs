@@ -70,7 +70,7 @@ class _PasswordDialogState extends State<PasswordDialog>
               getPaddingWidget(
                 EdgeInsets.symmetric(
                     horizontal: FetchPixels.getPixelHeight(30)),
-                getButton(context, blueColor, "Ok", Colors.white, () {
+                getButton(context, redColor, "Ok", Colors.white, () {
                   Constant.navigatePush(context, LoginScreen());
                 }, 16,
                     weight: FontWeight.w600,

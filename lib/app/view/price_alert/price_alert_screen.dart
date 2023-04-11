@@ -32,7 +32,7 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
             padding: EdgeInsets.symmetric(
                 vertical: FetchPixels.getPixelHeight(30), horizontal: horSpace),
             child: getButton(
-                context, blueColor, "Create Price alert", Colors.white, () {
+                context, redColor, "Create Price alert", Colors.white, () {
               // Navigator.pushNamed(context, Routes.createPriceAlertRoute)
               //     .then((value) {
               //   setState(() {});
@@ -155,7 +155,7 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
                                         getCustomFont(
                                             "\$${modelPriceAlert.price}",
                                             15,
-                                            blueColor,
+                                            redColor,
                                             1,
                                             fontWeight: FontWeight.w600)
                                       ],
@@ -229,7 +229,7 @@ class _PriceAlertScreenState extends State<PriceAlertScreen> {
                               modelPriceAlert.type ?? "", 15, Colors.black, 1,
                               fontWeight: FontWeight.w400),
                           getCustomFont(
-                              "\$${modelPriceAlert.price}", 15, blueColor, 1,
+                              "\$${modelPriceAlert.price}", 15, redColor, 1,
                               fontWeight: FontWeight.w600)
                         ],
                       ),

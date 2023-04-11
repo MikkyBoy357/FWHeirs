@@ -71,7 +71,7 @@ class _VerifyDialogState extends State<VerifyDialog>
               getPaddingWidget(
                 EdgeInsets.symmetric(
                     horizontal: FetchPixels.getPixelHeight(20)),
-                getButton(context, blueColor, "Ok", Colors.white, () {
+                getButton(context, redColor, "Ok", Colors.white, () {
                   Constant.navigatePush(context, LoginScreen());
                 }, 16,
                     weight: FontWeight.w600,

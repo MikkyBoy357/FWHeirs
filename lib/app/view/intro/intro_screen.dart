@@ -157,7 +157,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                                 FetchPixels.getPixelHeight(30)),
                                             getButton(
                                                 context,
-                                                blueColor,
+                                                redColor,
                                                 select == 2
                                                     ? "Get Started"
                                                     : 'Next',

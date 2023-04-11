@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
 
 class PriceDialog extends StatefulWidget {
   const PriceDialog({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class _PriceDialogState extends State<PriceDialog>
                   txtHeight: FetchPixels.getPixelHeight(1.3)),
             ),
             getVerSpace(FetchPixels.getPixelHeight(30)),
-            getButton(context, blueColor, "Ok", Colors.white, () {
+            getButton(context, redColor, "Ok", Colors.white, () {
               backToPrev();
               backToPrev();
             }, 16,

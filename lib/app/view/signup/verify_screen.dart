@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fwheirs/app/view/dialog/verify_dialog.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../../base/color_data.dart';
@@ -31,7 +31,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
       margin: EdgeInsets.symmetric(horizontal: FetchPixels.getPixelWidth(5)),
       textStyle: TextStyle(
         fontSize: FetchPixels.getPixelHeight(24),
-        color: blueColor,
+        color: redColor,
         fontWeight: FontWeight.w700,
       ),
       decoration: BoxDecoration(
@@ -70,7 +70,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     onFocusChange: (hasFocus) {
                       if (hasFocus) {
                         setState(() {
-                          color = blueColor;
+                          color = redColor;
                           myFocusNode.canRequestFocus = true;
                         });
                       } else {
@@ -93,7 +93,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     ),
                   ),
                   getVerSpace(FetchPixels.getPixelHeight(30)),
-                  getButton(context, blueColor, "Verify", Colors.white, () {
+                  getButton(context, redColor, "Verify", Colors.white, () {
                     showDialog(
                         barrierDismissible: false,
                         builder: (context) {
@@ -114,7 +114,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                           fontWeight: FontWeight.w400),
                       GestureDetector(
                         onTap: () {},
-                        child: getCustomFont("Resend", 15, blueColor, 1,
+                        child: getCustomFont("Resend", 15, redColor, 1,
                             fontWeight: FontWeight.w600),
                       )
                     ],

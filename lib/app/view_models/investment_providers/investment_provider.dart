@@ -24,6 +24,10 @@ class InvestmentProvider extends ChangeNotifier {
   List<String> packagesNames = [];
   List<PackageModel> packages = [];
 
+  // Upscale Investment
+  GlobalKey<FormState> upscaleFormKey = GlobalKey<FormState>();
+  TextEditingController upscaleAmountController = TextEditingController();
+
   // Create Investment Package
   GlobalKey<FormState> createPlanFormKey = GlobalKey<FormState>();
 
@@ -187,8 +191,9 @@ class InvestmentProvider extends ChangeNotifier {
           builder: (context) {
             return ErrorDialog(
               text: "Error: Invalid Amount\n\n"
-                  "Minimum: $minVest\n"
-                  "Maximum: $maxVest",
+                      "Minimum: $minVest\n"
+                      "Maximum: $maxVest"
+                  .valueWithComma,
             );
           },
         );
@@ -240,6 +245,103 @@ class InvestmentProvider extends ChangeNotifier {
             text: "${response.data['message']}",
             onTap: () {
               Navigator.of(context, rootNavigator: true).pop(context);
+            },
+          );
+        },
+      );
+    } on DioError catch (e) {
+      print("Error => $e");
+      print(e.message);
+      Navigator.of(context, rootNavigator: true).pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(
+            text: 'error: ${e.message}',
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> upscaleInvestment(
+    BuildContext context, {
+    required InvestmentModel investment,
+  }) async {
+    if (upscaleAmountController.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(
+            text: 'Error: Invalid TextFields',
+          );
+        },
+      );
+      return;
+    }
+    try {
+      setSelectedPackage(investment.package.toString());
+      setMinMaxVest();
+      String upscaleString = upscaleAmountController.text.replaceAll(",", "");
+      int upscaleInt = int.parse(upscaleString);
+      print("Amount =>  $upscaleString");
+      if (upscaleInt < (int.parse(investment.vestedAmount ?? "0") + 1) ||
+          upscaleInt > maxVest) {
+        return showDialog(
+          context: context,
+          builder: (context) {
+            return ErrorDialog(
+              text: "Error: Invalid Amount\n\n"
+                      "Minimum: ${int.parse(investment.vestedAmount ?? "0") + 1}\n"
+                      "Maximum: $maxVest"
+                  .valueWithComma,
+            );
+          },
+        );
+      } else {
+        print("Investment Amount Validated");
+      }
+      print('Upscaling Investment...');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return LoadingDialog();
+        },
+      );
+      Dio dio = Dio();
+      var body = {"invest_id": investment.id.toString(), "amount": 500000};
+      print(body);
+      dio.options.headers["Authorization"] =
+          "Bearer ${locator<AppDataBaseService>().getTokenString()}";
+      var response = await dio.post(
+        "${Constant.liveUrl}/topup",
+        data: body,
+        options: Options(
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization':
+                'Bearer ${locator<AppDataBaseService>().getTokenString()}',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Methods": "GET, POST",
+            "Access-Control-Allow-Credentials": "true",
+          },
+        ),
+      );
+      print("Investments Created Successfully");
+      print("InvestmentCreation Response => ${response.data}");
+      // investments = response.data['data'];
+      notifyListeners();
+      Navigator.of(context, rootNavigator: true).pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return SuccessDialog(
+            text: "${response.data['message']}",
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).pop(context);
+              Constant.backToPrev(context);
             },
           );
         },

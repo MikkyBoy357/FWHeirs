@@ -96,12 +96,12 @@ class _TabProfileState extends State<TabProfile> {
 
   Widget logoutButton(BuildContext context, {required VoidCallback onTap}) {
     return getButton(context, Theme.of(context).secondaryHeaderColor, "Logout",
-        blueColor, onTap, 16,
+        redColor, onTap, 16,
         weight: FontWeight.w600,
         borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(15)),
         buttonHeight: FetchPixels.getPixelHeight(60),
         isBorder: true,
-        borderColor: blueColor,
+        borderColor: redColor,
         borderWidth: FetchPixels.getPixelHeight(2));
   }
 
@@ -153,9 +153,7 @@ class _TabProfileState extends State<TabProfile> {
                     SizedBox(
                       width: FetchPixels.getPixelHeight(220),
                       child: getMultilineCustomFont(
-                          "All your transactions on coinswitch kuber",
-                          15,
-                          textColor,
+                          "All your transactions on FWHeirs", 15, textColor,
                           fontWeight: FontWeight.w400,
                           txtHeight: FetchPixels.getPixelHeight(1.3)),
                     )
@@ -279,7 +277,7 @@ class _TabProfileState extends State<TabProfile> {
   }
 
   Widget profileImageWidget() {
-    return getAssetImage("profile_photo.png",
+    return getAssetImage("fwheirsappp.png",
         height: FetchPixels.getPixelHeight(105),
         width: FetchPixels.getPixelHeight(105));
   }

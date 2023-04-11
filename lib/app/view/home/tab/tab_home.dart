@@ -39,7 +39,7 @@ class _TabHomeState extends State<TabHome> {
   Widget build(BuildContext context) {
     FetchPixels(context);
     return Scaffold(
-      backgroundColor: blueColor,
+      backgroundColor: redColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Constant.sendToScreen(CreatePlanScreen(), context);
@@ -53,7 +53,7 @@ class _TabHomeState extends State<TabHome> {
               children: [
                 Container(
                   color: Theme.of(context).brightness == Brightness.light
-                      ? blueColor
+                      ? redColor
                       : Theme.of(context).secondaryHeaderColor,
                   padding:
                       EdgeInsets.only(top: FetchPixels.getPixelHeight(268)),
@@ -116,7 +116,7 @@ class _TabHomeState extends State<TabHome> {
                                               "₦${investmentProvider.totalWorth}"
                                                   .valueWithComma,
                                               24,
-                                              blueColor,
+                                              redColor,
                                               1,
                                               fontWeight: FontWeight.w600)
                                         ],
@@ -139,7 +139,7 @@ class _TabHomeState extends State<TabHome> {
                                         children: [
                                           getMediumCustomFont(
                                             context,
-                                            "Investments",
+                                            "Minting Plans",
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -406,15 +406,17 @@ class _TabHomeState extends State<TabHome> {
   }
 
   SizedBox portfolioList({required List<InvestmentModel> investments}) {
+    print("${investments.length} Length");
     return SizedBox(
       height: FetchPixels.getPixelHeight(138 * 4),
       child: ListView.builder(
         padding: EdgeInsets.zero,
         primary: false,
-        shrinkWrap: true,
+        // shrinkWrap: true,
         // physics: const BouncingScrollPhysics(),
-        physics: const NeverScrollableScrollPhysics(),
+        // physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
+        // reverse: true,
         // itemCount: investments.length,
         itemCount: investments.length,
         itemBuilder: (context, index) {
@@ -465,90 +467,99 @@ class _TabHomeState extends State<TabHome> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Row(
-                    children: [
-                      // getSvgImage(modelPortfolio.image ?? "",
-                      //     height: FetchPixels.getPixelHeight(50),
-                      //     width: FetchPixels.getPixelHeight(50)),
-                      Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Colors.orange,
-                            foregroundColor: Colors.white,
-                            child: Text(
-                              "${currentInvestment.duration}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                  Expanded(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // getSvgImage(modelPortfolio.image ?? "",
+                        //     height: FetchPixels.getPixelHeight(50),
+                        //     width: FetchPixels.getPixelHeight(50)),
+                        Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 25,
+                              backgroundColor: Colors.orange,
+                              foregroundColor: Colors.white,
+                              child: Text(
+                                "${currentInvestment.duration}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
                               ),
                             ),
+                            Text(
+                              "Days",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        getHorSpace(FetchPixels.getPixelHeight(14)),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              getMediumCustomFont(
+                                context,
+                                "${currentInvestment.broker} Broker" ?? "",
+                                fontWeight: FontWeight.w600,
+                              ),
+                              getVerSpace(FetchPixels.getPixelHeight(4)),
+                              getMediumCustomFont(
+                                context,
+                                "${currentInvestment.package}" ?? "",
+                                fontSize: 14,
+                                fontColor: mictextColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              // getVerSpace(FetchPixels.getPixelHeight(4)),
+                              // getCustomFont(
+                              //     "modelPortfolio.profit" ?? "",
+                              //     15,
+                              //     "modelPortfolio.profit![0]" == "-"
+                              //         ? errorColor
+                              //         : successColor,
+                              //     1,
+                              //     fontWeight: FontWeight.w400),
+                              getVerSpace(FetchPixels.getPixelHeight(6)),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  getCustomFont(
+                                    "₦${currentInvestment.vestedAmount}"
+                                        .valueWithComma,
+                                    18,
+                                    successColor,
+                                    1,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 4, horizontal: 8),
+                                    decoration: BoxDecoration(
+                                      color: currentInvestment.isActive == "0"
+                                          ? Colors.orange
+                                          : Colors.green,
+                                      borderRadius: BorderRadius.circular(9),
+                                    ),
+                                    child: Text(
+                                      "${currentInvestment.isActive == "0" ? "Inactive" : "Active"}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Days",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      getHorSpace(FetchPixels.getPixelHeight(14)),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          getMediumCustomFont(
-                            context,
-                            "${currentInvestment.broker} Broker" ?? "",
-                            fontWeight: FontWeight.w600,
-                          ),
-                          getVerSpace(FetchPixels.getPixelHeight(4)),
-                          getMediumCustomFont(
-                            context,
-                            "${currentInvestment.package}" ?? "",
-                            fontSize: 14,
-                            fontColor: mictextColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          // getVerSpace(FetchPixels.getPixelHeight(4)),
-                          // getCustomFont(
-                          //     "modelPortfolio.profit" ?? "",
-                          //     15,
-                          //     "modelPortfolio.profit![0]" == "-"
-                          //         ? errorColor
-                          //         : successColor,
-                          //     1,
-                          //     fontWeight: FontWeight.w400),
-                          getVerSpace(FetchPixels.getPixelHeight(6)),
-                          getCustomFont(
-                              "₦${currentInvestment.vestedAmount}"
-                                  .valueWithComma,
-                              18,
-                              successColor,
-                              1,
-                              fontWeight: FontWeight.w600),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: currentInvestment.isActive == "0"
-                              ? Colors.orange
-                              : Colors.green,
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        child: Text(
-                          "${currentInvestment.isActive == "0" ? "Inactive" : "Active"}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
@@ -617,7 +628,7 @@ class _TabHomeState extends State<TabHome> {
                     getVerSpace(FetchPixels.getPixelHeight(11)),
                     Row(
                       children: [
-                        getCustomFont("Refer Now", 14, blueColor, 1,
+                        getCustomFont("Refer Now", 14, redColor, 1,
                             fontWeight: FontWeight.w600),
                         getHorSpace(FetchPixels.getPixelHeight(4)),
                         getSvgImage("right_arrow.svg"),
@@ -682,7 +693,7 @@ class _TabHomeState extends State<TabHome> {
                 onTap: () {
                   Constant.navigatePush(context, MyProfile());
                 },
-                child: getAssetImage("profile_image.png",
+                child: getAssetImage("fwheirsappp_white.png",
                     width: FetchPixels.getPixelHeight(40),
                     height: FetchPixels.getPixelHeight(40)),
               )

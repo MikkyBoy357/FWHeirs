@@ -42,7 +42,7 @@ class _CreatePriceAlertState extends State<CreatePriceAlert> {
             padding: EdgeInsets.symmetric(
                 vertical: FetchPixels.getPixelHeight(30), horizontal: horSpace),
             child: getButton(
-                context, blueColor, "Create Price alert", Colors.white, () {
+                context, redColor, "Create Price alert", Colors.white, () {
               if (alertSelect == 1) {
                 setState(() {
                   alerttype = "Price Rises To";
@@ -305,7 +305,7 @@ class _CreatePriceAlertState extends State<CreatePriceAlert> {
                                           "+2%",
                                           15,
                                           priceselect == 1
-                                              ? blueColor
+                                              ? redColor
                                               : textColor,
                                           1,
                                           fontWeight: FontWeight.w400),
@@ -340,7 +340,7 @@ class _CreatePriceAlertState extends State<CreatePriceAlert> {
                                           "+5%",
                                           15,
                                           priceselect == 2
-                                              ? blueColor
+                                              ? redColor
                                               : textColor,
                                           1,
                                           fontWeight: FontWeight.w400),
@@ -375,7 +375,7 @@ class _CreatePriceAlertState extends State<CreatePriceAlert> {
                                           "+2%",
                                           15,
                                           priceselect == 3
-                                              ? blueColor
+                                              ? redColor
                                               : textColor,
                                           1,
                                           fontWeight: FontWeight.w400),

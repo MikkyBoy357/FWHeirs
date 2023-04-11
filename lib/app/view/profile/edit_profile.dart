@@ -47,7 +47,7 @@ class _EditProfileState extends State<EditProfile> {
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(
                 horizontal: horSpace, vertical: FetchPixels.getPixelHeight(30)),
-            child: getButton(context, blueColor, "Save", Colors.white, () {
+            child: getButton(context, redColor, "Save", Colors.white, () {
               profileProvider.editProfileInfo(context);
             }, 16,
                 weight: FontWeight.w600,

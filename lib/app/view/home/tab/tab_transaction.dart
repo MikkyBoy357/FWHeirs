@@ -12,6 +12,8 @@ import 'package:fwheirs/base/widget_utils.dart';
 import 'package:fwheirs/widgets/error_dialog.dart';
 import 'package:provider/provider.dart';
 
+import '../upscale_investment_screen.dart';
+
 class TabTransaction extends StatefulWidget {
   final InvestmentModel investment;
 
@@ -48,7 +50,7 @@ class _TabTransactionState extends State<TabTransaction> {
           ),
         ),
         title: getCustomFont(
-          "Market Trend",
+          "Minting Plan",
           22,
           Theme.of(context).textTheme.bodyLarge!.color!,
           1,
@@ -59,7 +61,7 @@ class _TabTransactionState extends State<TabTransaction> {
         //     onPressed: () {},
         //     icon: Icon(
         //       CupertinoIcons.info,
-        //       color: blueColor,
+        //       color: redColor,
         //     ),
         //   ),
         // ],
@@ -91,9 +93,30 @@ class _TabTransactionState extends State<TabTransaction> {
                           // priceAlertWidget(),
                           terminateAccountButton(
                             context,
-                            label: "Upscale Investment",
+                            label: "Submit Revenue",
                             color: Colors.green,
-                            onTap: () {},
+                            onTap: () {
+                              Constant.navigatePush(
+                                context,
+                                UpscaleInvestmentScreen(
+                                  investment: widget.investment,
+                                ),
+                              );
+                            },
+                          ),
+                          getVerSpace(horspace),
+                          terminateAccountButton(
+                            context,
+                            label: "Upscale Mint Plan",
+                            color: Colors.green,
+                            onTap: () {
+                              Constant.navigatePush(
+                                context,
+                                UpscaleInvestmentScreen(
+                                  investment: widget.investment,
+                                ),
+                              );
+                            },
                           ),
                           getVerSpace(horspace),
                           terminateAccountButton(
@@ -132,7 +155,7 @@ class _TabTransactionState extends State<TabTransaction> {
   Widget terminateAccountButton(BuildContext context,
       {String? label, Color? color, VoidCallback? onTap}) {
     return getButton(context, Theme.of(context).secondaryHeaderColor,
-        label ?? "Terminate Investment", color ?? Colors.red, onTap, 16,
+        label ?? "Terminate Mint Plan", color ?? Colors.red, onTap, 16,
         weight: FontWeight.w600,
         borderRadius: BorderRadius.circular(FetchPixels.getPixelHeight(15)),
         buttonHeight: FetchPixels.getPixelHeight(60),
@@ -169,7 +192,7 @@ class _TabTransactionState extends State<TabTransaction> {
                 isSwitch = value;
               });
             },
-            activeColor: blueColor,
+            activeColor: redColor,
           )
         ],
       ),
@@ -194,15 +217,19 @@ class _TabTransactionState extends State<TabTransaction> {
             fontWeight: FontWeight.w400,
           ),
           getVerSpace(FetchPixels.getPixelHeight(6)),
-          getCustomFont("₦****", 18, blueColor, 1, fontWeight: FontWeight.w600),
+          getCustomFont("₦****", 18, redColor, 1, fontWeight: FontWeight.w600),
           getVerSpace(FetchPixels.getPixelHeight(20)),
-          getButtonWithIcon(
-              context,
-              Theme.of(context).scaffoldBackgroundColor,
-              "${widget.investment.broker} User's Guide",
-              Colors.black,
-              () {},
-              15,
+          getButtonWithIcon(context, Theme.of(context).scaffoldBackgroundColor,
+              "${widget.investment.broker} User's Guide", Colors.black, () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return SuccessDialog(
+                  text: "${widget.investment.broker} User's Guide",
+                );
+              },
+            );
+          }, 15,
               weight: FontWeight.w400,
               borderRadius:
                   BorderRadius.circular(FetchPixels.getPixelHeight(12)),
@@ -253,7 +280,7 @@ class _TabTransactionState extends State<TabTransaction> {
                 Column(
                   children: [
                     getVerSpace(FetchPixels.getPixelHeight(20)),
-                    getCustomFont("Invested value", 15, textColor, 1,
+                    getCustomFont("Minting value", 15, textColor, 1,
                         fontWeight: FontWeight.w400),
                     getVerSpace(FetchPixels.getPixelHeight(6)),
                     getMediumCustomFont(
@@ -275,8 +302,14 @@ class _TabTransactionState extends State<TabTransaction> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                getCustomFont("Gain / Loss", 15, textColor, 1,
-                    fontWeight: FontWeight.w400),
+                Row(
+                  children: [
+                    getCustomFont("Mint Number: ", 15, textColor, 1,
+                        fontWeight: FontWeight.w400),
+                    getMediumCustomFont(context, "${widget.investment.id}",
+                        fontWeight: FontWeight.w400),
+                  ],
+                ),
                 Wrap(
                   children: [
                     Container(

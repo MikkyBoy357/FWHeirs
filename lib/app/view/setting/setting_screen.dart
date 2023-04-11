@@ -80,7 +80,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                         themeProvider.toggleTheme(isDark);
                                       });
                                     },
-                                    activeColor: blueColor,
+                                    activeColor: redColor,
                                   ),
                                 ),
                                 getVerSpace(horSpace),
@@ -336,7 +336,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 isSwitch = value;
               });
             },
-            activeColor: blueColor,
+            activeColor: redColor,
           )
         ],
       ),
@@ -452,7 +452,7 @@ class _SettingScreenState extends State<SettingScreen> {
       title: "Settings",
       fontsize: 24,
       weight: FontWeight.w700,
-      textColor: Colors.black,
+      textColor: Theme.of(context).textTheme.bodyLarge!.color!,
     );
   }
 }

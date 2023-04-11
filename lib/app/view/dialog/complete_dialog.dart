@@ -70,7 +70,7 @@ class _CompleteDialogState extends State<CompleteDialog>
                 getPaddingWidget(
                   EdgeInsets.symmetric(
                       horizontal: FetchPixels.getPixelHeight(30)),
-                  getButton(context, blueColor, "Go to home", Colors.white, () {
+                  getButton(context, redColor, "Go to home", Colors.white, () {
                     Constant.navigatePush(context, HomeScreen());
                   }, 16,
                       weight: FontWeight.w600,

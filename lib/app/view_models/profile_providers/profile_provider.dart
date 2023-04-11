@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fwheirs/app/models/my_profile_model.dart';
+import 'package:fwheirs/app/models/wallet_model.dart';
 
 import '../../../base/constant.dart';
 import '../../../dependency_injection/locator.dart';
@@ -10,6 +11,7 @@ import '../../../widgets/loading_dialog.dart';
 
 class ProfileProvider extends ChangeNotifier {
   MyProfileModel myProfileInfo = MyProfileModel();
+  WalletModel myWallet = WalletModel();
 
   // Edit Profile Info
   TextEditingController firstNameController = TextEditingController();
@@ -41,7 +43,9 @@ class ProfileProvider extends ChangeNotifier {
       print("Profile Gotten Successfully");
       print("Profile Response => ${response.data}");
       var profile = response.data['data']["profile"];
+      var wallet = response.data['data']["wallet"];
       myProfileInfo = MyProfileModel.fromJson(profile);
+      myWallet = WalletModel.fromJson(wallet);
       print("myProfileInfo => $myProfileInfo");
       // investments = response.data['data'];
       notifyListeners();

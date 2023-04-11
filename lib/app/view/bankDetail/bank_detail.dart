@@ -10,7 +10,7 @@ import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/bank_model.dart';
+import '../../models/payout_account_model.dart';
 
 class BankDetail extends StatefulWidget {
   const BankDetail({Key? key}) : super(key: key);
@@ -31,105 +31,108 @@ class _BankDetailState extends State<BankDetail> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Provider.of<ReferralsProvider>(context, listen: false).getBanks(context);
+      Provider.of<ReferralsProvider>(context, listen: false)
+          .getPayoutAccounts(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
-    return WillPopScope(child: Consumer<ReferralsProvider>(
-      builder: (context, referralsProvider, _) {
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            elevation: 0,
-            centerTitle: true,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            leading: getPaddingWidget(
-              EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(18)),
-              GestureDetector(
-                child: getSvgImage("back.svg"),
-                onTap: () {
-                  Constant.backToPrev(context);
-                },
+    return WillPopScope(
+      child: Consumer<ReferralsProvider>(
+        builder: (context, referralsProvider, _) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              centerTitle: true,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              leading: getPaddingWidget(
+                EdgeInsets.symmetric(vertical: FetchPixels.getPixelHeight(18)),
+                GestureDetector(
+                  child: getSvgImage("back.svg"),
+                  onTap: () {
+                    Constant.backToPrev(context);
+                  },
+                ),
+              ),
+              title: getCustomFont(
+                "Bank Details",
+                22,
+                Theme.of(context).textTheme.bodyLarge!.color!,
+                1,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            title: getCustomFont(
-              "Bank Details",
-              22,
-              Theme.of(context).textTheme.bodyLarge!.color!,
-              1,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          body: getPaddingWidget(
-            EdgeInsets.symmetric(horizontal: horSpace),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // getVerSpace(FetchPixels.getPixelHeight(14)),
-                // appBar(context),
-                if (paymentLists.isEmpty)
-                  emptyWidget(context)
-                else
-                  Expanded(
-                      flex: 1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              getVerSpace(FetchPixels.getPixelHeight(39)),
-                              getMediumCustomFont(context, "Your banks:"),
-                              getVerSpace(FetchPixels.getPixelHeight(16)),
-                              Builder(builder: (context) {
-                                if (referralsProvider.myBanks.isNotEmpty) {
-                                  return cardList(
-                                      myBanks: referralsProvider.myBanks);
-                                } else {
-                                  return Text(
-                                    "Nothing to show, Click the button below to add bank details.",
-                                    style: TextStyle(fontSize: 18),
-                                  );
-                                }
-                              }),
-                            ],
+            body: getPaddingWidget(
+              EdgeInsets.symmetric(horizontal: horSpace),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // getVerSpace(FetchPixels.getPixelHeight(14)),
+                  // appBar(context),
+                  if (paymentLists.isEmpty)
+                    emptyWidget(context)
+                  else
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            getVerSpace(FetchPixels.getPixelHeight(39)),
+                            getMediumCustomFont(context, "Your banks:"),
+                            getVerSpace(FetchPixels.getPixelHeight(16)),
+                            Builder(builder: (context) {
+                              if (referralsProvider.payoutAccounts.isNotEmpty) {
+                                return cardList(
+                                    myBanks: referralsProvider.payoutAccounts);
+                              } else {
+                                return Text(
+                                  "Nothing to show, Click the button below to add bank details.",
+                                  style: TextStyle(fontSize: 18),
+                                );
+                              }
+                            }),
+                          ],
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: FetchPixels.getPixelHeight(30)),
+                          child: getButton(
+                            context,
+                            redColor,
+                            "Add New Bank",
+                            Colors.white,
+                            () {
+                              Constant.sendToScreen(AddBankDetail(), context);
+                            },
+                            16,
+                            weight: FontWeight.w600,
+                            borderRadius: BorderRadius.circular(
+                                FetchPixels.getPixelHeight(15)),
+                            buttonHeight: FetchPixels.getPixelHeight(60),
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: FetchPixels.getPixelHeight(30)),
-                            child: getButton(
-                              context,
-                              blueColor,
-                              "Add New Bank",
-                              Colors.white,
-                              () {
-                                Constant.sendToScreen(AddBankDetail(), context);
-                              },
-                              16,
-                              weight: FontWeight.w600,
-                              borderRadius: BorderRadius.circular(
-                                  FetchPixels.getPixelHeight(15)),
-                              buttonHeight: FetchPixels.getPixelHeight(60),
-                            ),
-                          ),
-                        ],
-                      ))
-              ],
+                        ),
+                      ],
+                    )
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        },
+      ),
+      onWillPop: () async {
+        backToPrev();
+        return false;
       },
-    ), onWillPop: () async {
-      backToPrev();
-      return false;
-    });
+    );
   }
 
-  AnimationLimiter cardList({required List<BankModel> myBanks}) {
+  AnimationLimiter cardList({required List<PayoutAccountModel> myBanks}) {
+    print(myBanks);
     return AnimationLimiter(
       child: ListView.builder(
         primary: false,
@@ -137,7 +140,7 @@ class _BankDetailState extends State<BankDetail> {
         physics: const BouncingScrollPhysics(),
         itemCount: myBanks.length,
         itemBuilder: (context, index) {
-          BankModel bankModel = myBanks[index];
+          PayoutAccountModel payoutAccountModel = myBanks[index];
           ModelPayment modelPayment = paymentLists[0];
           return AnimationConfiguration.staggeredList(
               position: index,
@@ -182,22 +185,30 @@ class _BankDetailState extends State<BankDetail> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                getMediumCustomFont(
-                                  context,
-                                  bankModel.bankName ?? "",
-                                  fontWeight: FontWeight.w600,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.9,
+                                  child: getMediumCustomFont(
+                                    context,
+                                    payoutAccountModel.bankName ?? "",
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 getVerSpace(FetchPixels.getPixelHeight(4)),
                                 getMediumCustomFont(
                                   context,
-                                  bankModel.accountNumber ?? "",
+                                  payoutAccountModel.accountNumber ?? "",
                                   fontWeight: FontWeight.w400,
                                 ),
                                 getVerSpace(FetchPixels.getPixelHeight(4)),
-                                getMediumCustomFont(
-                                  context,
-                                  bankModel.accountName ?? "",
-                                  fontWeight: FontWeight.w600,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.9,
+                                  child: getMediumCustomFont(
+                                    context,
+                                    payoutAccountModel.accountName ?? "",
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ],
                             )
@@ -208,7 +219,8 @@ class _BankDetailState extends State<BankDetail> {
                             print("Delete Bank");
                             Provider.of<ReferralsProvider>(context,
                                     listen: false)
-                                .deleteBank(context, id: "${bankModel.id}");
+                                .deleteBank(context,
+                                    id: "${payoutAccountModel.id}");
                           },
                           icon: Icon(
                             Icons.delete,
@@ -240,10 +252,10 @@ class _BankDetailState extends State<BankDetail> {
                 fontWeight: FontWeight.w400,
                 txtHeight: FetchPixels.getPixelHeight(1.3)),
             getVerSpace(FetchPixels.getPixelHeight(40)),
-            getButton(context, Colors.white, "Add Card", blueColor, () {}, 16,
+            getButton(context, Colors.white, "Add Card", redColor, () {}, 16,
                 weight: FontWeight.w600,
                 isBorder: true,
-                borderColor: blueColor,
+                borderColor: redColor,
                 borderWidth: FetchPixels.getPixelHeight(2),
                 borderRadius:
                     BorderRadius.circular(FetchPixels.getPixelHeight(14)),

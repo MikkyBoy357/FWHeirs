@@ -128,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 height: FetchPixels.getPixelHeight(24),
                                 width: FetchPixels.getPixelHeight(24),
                                 decoration: BoxDecoration(
-                                    color: (agree) ? blueColor : Colors.white,
+                                    color: (agree) ? redColor : Colors.white,
                                     border: (agree)
                                         ? null
                                         : Border.all(
@@ -184,7 +184,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               onTap: () {
                                 Constant.navigatePush(context, LoginScreen());
                               },
-                              child: getCustomFont("Login", 16, blueColor, 1,
+                              child: getCustomFont("Login", 16, redColor, 1,
                                   fontWeight: FontWeight.w600),
                             )
                           ],

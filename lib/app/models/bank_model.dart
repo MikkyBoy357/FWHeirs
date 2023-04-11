@@ -1,44 +1,70 @@
+/// name : "9 PAYMENT SOLUTIONS BANK"
+/// code : "120001"
+/// ussdTemplate : null
+/// baseUssdCode : null
+/// transferUssdTemplate : null
+
 class BankModel {
-  String? id;
-  String? userId;
-  String? bankName;
-  String? accountNumber;
-  String? accountName;
-  String? bankCode;
-  String? createdAt;
-  String? updatedAt;
-
-  BankModel(
-      {this.id,
-      this.userId,
-      this.bankName,
-      this.accountNumber,
-      this.accountName,
-      this.bankCode,
-      this.createdAt,
-      this.updatedAt});
-
-  BankModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    bankName = json['bank_name'];
-    accountNumber = json['account_number'];
-    accountName = json['account_name'];
-    bankCode = json['bank_code'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+  BankModel({
+    String? name,
+    String? code,
+    dynamic ussdTemplate,
+    dynamic baseUssdCode,
+    dynamic transferUssdTemplate,
+  }) {
+    _name = name;
+    _code = code;
+    _ussdTemplate = ussdTemplate;
+    _baseUssdCode = baseUssdCode;
+    _transferUssdTemplate = transferUssdTemplate;
   }
 
+  BankModel.fromJson(dynamic json) {
+    _name = json['name'];
+    _code = json['code'];
+    _ussdTemplate = json['ussdTemplate'];
+    _baseUssdCode = json['baseUssdCode'];
+    _transferUssdTemplate = json['transferUssdTemplate'];
+  }
+
+  String? _name;
+  String? _code;
+  dynamic _ussdTemplate;
+  dynamic _baseUssdCode;
+  dynamic _transferUssdTemplate;
+
+  BankModel copyWith({
+    String? name,
+    String? code,
+    dynamic ussdTemplate,
+    dynamic baseUssdCode,
+    dynamic transferUssdTemplate,
+  }) =>
+      BankModel(
+        name: name ?? _name,
+        code: code ?? _code,
+        ussdTemplate: ussdTemplate ?? _ussdTemplate,
+        baseUssdCode: baseUssdCode ?? _baseUssdCode,
+        transferUssdTemplate: transferUssdTemplate ?? _transferUssdTemplate,
+      );
+
+  String? get name => _name;
+
+  String? get code => _code;
+
+  dynamic get ussdTemplate => _ussdTemplate;
+
+  dynamic get baseUssdCode => _baseUssdCode;
+
+  dynamic get transferUssdTemplate => _transferUssdTemplate;
+
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['bank_name'] = this.bankName;
-    data['account_number'] = this.accountNumber;
-    data['account_name'] = this.accountName;
-    data['bank_code'] = this.bankCode;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    return data;
+    final map = <String, dynamic>{};
+    map['name'] = _name;
+    map['code'] = _code;
+    map['ussdTemplate'] = _ussdTemplate;
+    map['baseUssdCode'] = _baseUssdCode;
+    map['transferUssdTemplate'] = _transferUssdTemplate;
+    return map;
   }
 }

@@ -7,6 +7,8 @@ import 'package:fwheirs/base/widget_utils.dart';
 import 'package:fwheirs/widgets/name_text_field.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widgets/dropdown_text_field.dart';
+
 class AddBankDetail extends StatefulWidget {
   const AddBankDetail({Key? key}) : super(key: key);
 
@@ -24,6 +26,10 @@ class _AddBankDetailState extends State<AddBankDetail> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () {
+      Provider.of<ReferralsProvider>(context, listen: false).getBanks(context);
+      Provider.of<ReferralsProvider>(context, listen: false).setBankNames();
+    });
   }
 
   @override
@@ -37,7 +43,7 @@ class _AddBankDetailState extends State<AddBankDetail> {
               padding: EdgeInsets.symmetric(
                   horizontal: horSpace,
                   vertical: FetchPixels.getPixelHeight(30)),
-              child: getButton(context, blueColor, "Save", Colors.white, () {
+              child: getButton(context, redColor, "Save", Colors.white, () {
                 referralsProvider.addBank(context);
               }, 16,
                   weight: FontWeight.w600,
@@ -57,17 +63,47 @@ class _AddBankDetailState extends State<AddBankDetail> {
                       // getVerSpace(FetchPixels.getPixelHeight(29)),
                       // profileImageWidget(),
                       getVerSpace(FetchPixels.getPixelHeight(30)),
-                      NameTextField(
+                      DropDownTextField(
+                        title: "Bank Name",
+                        hasPrefixImage: false,
                         controller: referralsProvider.bankNameController,
-                        hintText: "Bank Name",
+                        hintText: 'Select Bank Name',
+                        dropDownList: referralsProvider.bankNames,
+                        onChanged: (newValue) {
+                          setState(() {
+                            // _armorcDues = newValue;
+                            referralsProvider.bankNameController.text =
+                                newValue.toString();
+                            print("newBank => $newValue");
+                            referralsProvider
+                                .setSelectedBank(newValue.toString());
+                            print(
+                                "SelectedBank => ${referralsProvider.selectedBank.name}");
+                            print(
+                                "SelectedBank CODE => ${referralsProvider.selectedBank.code}");
+                            // print(amorcDuesDropDown.indexOf(newValue));
+                            // var index = amorcDuesDropDown.indexOf(newValue);
+                            // payment.changeDuesAmount(index);
+                            // payment.calculateTotal();
+                          });
+                        },
+                        value:
+                            referralsProvider.bankNameController.text.isNotEmpty
+                                ? referralsProvider.bankNameController.text
+                                : referralsProvider.banks[0].name,
                       ),
                       getVerSpace(horSpace),
                       NumberTextField(
                         controller: referralsProvider.accountNumberController,
                         hintText: "Account Number",
+                        maxLength: 10,
+                        onChanged: (String? newValue) {
+                          referralsProvider.verifyAccount(context);
+                        },
                       ),
                       getVerSpace(horSpace),
                       NameTextField(
+                        enabled: false,
                         controller: referralsProvider.accountNameController,
                         hintText: "Account Name",
                       ),

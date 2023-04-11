@@ -56,7 +56,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   getVerSpace(FetchPixels.getPixelHeight(30)),
                   EmailTextField(controller: TextEditingController()),
                   getVerSpace(FetchPixels.getPixelHeight(30)),
-                  getButton(context, blueColor, "Submit", Colors.white, () {
+                  getButton(context, redColor, "Submit", Colors.white, () {
                     Constant.navigatePush(context, ChangePassword());
                   }, 16,
                       weight: FontWeight.w600,

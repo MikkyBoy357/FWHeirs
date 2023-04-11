@@ -1,17 +1,18 @@
 import 'dart:ui';
 
 // Color backGroundColor = "#F9FAFC".toColor();
-// Color blueColor = "#23408F".toColor();
+// Color redColor = "#23408F".toColor();
 // Color intro1Color = "#FFC8CF".toColor();
 // Color intro2Color = "#E5ECFF".toColor();
 // Color intro3Color = "#F7FBCD".toColor();
 // Color dividerColor = "#E5E8F1".toColor();
 Color textColor = "#6E768A".toColor();
 Color blueColor = "#2B66FF".toColor();
+Color redColor = "#ff472b".toColor();
 Color intro1 = "#ECF4FF".toColor();
 Color intro2 = "#FFF4EC".toColor();
 Color intro3 = "#F7ECFF".toColor();
-Color shadowColor = blueColor.withOpacity(0.10);
+Color shadowColor = redColor.withOpacity(0.10);
 Color skipColor = "#6E768A".toColor();
 Color borderColor = "#BEC4CD".toColor();
 Color containerShadow = "#E0E9F5".toColor();

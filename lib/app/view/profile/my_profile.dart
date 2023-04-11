@@ -50,7 +50,7 @@ class _MyProfileState extends State<MyProfile> {
           // bottomNavigationBar: Container(
           //   padding: EdgeInsets.symmetric(
           //       horizontal: horspace, vertical: FetchPixels.getPixelHeight(30)),
-          //   child: getButton(context, blueColor, "Edit Profile", Colors.white,
+          //   child: getButton(context, redColor, "Edit Profile", Colors.white,
           //       () {
           //     Constant.navigatePush(context, EditProfile());
           //     // Navigator.pushNamed(context, Routes.editProfileRoute)
@@ -155,7 +155,7 @@ class _MyProfileState extends State<MyProfile> {
   Align profileImageWidget() {
     return Align(
       alignment: Alignment.center,
-      child: getAssetImage("profile_photo.png",
+      child: getAssetImage("fwheirsappp.png",
           height: FetchPixels.getPixelHeight(105),
           width: FetchPixels.getPixelHeight(105)),
     );

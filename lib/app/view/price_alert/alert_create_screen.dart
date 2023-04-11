@@ -65,7 +65,7 @@ class _AlertCreateScreenState extends State<AlertCreateScreen> {
               getPaddingWidget(
                 EdgeInsets.symmetric(
                     horizontal: FetchPixels.getPixelHeight(50)),
-                getButton(context, blueColor, "Ok", Colors.white, () {
+                getButton(context, redColor, "Ok", Colors.white, () {
                   Constant.navigatePush(context, PriceAlertScreen());
                 }, 16,
                     weight: FontWeight.w600,

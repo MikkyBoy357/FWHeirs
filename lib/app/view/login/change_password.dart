@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:fwheirs/app/view/dialog/password_dialog.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
@@ -81,7 +81,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       });
                     }),
                     getVerSpace(FetchPixels.getPixelHeight(30)),
-                    getButton(context, blueColor, "Submit", Colors.white, () {
+                    getButton(context, redColor, "Submit", Colors.white, () {
                       showDialog(
                           barrierDismissible: false,
                           builder: (context) {

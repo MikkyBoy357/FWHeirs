@@ -171,8 +171,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 buttonHeight: FetchPixels.getPixelHeight(60))),
         getHorSpace(horspace),
         Expanded(
-            child: getButton(
-                context, blueColor, "Sell", Colors.white, () {}, 16,
+            child: getButton(context, redColor, "Sell", Colors.white, () {}, 16,
                 weight: FontWeight.w600,
                 borderRadius:
                     BorderRadius.circular(FetchPixels.getPixelHeight(15)),
@@ -226,7 +225,7 @@ class _DetailScreenState extends State<DetailScreen> {
               const FlSpot(11, 3.5)
             ],
             isCurved: true,
-            color: blueColor,
+            color: redColor,
             barWidth: FetchPixels.getPixelHeight(2),
             isStrokeCapRound: true,
             dotData: FlDotData(
@@ -328,7 +327,7 @@ class _DetailScreenState extends State<DetailScreen> {
         child: Text(
           text,
           style: TextStyle(
-              color: value == index ? blueColor : subtextColor,
+              color: value == index ? redColor : subtextColor,
               fontWeight: value == index ? FontWeight.w600 : FontWeight.w400,
               fontSize: 15,
               fontFamily: Constant.fontsFamily),

@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
-import 'package:flutter/material.dart';
 
 import '../dialog/complete_dialog.dart';
 
@@ -217,8 +217,8 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                             ),
                           ),
                           getVerSpace(FetchPixels.getPixelHeight(40)),
-                          getButton(
-                              context, blueColor, "Exchange", Colors.white, () {
+                          getButton(context, redColor, "Exchange", Colors.white,
+                              () {
                             showDialog(
                               builder: (context) {
                                 return const CompleteDialog();

@@ -79,7 +79,7 @@ class DropDownTextField extends StatelessWidget {
                     height: 10,
                   ),
                   items: dropDownList.map((location) {
-                    print(location.toString());
+                    // print(location.toString());
                     return DropdownMenuItem(
                       value: location,
                       child: Row(
@@ -107,7 +107,14 @@ class DropDownTextField extends StatelessWidget {
                             visible: hasPrefixImage,
                             child: getHorSpace(10),
                           ),
-                          Text(location.toString()),
+                          Expanded(
+                            child: Text(
+                              location.toString(),
+                              style: TextStyle(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                         ],
                       ),
                     );

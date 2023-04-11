@@ -7,12 +7,14 @@ import 'custom_text_field.dart';
 class NameTextField extends StatelessWidget {
   const NameTextField({
     Key? key,
+    this.enabled = true,
     required this.controller,
     this.title = 'Title',
     this.hintText = 'Name',
     this.onChanged,
   }) : super(key: key);
 
+  final bool enabled;
   final TextEditingController controller;
   final String title;
   final String hintText;
@@ -21,6 +23,7 @@ class NameTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
+      enabled: enabled,
       hintText: hintText,
       controller: controller,
       validateFunction: Validations.validateString,
@@ -33,14 +36,20 @@ class NameTextField extends StatelessWidget {
 class NumberTextField extends StatelessWidget {
   const NumberTextField({
     Key? key,
+    this.isAmountField = false,
     required this.controller,
     this.title = 'Title',
-    this.hintText = 'Name',
+    this.hintText = 'Number',
+    this.maxLength = 20,
+    this.onChanged,
   }) : super(key: key);
 
+  final bool isAmountField;
   final TextEditingController controller;
   final String title;
   final String hintText;
+  final int maxLength;
+  final void Function(String?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +59,12 @@ class NumberTextField extends StatelessWidget {
       validateFunction: Validations.validateNumber,
       textInputType: TextInputType.number,
       textInputFormatters: [
-        NumericTextFormatter(),
+        isAmountField
+            ? NumericTextFormatter()
+            : LengthLimitingTextInputFormatter(maxLength),
         LengthLimitingTextInputFormatter(20),
       ],
+      onChange: onChanged,
     );
   }
 }
