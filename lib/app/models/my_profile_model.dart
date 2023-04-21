@@ -7,6 +7,7 @@ class MyProfileModel {
   String? refCode;
   String? refBy;
   String? isActive;
+  String? isAgent;
   String? createdAt;
   String? updatedAt;
 
@@ -19,6 +20,7 @@ class MyProfileModel {
       this.refCode,
       this.refBy,
       this.isActive,
+      this.isAgent,
       this.createdAt,
       this.updatedAt});
 
@@ -31,6 +33,7 @@ class MyProfileModel {
     refCode = json['ref_code'];
     refBy = json['ref_by'];
     isActive = json['is_active'];
+    isAgent = json['is_agent'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -45,6 +48,7 @@ class MyProfileModel {
     data['ref_code'] = this.refCode;
     data['ref_by'] = this.refBy;
     data['is_active'] = this.isActive;
+    data['is_agent'] = this.isAgent;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;

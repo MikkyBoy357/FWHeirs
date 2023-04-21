@@ -64,7 +64,7 @@ class _TabProfileState extends State<TabProfile> {
                       getVerSpace(FetchPixels.getPixelHeight(20)),
                       Builder(
                         builder: (context) {
-                          if (profileProvider.myProfileInfo.isActive == "0") {
+                          if (profileProvider.myProfileInfo.isAgent == "1") {
                             return Column(
                               children: [
                                 bankDetailButton(context),

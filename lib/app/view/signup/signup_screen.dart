@@ -100,9 +100,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         getVerSpace(FetchPixels.getPixelHeight(20)),
                         NameTextField(
+                          isOptional: true,
                           controller: authProvider.refCodeController,
-                          hintText: "Referral Code",
-                          title: "Referral Code",
+                          hintText: "Agent Code (Optional)",
+                          title: "Agent Code",
                           onChanged: (String newVal) {
                             authProvider.changeNotifiers();
                           },

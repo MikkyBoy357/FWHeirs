@@ -12,9 +12,11 @@ class NameTextField extends StatelessWidget {
     this.title = 'Title',
     this.hintText = 'Name',
     this.onChanged,
+    this.isOptional = false,
   }) : super(key: key);
 
   final bool enabled;
+  final bool isOptional;
   final TextEditingController controller;
   final String title;
   final String hintText;
@@ -26,7 +28,7 @@ class NameTextField extends StatelessWidget {
       enabled: enabled,
       hintText: hintText,
       controller: controller,
-      validateFunction: Validations.validateString,
+      validateFunction: isOptional ? null : Validations.validateString,
       textInputType: TextInputType.text,
       onChange: (String? newVal) {},
     );

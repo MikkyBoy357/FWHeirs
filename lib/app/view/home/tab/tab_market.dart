@@ -10,6 +10,7 @@ import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../main.dart';
 import '../../../models/referral_model.dart';
 import '../withdraw_screen.dart';
 
@@ -38,22 +39,26 @@ class _TabMarketState extends State<TabMarket> {
 
   int length = 0;
 
+  void initFunction() {
+    Provider.of<ReferralsProvider>(context, listen: false)
+        .getReferrals(context);
+  }
+
   @override
   void initState() {
     super.initState();
     length = newTrendList.length;
     setState(() {});
     Future.delayed(Duration.zero, () {
-      Provider.of<ReferralsProvider>(context, listen: false)
-          .getReferrals(context);
+      initFunction();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
-    return Consumer<ReferralsProvider>(
-      builder: (context, referralsProvider, _) {
+    return Consumer2<ReferralsProvider, ProfileProvider>(
+      builder: (context, referralsProvider, profileProvider, _) {
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -77,83 +82,92 @@ class _TabMarketState extends State<TabMarket> {
             ],
             elevation: 0,
           ),
-          body: Column(
-            children: [
-              // getVerSpace(FetchPixels.getPixelHeight(14)),
-              // appBar(context),
-              getVerSpace(FetchPixels.getPixelHeight(23)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+          body: RefreshIndicator(
+            onRefresh: () async {
+              initFunction();
+              MyApp.setWholeAppState(context);
+            },
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Container(
-                    // height: 60,
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                    child: Text(
-                      "Join our agent program to earn some money when you refer people to our platform.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.normal,
+                  // getVerSpace(FetchPixels.getPixelHeight(14)),
+                  // appBar(context),
+                  getVerSpace(FetchPixels.getPixelHeight(23)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        // height: 60,
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        child: Text(
+                          "Join our agent program to earn some money when you refer people to our platform.",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontStyle: FontStyle.normal,
+                          ),
+                          textAlign: TextAlign.left,
+                          textScaleFactor: FetchPixels.getTextScale(),
+                        ),
                       ),
-                      textAlign: TextAlign.left,
-                      textScaleFactor: FetchPixels.getTextScale(),
-                    ),
+                      // getCustomFont("up 0.63%", 15, redColor, 1,
+                      //     fontWeight: FontWeight.w600),
+                      // getCustomFont(" in last 24h", 15, Colors.black, 1,
+                      //     fontWeight: FontWeight.w400),
+                    ],
                   ),
-                  // getCustomFont("up 0.63%", 15, redColor, 1,
-                  //     fontWeight: FontWeight.w600),
-                  // getCustomFont(" in last 24h", 15, Colors.black, 1,
-                  //     fontWeight: FontWeight.w400),
+                  // getVerSpace(FetchPixels.getPixelHeight(20)),
+                  // searchWidget(context),
+                  getVerSpace(FetchPixels.getPixelHeight(24)),
+                  categoryList(),
+                  getVerSpace(FetchPixels.getPixelHeight(24)),
+                  Builder(builder: (context) {
+                    print(Provider.of<ProfileProvider>(context)
+                        .myProfileInfo
+                        .toJson());
+                    if (select == 0) {
+                      return Column(
+                        children: [
+                          getMediumCustomFont(
+                            context,
+                            "Here is your agent code:",
+                          ),
+                          SizedBox(height: 20),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).secondaryHeaderColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              "${Provider.of<ProfileProvider>(context).myProfileInfo.refCode}",
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).secondaryHeaderColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              "Balance: ₦${profileProvider.myWallet.earning}"
+                                  .valueWithComma,
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return markettrendList(
+                        referrals: referralsProvider.referrals,
+                      );
+                    }
+                  })
                 ],
               ),
-              // getVerSpace(FetchPixels.getPixelHeight(20)),
-              // searchWidget(context),
-              getVerSpace(FetchPixels.getPixelHeight(24)),
-              categoryList(),
-              getVerSpace(FetchPixels.getPixelHeight(24)),
-              Builder(builder: (context) {
-                print(Provider.of<ProfileProvider>(context)
-                    .myProfileInfo
-                    .toJson());
-                if (select == 0) {
-                  return Column(
-                    children: [
-                      getMediumCustomFont(
-                        context,
-                        "Here is your agent code:",
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).secondaryHeaderColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          "${Provider.of<ProfileProvider>(context).myProfileInfo.refCode}",
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).secondaryHeaderColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          "Balance: ₦500000".valueWithComma,
-                        ),
-                      ),
-                    ],
-                  );
-                } else {
-                  return markettrendList(
-                    referrals: referralsProvider.referrals,
-                  );
-                }
-              })
-            ],
+            ),
           ),
           // bottomNavigationBar: Padding(
           //   padding: const EdgeInsets.all(15.0),
@@ -171,131 +185,129 @@ class _TabMarketState extends State<TabMarket> {
     );
   }
 
-  Expanded markettrendList({required List<ReferralModel> referrals}) {
-    return Expanded(
-      child: AnimationLimiter(
-        child: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.zero,
-          itemCount: referrals.length,
-          primary: false,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            ReferralModel modelTrend = referrals[index];
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 200),
-              child: SlideAnimation(
-                verticalOffset: 44.0,
-                child: FadeInAnimation(
-                  child: GestureDetector(
-                    onTap: () {
-                      // PrefData.setTrendName(modelTrend.name ?? "");
-                      // PrefData.setTrendImage(modelTrend.image ?? "");
-                      // PrefData.setTrendCurrency(modelTrend.currency ?? "");
-                      // PrefData.setTrendPrice(modelTrend.price ?? 0.00);
-                      // PrefData.setTrendProfit(modelTrend.profit ?? "");
-                      // Constant.navigatePush(context, DetailScreen());
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          top: index == 0 ? FetchPixels.getPixelHeight(5) : 0,
-                          left: horspace,
-                          right: horspace,
-                          bottom: FetchPixels.getPixelHeight(20)),
-                      padding: EdgeInsets.only(
-                          left: FetchPixels.getPixelHeight(16),
-                          right: FetchPixels.getPixelHeight(16),
-                          top: FetchPixels.getPixelHeight(16),
-                          bottom: FetchPixels.getPixelHeight(18)),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).secondaryHeaderColor,
-                          boxShadow: [
-                            BoxShadow(
-                                color: shadowColor,
-                                blurRadius: 23,
-                                offset: const Offset(0, 10))
-                          ],
-                          borderRadius: BorderRadius.circular(
-                              FetchPixels.getPixelHeight(14))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              getAssetImage("fwheirsappp.png",
-                                  height: FetchPixels.getPixelHeight(50),
-                                  width: FetchPixels.getPixelHeight(50)),
-                              getHorSpace(FetchPixels.getPixelHeight(12)),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  getMediumCustomFont(
-                                    context,
-                                    "${modelTrend.firstname} ${modelTrend.lastname}",
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  getVerSpace(FetchPixels.getPixelHeight(3)),
-                                  getMediumCustomFont(
-                                    context,
-                                    "${modelTrend.email}",
-                                    fontColor: textColor,
-                                    fontWeight: FontWeight.w400,
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          // Column(
-                          //   children: [
-                          //     getMediumCustomFont(
-                          //       context,
-                          //       "\$${modelTrend.price}",
-                          //       fontWeight: FontWeight.w600,
-                          //     ),
-                          //     getVerSpace(FetchPixels.getPixelHeight(5)),
-                          // Wrap(
-                          //   children: [
-                          //     Container(
-                          //       decoration: BoxDecoration(
-                          //           color: modelTrend.profit![0] == "-"
-                          //               ? errorbg
-                          //               : successBg,
-                          //           borderRadius: BorderRadius.circular(
-                          //               FetchPixels.getPixelHeight(21))),
-                          //       padding: EdgeInsets.symmetric(
-                          //           horizontal: FetchPixels.getPixelHeight(6),
-                          //           vertical: FetchPixels.getPixelHeight(1)),
-                          //       child: Row(
-                          //         children: [
-                          //           getSvgImage(modelTrend.profit![0] == "-"
-                          //               ? "error_icon.svg"
-                          //               : 'success_icon.svg'),
-                          //           getHorSpace(FetchPixels.getPixelHeight(4)),
-                          //           getCustomFont(
-                          //               modelTrend.profit ?? '',
-                          //               13,
-                          //               modelTrend.profit![0] == "-"
-                          //                   ? errorColor
-                          //                   : successColor,
-                          //               1,
-                          //               fontWeight: FontWeight.w400)
-                          //         ],
-                          //       ),
-                          //     )
-                          //   ],
-                          // )
-                          // ],
-                          // )
+  Widget markettrendList({required List<ReferralModel> referrals}) {
+    return AnimationLimiter(
+      child: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
+        itemCount: referrals.length,
+        primary: false,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          ReferralModel modelTrend = referrals[index];
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 200),
+            child: SlideAnimation(
+              verticalOffset: 44.0,
+              child: FadeInAnimation(
+                child: GestureDetector(
+                  onTap: () {
+                    // PrefData.setTrendName(modelTrend.name ?? "");
+                    // PrefData.setTrendImage(modelTrend.image ?? "");
+                    // PrefData.setTrendCurrency(modelTrend.currency ?? "");
+                    // PrefData.setTrendPrice(modelTrend.price ?? 0.00);
+                    // PrefData.setTrendProfit(modelTrend.profit ?? "");
+                    // Constant.navigatePush(context, DetailScreen());
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        top: index == 0 ? FetchPixels.getPixelHeight(5) : 0,
+                        left: horspace,
+                        right: horspace,
+                        bottom: FetchPixels.getPixelHeight(20)),
+                    padding: EdgeInsets.only(
+                        left: FetchPixels.getPixelHeight(16),
+                        right: FetchPixels.getPixelHeight(16),
+                        top: FetchPixels.getPixelHeight(16),
+                        bottom: FetchPixels.getPixelHeight(18)),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).secondaryHeaderColor,
+                        boxShadow: [
+                          BoxShadow(
+                              color: shadowColor,
+                              blurRadius: 23,
+                              offset: const Offset(0, 10))
                         ],
-                      ),
+                        borderRadius: BorderRadius.circular(
+                            FetchPixels.getPixelHeight(14))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            getAssetImage("fwheirsappp.png",
+                                height: FetchPixels.getPixelHeight(50),
+                                width: FetchPixels.getPixelHeight(50)),
+                            getHorSpace(FetchPixels.getPixelHeight(12)),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                getMediumCustomFont(
+                                  context,
+                                  "${modelTrend.firstname} ${modelTrend.lastname}",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                getVerSpace(FetchPixels.getPixelHeight(3)),
+                                getMediumCustomFont(
+                                  context,
+                                  "${modelTrend.email}",
+                                  fontColor: textColor,
+                                  fontWeight: FontWeight.w400,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        // Column(
+                        //   children: [
+                        //     getMediumCustomFont(
+                        //       context,
+                        //       "\$${modelTrend.price}",
+                        //       fontWeight: FontWeight.w600,
+                        //     ),
+                        //     getVerSpace(FetchPixels.getPixelHeight(5)),
+                        // Wrap(
+                        //   children: [
+                        //     Container(
+                        //       decoration: BoxDecoration(
+                        //           color: modelTrend.profit![0] == "-"
+                        //               ? errorbg
+                        //               : successBg,
+                        //           borderRadius: BorderRadius.circular(
+                        //               FetchPixels.getPixelHeight(21))),
+                        //       padding: EdgeInsets.symmetric(
+                        //           horizontal: FetchPixels.getPixelHeight(6),
+                        //           vertical: FetchPixels.getPixelHeight(1)),
+                        //       child: Row(
+                        //         children: [
+                        //           getSvgImage(modelTrend.profit![0] == "-"
+                        //               ? "error_icon.svg"
+                        //               : 'success_icon.svg'),
+                        //           getHorSpace(FetchPixels.getPixelHeight(4)),
+                        //           getCustomFont(
+                        //               modelTrend.profit ?? '',
+                        //               13,
+                        //               modelTrend.profit![0] == "-"
+                        //                   ? errorColor
+                        //                   : successColor,
+                        //               1,
+                        //               fontWeight: FontWeight.w400)
+                        //         ],
+                        //       ),
+                        //     )
+                        //   ],
+                        // )
+                        // ],
+                        // )
+                      ],
                     ),
                   ),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

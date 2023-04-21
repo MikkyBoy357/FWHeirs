@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fwheirs/app/view/home/home_screen.dart';
-import 'package:fwheirs/app/view/setting/help_screen.dart';
-import 'package:fwheirs/app/view/setting/privacy_screen.dart';
 import 'package:fwheirs/base/constant.dart';
 import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/theme/theme_manager.dart';
 import 'package:fwheirs/base/widget_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../base/color_data.dart';
 import '../price_alert/price_alert_screen.dart';
@@ -62,14 +61,14 @@ class _SettingScreenState extends State<SettingScreen> {
                                 child: FadeInAnimation(child: widget),
                               ),
                               children: [
-                                priceAlertButton(context),
-                                getVerSpace(horSpace),
-                                portfolioPriceAlertButton(),
-                                getVerSpace(horSpace),
-                                referAndEarnButton(),
-                                getVerSpace(horSpace),
-                                notificationButton(),
-                                getVerSpace(horSpace),
+                                // priceAlertButton(context),
+                                // getVerSpace(horSpace),
+                                // portfolioPriceAlertButton(),
+                                // getVerSpace(horSpace),
+                                // referAndEarnButton(),
+                                // getVerSpace(horSpace),
+                                // notificationButton(),
+                                // getVerSpace(horSpace),
                                 themeButton(
                                   switchWidget: CupertinoSwitch(
                                     value: themeProvider.themeMode ==
@@ -87,8 +86,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                 helpButton(context),
                                 getVerSpace(horSpace),
                                 privacyButton(context),
-                                getVerSpace(horSpace),
-                                rateUsButton()
+                                // getVerSpace(horSpace),
+                                // rateUsButton()
                               ],
                             ),
                           ),
@@ -146,7 +145,8 @@ class _SettingScreenState extends State<SettingScreen> {
   GestureDetector privacyButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constant.navigatePush(context, PrivacyScreen());
+        // Constant.navigatePush(context, PrivacyScreen());
+        launchUrl(Uri.parse("https://fwheirs.com/terms"));
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -182,7 +182,8 @@ class _SettingScreenState extends State<SettingScreen> {
   GestureDetector helpButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Constant.navigatePush(context, HelpScreen());
+        // Constant.navigatePush(context, HelpScreen());
+        launchUrl(Uri.parse("https://fwheirs.com/contact"));
       },
       child: Container(
         padding: EdgeInsets.symmetric(

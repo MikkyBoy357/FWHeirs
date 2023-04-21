@@ -12,6 +12,7 @@ import 'package:fwheirs/base/widget_utils.dart';
 import 'package:fwheirs/widgets/error_dialog.dart';
 import 'package:provider/provider.dart';
 
+import '../submit_revenue_screen.dart';
 import '../upscale_investment_screen.dart';
 
 class TabTransaction extends StatefulWidget {
@@ -88,7 +89,8 @@ class _TabTransactionState extends State<TabTransaction> {
                         children: [
                           currentValueWidget(),
                           getVerSpace(horspace),
-                          totalBalanceWidget(context),
+                          totalBalanceWidget(context,
+                              investment: widget.investment),
                           getVerSpace(horspace),
                           // priceAlertWidget(),
                           terminateAccountButton(
@@ -98,7 +100,7 @@ class _TabTransactionState extends State<TabTransaction> {
                             onTap: () {
                               Constant.navigatePush(
                                 context,
-                                UpscaleInvestmentScreen(
+                                SubmitRevenueScreen(
                                   investment: widget.investment,
                                 ),
                               );
@@ -199,7 +201,10 @@ class _TabTransactionState extends State<TabTransaction> {
     );
   }
 
-  Container totalBalanceWidget(BuildContext context) {
+  Container totalBalanceWidget(
+    BuildContext context, {
+    required InvestmentModel investment,
+  }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: horspace, vertical: horspace),
       decoration: BoxDecoration(
@@ -217,7 +222,8 @@ class _TabTransactionState extends State<TabTransaction> {
             fontWeight: FontWeight.w400,
           ),
           getVerSpace(FetchPixels.getPixelHeight(6)),
-          getCustomFont("₦****", 18, redColor, 1, fontWeight: FontWeight.w600),
+          getCustomFont("₦${investment.totalBalance}", 18, redColor, 1,
+              fontWeight: FontWeight.w600),
           getVerSpace(FetchPixels.getPixelHeight(20)),
           getButtonWithIcon(context, Theme.of(context).scaffoldBackgroundColor,
               "${widget.investment.broker} User's Guide", Colors.black, () {
@@ -265,7 +271,7 @@ class _TabTransactionState extends State<TabTransaction> {
                     getVerSpace(FetchPixels.getPixelHeight(6)),
                     getMediumCustomFont(
                       context,
-                      "₦****",
+                      "₦${widget.investment.currentEquity}",
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),

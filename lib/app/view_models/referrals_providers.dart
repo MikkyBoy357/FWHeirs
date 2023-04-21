@@ -14,7 +14,10 @@ class ReferralsProvider extends ChangeNotifier {
   BankModel selectedBank = BankModel();
 
   List<ReferralModel> referrals = [];
+
+  PayoutAccountModel selectedPayoutAccount = PayoutAccountModel();
   List<PayoutAccountModel> payoutAccounts = [];
+  List<String> payoutAccountIds = [];
   // List<> referralEarnings = [];
   List<BankModel> banks = [];
   List<String> bankNames = [];
@@ -28,6 +31,8 @@ class ReferralsProvider extends ChangeNotifier {
   TextEditingController bankCodeNoController = TextEditingController();
 
   // Withdrawal Request
+  TextEditingController amountController = TextEditingController();
+  TextEditingController payoutIdController = TextEditingController();
 
   void setSelectedBank(String newValue) {
     selectedBank =
@@ -41,6 +46,30 @@ class ReferralsProvider extends ChangeNotifier {
     for (var bank in banks) {
       bankNames.add(bank.name.toString());
     }
+  }
+
+  void setPayoutAccountIds() {
+    payoutAccountIds.clear();
+    for (PayoutAccountModel payacc in payoutAccounts) {
+      payoutAccountIds.add(payacc.id.toString());
+    }
+    notifyListeners();
+  }
+
+  void setSelectedPayoutAccount(String newValue) {
+    selectedPayoutAccount = payoutAccounts
+        .where((PayoutAccountModel element) => element.id == newValue)
+        .first;
+    // setMinMaxVest();
+    notifyListeners();
+  }
+
+  PayoutAccountModel getPayoutAccountFromId(String id) {
+    PayoutAccountModel payoutAccount = payoutAccounts
+        .where((PayoutAccountModel element) => element.id == id)
+        .first;
+
+    return payoutAccount;
   }
 
   Future<void> getPayoutAccounts(BuildContext context) async {
@@ -336,20 +365,29 @@ class ReferralsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> makeWithdrawal(BuildContext context,
-      {required String id}) async {
+  Future<void> makeWithdrawal(BuildContext context) async {
+    if (amountController.text.isNotEmpty && selectedPayoutAccount.id != null) {
+    } else {
+      return;
+    }
     try {
-      print('Deleting Bank...');
-      print('Deleting Bank => ${"${Constant.liveUrl}/payout-account/$id"}');
+      print('Making Withdrawal...');
+      print('Deleting Bank => ${"${Constant.liveUrl}/withdraw"}');
       showDialog(
         context: context,
         builder: (context) {
           return LoadingDialog();
         },
       );
+      var body = {
+        "amount": int.parse(amountController.text),
+        "payout_id": int.parse(selectedPayoutAccount.id ?? "0")
+      };
+      print(body);
       Dio dio = Dio();
-      var response = await dio.delete(
-        "${Constant.liveUrl}/payout-account/$id",
+      var response = await dio.post(
+        "${Constant.liveUrl}/withdraw",
+        data: body,
         options: Options(
           headers: {
             'accept': 'application/json',
@@ -359,14 +397,25 @@ class ReferralsProvider extends ChangeNotifier {
           },
         ),
       );
-      print("Bank id $id deleted Successfully");
-      print("DeleteBanks Response => ${response.data}");
-      payoutAccounts.removeWhere((element) => element.id == id);
-      print("MyBanks List => $payoutAccounts");
-      // investments = response.data['data'];
       notifyListeners();
       Navigator.of(context, rootNavigator: true).pop(context);
-      getPayoutAccounts(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          if (response.data['status'] == true) {
+            return SuccessDialog(
+              text: "${response.data['message']}",
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).pop(context);
+              },
+            );
+          } else {
+            return ErrorDialog(
+              text: "${response.data['message']}",
+            );
+          }
+        },
+      );
     } on DioError catch (e) {
       print("Error => $e");
       print(e.message);
@@ -375,7 +424,7 @@ class ReferralsProvider extends ChangeNotifier {
         context: context,
         builder: (context) {
           return ErrorDialog(
-            text: 'error: ${e.message}',
+            text: 'error: ${e.response!.data['message']}',
           );
         },
       );

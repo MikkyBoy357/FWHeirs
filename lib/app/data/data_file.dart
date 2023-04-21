@@ -55,6 +55,12 @@ class DataFile {
     ModelItem("profile.svg", "More")
   ];
 
+  static List<ModelItem> itemList2 = [
+    ModelItem("home.svg", "Home"),
+    ModelItem("exchange.svg", "History"),
+    ModelItem("profile.svg", "More")
+  ];
+
   static List<ModelPortfolio> portfolioList = [
     ModelPortfolio("btc.svg", "Exness", "-0.22", 56.33, "BTS"),
     ModelPortfolio("eth.svg", "Hantec", "+0.22", 25.56, "ETH"),

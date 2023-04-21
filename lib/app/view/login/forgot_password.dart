@@ -28,7 +28,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       builder: (context, authProvider, _) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           body: SafeArea(
             child: getPaddingWidget(
               EdgeInsets.symmetric(horizontal: FetchPixels.getPixelHeight(20)),
@@ -43,16 +43,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     },
                   ),
                   getVerSpace(FetchPixels.getPixelHeight(46)),
-                  getCustomFont("Forgot Password", 24, Colors.black, 1,
-                      fontWeight: FontWeight.w700),
+                  getMediumCustomFont(context, "Forgot Password",
+                      fontSize: 24, fontWeight: FontWeight.w700),
                   getVerSpace(FetchPixels.getPixelHeight(10)),
-                  getMultilineCustomFont(
-                      "Please enter email for forgot your password.",
-                      15,
-                      Colors.black,
-                      fontWeight: FontWeight.w400,
-                      txtHeight: FetchPixels.getPixelHeight(1.3),
-                      textAlign: TextAlign.center),
+                  getMediumCustomFont(
+                    context,
+                    "Please enter the email of your account",
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
                   getVerSpace(FetchPixels.getPixelHeight(30)),
                   EmailTextField(controller: TextEditingController()),
                   getVerSpace(FetchPixels.getPixelHeight(30)),

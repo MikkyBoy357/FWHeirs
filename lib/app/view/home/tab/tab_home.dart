@@ -176,9 +176,13 @@ class _TabHomeState extends State<TabHome> {
                                                     width: 80,
                                                     height: 80,
                                                     color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyLarge!
-                                                        .color!,
+                                                                .brightness ==
+                                                            Brightness.light
+                                                        ? Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge!
+                                                            .color!
+                                                        : Colors.white,
                                                   ),
                                                 ),
                                                 getMediumCustomFont(context,
@@ -540,16 +544,21 @@ class _TabHomeState extends State<TabHome> {
                                     padding: EdgeInsets.symmetric(
                                         vertical: 4, horizontal: 8),
                                     decoration: BoxDecoration(
-                                      color: currentInvestment.isActive == "0"
-                                          ? Colors.orange
-                                          : Colors.green,
+                                      color:
+                                          currentInvestment.status == "APPROVED"
+                                              ? Colors.orange
+                                              : currentInvestment.status ==
+                                                      "INACTIVE"
+                                                  ? redColor
+                                                  : Colors.green,
                                       borderRadius: BorderRadius.circular(9),
                                     ),
                                     child: Text(
-                                      "${currentInvestment.isActive == "0" ? "Inactive" : "Active"}",
+                                      "${currentInvestment.status}",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
                                     ),
                                   )
                                 ],

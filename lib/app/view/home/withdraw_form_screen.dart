@@ -7,9 +7,27 @@ import 'package:provider/provider.dart';
 import '../../../base/constant.dart';
 import '../../../base/resizer/fetch_pixels.dart';
 import '../../../base/widget_utils.dart';
+import '../../../widgets/dropdown_text_field.dart';
 
-class WithdrawFormScreen extends StatelessWidget {
+class WithdrawFormScreen extends StatefulWidget {
   const WithdrawFormScreen({Key? key}) : super(key: key);
+
+  @override
+  State<WithdrawFormScreen> createState() => _WithdrawFormScreenState();
+}
+
+class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Provider.of<ReferralsProvider>(context, listen: false)
+          .getPayoutAccounts(context);
+
+      Provider.of<ReferralsProvider>(context, listen: false)
+          .setPayoutAccountIds();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +71,34 @@ class WithdrawFormScreen extends StatelessWidget {
               children: [
                 NumberTextField(
                   hintText: "Amount",
-                  controller: TextEditingController(),
+                  controller: referralsProvider.amountController,
                 ),
                 getVerSpace(20),
-                NumberTextField(
-                  hintText: "Payout id",
-                  controller: TextEditingController(),
+                PayoutAccountDropDownTextField(
+                  title: "Select Payout Bank",
+                  hasPrefixImage: false,
+                  controller: referralsProvider.payoutIdController,
+                  hintText: 'Select Package',
+                  dropDownList: referralsProvider.payoutAccountIds,
+                  onChanged: (newValue) {
+                    setState(() {
+                      // _armorcDues = newValue;
+                      referralsProvider.payoutIdController.text =
+                          newValue.toString();
+                      print("newPackage => $newValue");
+                      referralsProvider
+                          .setSelectedPayoutAccount(newValue.toString());
+                      print(
+                          "SelectedPackage => ${referralsProvider.selectedPayoutAccount.id}");
+                      // print(amorcDuesDropDown.indexOf(newValue));
+                      // var index = amorcDuesDropDown.indexOf(newValue);
+                      // payment.changeDuesAmount(index);
+                      // payment.calculateTotal();
+                    });
+                  },
+                  value: referralsProvider.payoutIdController.text.isNotEmpty
+                      ? referralsProvider.payoutIdController.text
+                      : referralsProvider.payoutAccounts[0].id,
                 ),
               ],
             ),
@@ -69,7 +109,10 @@ class WithdrawFormScreen extends StatelessWidget {
               context: context,
               label: "Make Withdrawal",
               color: Colors.green,
-              onTap: () {},
+              onTap: () {
+                Provider.of<ReferralsProvider>(context, listen: false)
+                    .makeWithdrawal(context);
+              },
             ),
           ),
         );

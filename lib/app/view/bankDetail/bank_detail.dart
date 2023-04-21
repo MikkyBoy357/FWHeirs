@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fwheirs/app/data/data_file.dart';
 import 'package:fwheirs/app/models/model_payment.dart';
-import 'package:fwheirs/app/view/bankDetail/add_bank_detail.dart';
 import 'package:fwheirs/app/view_models/referrals_providers.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
@@ -11,6 +10,7 @@ import 'package:fwheirs/base/widget_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/payout_account_model.dart';
+import 'add_bank_detail.dart';
 
 class BankDetail extends StatefulWidget {
   const BankDetail({Key? key}) : super(key: key);
@@ -27,12 +27,16 @@ class _BankDetailState extends State<BankDetail> {
   var horSpace = FetchPixels.getPixelHeight(20);
   List<ModelPayment> paymentLists = DataFile.paymentList;
 
+  void initFunction() {
+    Provider.of<ReferralsProvider>(context, listen: false)
+        .getPayoutAccounts(context);
+  }
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Provider.of<ReferralsProvider>(context, listen: false)
-          .getPayoutAccounts(context);
+      initFunction();
     });
   }
 
@@ -66,59 +70,68 @@ class _BankDetailState extends State<BankDetail> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            body: getPaddingWidget(
-              EdgeInsets.symmetric(horizontal: horSpace),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // getVerSpace(FetchPixels.getPixelHeight(14)),
-                  // appBar(context),
-                  if (paymentLists.isEmpty)
-                    emptyWidget(context)
-                  else
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+            body: RefreshIndicator(
+              onRefresh: () async {
+                initFunction();
+              },
+              child: getPaddingWidget(
+                EdgeInsets.symmetric(horizontal: horSpace),
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // getVerSpace(FetchPixels.getPixelHeight(14)),
+                      // appBar(context),
+                      if (paymentLists.isEmpty)
+                        emptyWidget(context)
+                      else
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            getVerSpace(FetchPixels.getPixelHeight(39)),
-                            getMediumCustomFont(context, "Your banks:"),
-                            getVerSpace(FetchPixels.getPixelHeight(16)),
-                            Builder(builder: (context) {
-                              if (referralsProvider.payoutAccounts.isNotEmpty) {
-                                return cardList(
-                                    myBanks: referralsProvider.payoutAccounts);
-                              } else {
-                                return Text(
-                                  "Nothing to show, Click the button below to add bank details.",
-                                  style: TextStyle(fontSize: 18),
-                                );
-                              }
-                            }),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                getVerSpace(FetchPixels.getPixelHeight(39)),
+                                getMediumCustomFont(context, "Your banks:"),
+                                getVerSpace(FetchPixels.getPixelHeight(16)),
+                                Builder(builder: (context) {
+                                  if (referralsProvider
+                                      .payoutAccounts.isNotEmpty) {
+                                    return cardList(
+                                        myBanks:
+                                            referralsProvider.payoutAccounts);
+                                  } else {
+                                    return Text(
+                                      "Nothing to show, Click the button below to add bank details.",
+                                      style: TextStyle(fontSize: 18),
+                                    );
+                                  }
+                                }),
+                              ],
+                            ),
                           ],
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: FetchPixels.getPixelHeight(30)),
-                          child: getButton(
-                            context,
-                            redColor,
-                            "Add New Bank",
-                            Colors.white,
-                            () {
-                              Constant.sendToScreen(AddBankDetail(), context);
-                            },
-                            16,
-                            weight: FontWeight.w600,
-                            borderRadius: BorderRadius.circular(
-                                FetchPixels.getPixelHeight(15)),
-                            buttonHeight: FetchPixels.getPixelHeight(60),
-                          ),
-                        ),
-                      ],
-                    )
-                ],
+                        )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            bottomNavigationBar: Container(
+              padding:
+                  EdgeInsets.only(bottom: 30, top: 10, left: 20, right: 20),
+              child: getButton(
+                context,
+                redColor,
+                "Add New Bank",
+                Colors.white,
+                () {
+                  Constant.sendToScreen(AddBankDetail(), context);
+                },
+                16,
+                weight: FontWeight.w600,
+                borderRadius:
+                    BorderRadius.circular(FetchPixels.getPixelHeight(15)),
+                buttonHeight: FetchPixels.getPixelHeight(60),
               ),
             ),
           );
@@ -137,7 +150,7 @@ class _BankDetailState extends State<BankDetail> {
       child: ListView.builder(
         primary: false,
         shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: myBanks.length,
         itemBuilder: (context, index) {
           PayoutAccountModel payoutAccountModel = myBanks[index];

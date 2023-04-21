@@ -34,7 +34,7 @@ Widget getSvgImage(String image,
     BoxFit boxFit = BoxFit.contain}) {
   return SvgPicture.asset(
     Constant.assetImagePath + image,
-    // color: color ?? redColor,
+    color: color ?? redColor,
     width: width,
     height: height,
     fit: boxFit,

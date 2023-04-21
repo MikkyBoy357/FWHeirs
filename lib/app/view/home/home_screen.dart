@@ -39,7 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
     const TabMarket(),
     const TabProfile(),
   ];
+  List<Widget> tabList2 = [
+    const TabHome(),
+    // const TabTransaction(),
+    const HistoryScreen(),
+    const TabProfile(),
+  ];
   List<ModelItem> itemLists = DataFile.itemList;
+  List<ModelItem> itemLists2 = DataFile.itemList2;
 
   @override
   void initState() {
@@ -56,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<InvestmentProvider>(context, listen: false)
           .getPackages(context);
       Provider.of<ReferralsProvider>(context, listen: false).getBanks(context);
+      Provider.of<ReferralsProvider>(context, listen: false)
+          .getPayoutAccounts(context);
     });
   }
 
@@ -63,74 +72,93 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        body: tabList[position],
-        bottomNavigationBar: bottomNavigationBar(),
+      child: Consumer<ProfileProvider>(
+        builder: (context, profileProvider, _) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.white,
+            body: profileProvider.myProfileInfo.isAgent == "0"
+                ? tabList[position]
+                : tabList2[position],
+            bottomNavigationBar: bottomNavigationBar(),
+          );
+        },
       ),
     );
   }
 
-  Container bottomNavigationBar() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: FetchPixels.getPixelHeight(20)),
-      height: Platform.isAndroid
-          ? FetchPixels.getPixelHeight(66)
-          : FetchPixels.getPixelHeight(86),
-      decoration: BoxDecoration(
-        color: Theme.of(context).secondaryHeaderColor,
-        boxShadow: [
-          BoxShadow(
-              color: shadowColor, blurRadius: 23, offset: const Offset(0, -2)),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List<Widget>.generate(itemLists.length, (index) {
-          ModelItem modelItem = itemLists[index];
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                position = index;
-              });
-            },
-            child: Row(
-              children: [
-                Container(
-                  height: FetchPixels.getPixelHeight(46),
-                  width: FetchPixels.getPixelHeight(46),
-                  decoration: position == index
-                      ? BoxDecoration(
-                          color:
-                              position == index ? redColor : Colors.transparent,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                              BoxShadow(
-                                  color: shadowColor,
-                                  blurRadius: 18,
-                                  offset: const Offset(0, 9))
-                            ])
-                      : null,
-                  child: Padding(
-                    padding: EdgeInsets.all(FetchPixels.getPixelHeight(11)),
-                    child: getSvgImage(modelItem.image ?? "",
-                        color: position == index ? Colors.white : null),
-                  ),
+  Widget bottomNavigationBar() {
+    return Consumer<ProfileProvider>(
+      builder: (context, profileProvider, _) {
+        return Container(
+          padding:
+              EdgeInsets.symmetric(horizontal: FetchPixels.getPixelHeight(20)),
+          height: Platform.isAndroid
+              ? FetchPixels.getPixelHeight(66)
+              : FetchPixels.getPixelHeight(86),
+          decoration: BoxDecoration(
+            color: Theme.of(context).secondaryHeaderColor,
+            boxShadow: [
+              BoxShadow(
+                  color: shadowColor,
+                  blurRadius: 23,
+                  offset: const Offset(0, -2)),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List<Widget>.generate(
+                profileProvider.myProfileInfo.isAgent == "0"
+                    ? itemLists.length
+                    : itemLists2.length, (index) {
+              ModelItem modelItem = profileProvider.myProfileInfo.isAgent == "0"
+                  ? itemLists[index]
+                  : itemLists2[index];
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    position = index;
+                  });
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      height: FetchPixels.getPixelHeight(46),
+                      width: FetchPixels.getPixelHeight(46),
+                      decoration: position == index
+                          ? BoxDecoration(
+                              color: position == index
+                                  ? redColor
+                                  : Colors.transparent,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                  BoxShadow(
+                                      color: shadowColor,
+                                      blurRadius: 18,
+                                      offset: const Offset(0, 9))
+                                ])
+                          : null,
+                      child: Padding(
+                        padding: EdgeInsets.all(FetchPixels.getPixelHeight(11)),
+                        child: getSvgImage(modelItem.image ?? "",
+                            color: position == index ? Colors.white : null),
+                      ),
+                    ),
+                    position == index
+                        ? Row(
+                            children: [
+                              getHorSpace(FetchPixels.getPixelHeight(8)),
+                              getMediumCustomFont(context, modelItem.name ?? '')
+                            ],
+                          )
+                        : Container()
+                  ],
                 ),
-                position == index
-                    ? Row(
-                        children: [
-                          getHorSpace(FetchPixels.getPixelHeight(8)),
-                          getMediumCustomFont(context, modelItem.name ?? '')
-                        ],
-                      )
-                    : Container()
-              ],
-            ),
-          );
-        }),
-      ), // child:
+              );
+            }),
+          ), // child:
+        );
+      },
     );
   }
 }
