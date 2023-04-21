@@ -9,10 +9,20 @@ import '../../../dependency_injection/locator.dart';
 import '../../../local_storage/local_db.dart';
 import '../../../widgets/error_dialog.dart';
 import '../../../widgets/loading_dialog.dart';
+import '../../view/login/change_password.dart';
 
 class AuthProvider extends ChangeNotifier {
   // GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   // GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
+
+  // Forgot Password
+  TextEditingController changeOTPController = TextEditingController();
+  TextEditingController changePasswordController = TextEditingController();
+  TextEditingController changeConfirmPasswordController =
+      TextEditingController();
+
+  // Forgot Password
+  TextEditingController forgotEmailController = TextEditingController();
 
   // Login
   TextEditingController emailController = TextEditingController();
@@ -181,14 +191,109 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> forgotPassword(BuildContext context) async {
-    print('Forgot Password...');
-    print(passwordController.text);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return LoadingDialog();
-      },
-    );
+    try {
+      print('Forgot Password...');
+      print(forgotEmailController.text);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return LoadingDialog();
+        },
+      );
+      var body = {"email": forgotEmailController.text};
+      print(body);
+
+      Dio dio = Dio();
+      var response = await dio.post(
+        "${Constant.liveUrl}/forgotpassword",
+        data: body,
+      );
+      Navigator.of(context).pop(context);
+      print("Response => $response");
+      String resetToken = "${response.data['reset_token']}";
+      Constant.navigatePush(
+        context,
+        ChangePassword(
+          resetToken: resetToken,
+        ),
+      );
+      showDialog(
+        context: context,
+        builder: (context) {
+          return SuccessDialog(
+            onTap: () {
+              Navigator.of(context).pop(context);
+            },
+            text: "${response.data['message']}",
+          );
+        },
+      );
+    } on DioError catch (e) {
+      Navigator.of(context).pop(context);
+      print("Error => $e");
+      print(e.message);
+      print(e.response?.data);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(
+            text: "Error: ${e.response?.data['message']}",
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> changePassword(BuildContext context,
+      {required String resetToken}) async {
+    try {
+      print('Forgot Password...');
+      print(forgotEmailController.text);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return LoadingDialog();
+        },
+      );
+      var body = {
+        "otp": "759863",
+        "password": "123457",
+        "token": resetToken,
+      };
+      print(body);
+
+      Dio dio = Dio();
+      var response = await dio.post(
+        "${Constant.liveUrl}/resetpassword",
+        data: body,
+      );
+      Navigator.of(context).pop(context);
+      print("Response => $response");
+      showDialog(
+        context: context,
+        builder: (context) {
+          return SuccessDialog(
+            onTap: () {
+              Navigator.of(context).pop(context);
+            },
+            text: "${response.data['message']}",
+          );
+        },
+      );
+    } on DioError catch (e) {
+      Navigator.of(context).pop(context);
+      print("Error => $e");
+      print(e.message);
+      print(e.response?.data);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(
+            text: "Error: ${e.response?.data['message']}",
+          );
+        },
+      );
+    }
   }
 
   void logout(BuildContext context) {

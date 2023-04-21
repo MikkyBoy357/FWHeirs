@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fwheirs/app/view/login/change_password.dart';
 import 'package:fwheirs/app/view_models/auth_providers/auth_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/constant.dart';
@@ -16,11 +15,19 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  GlobalKey<FormState> forgotFormKey = GlobalKey<FormState>();
+
   void finish() {
     Constant.backToPrev(context);
   }
 
   TextEditingController emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    forgotFormKey.currentState?.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +60,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     fontWeight: FontWeight.w400,
                   ),
                   getVerSpace(FetchPixels.getPixelHeight(30)),
-                  EmailTextField(controller: TextEditingController()),
+                  Form(
+                    key: forgotFormKey,
+                    child: EmailTextField(
+                      controller: authProvider.forgotEmailController,
+                    ),
+                  ),
                   getVerSpace(FetchPixels.getPixelHeight(30)),
                   getButton(context, redColor, "Submit", Colors.white, () {
-                    Constant.navigatePush(context, ChangePassword());
+                    authProvider.forgotPassword(context);
                   }, 16,
                       weight: FontWeight.w600,
                       borderRadius:

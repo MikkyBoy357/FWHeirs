@@ -36,17 +36,14 @@ class CustomButton extends StatelessWidget {
               Radius.circular(15),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Center(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: Constant.fontsFamily,
-                ),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontFamily: Constant.fontsFamily,
               ),
             ),
           ),
