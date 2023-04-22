@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constant.dart';
-
 const COLOR_PRIMARY = Colors.deepOrangeAccent;
 const COLOR_ACCENT = Colors.orange;
 
@@ -16,14 +14,16 @@ ThemeData lightTheme = ThemeData(
       fontSize: 20,
       fontStyle: FontStyle.normal,
       color: Colors.black,
-      fontFamily: Constant.fontsFamily,
+      // fontFamily: Constant.fontsFamily,
+      fontFamily: "",
       fontWeight: FontWeight.w700,
     ),
     bodyMedium: TextStyle(
       fontSize: 16,
       fontStyle: FontStyle.normal,
       color: Colors.black,
-      fontFamily: Constant.fontsFamily,
+      // fontFamily: Constant.fontsFamily,
+      fontFamily: "",
       fontWeight: FontWeight.w500,
     ),
   ),
@@ -58,14 +58,14 @@ ThemeData darkTheme = ThemeData(
       fontSize: 20,
       fontStyle: FontStyle.normal,
       color: Colors.white,
-      fontFamily: Constant.fontsFamily,
+      // fontFamily: Constant.fontsFamily,
       fontWeight: FontWeight.w700,
     ),
     bodyMedium: TextStyle(
       fontSize: 16,
       fontStyle: FontStyle.normal,
       color: Colors.white,
-      fontFamily: Constant.fontsFamily,
+      // fontFamily: Constant.fontsFamily,
       fontWeight: FontWeight.w500,
     ),
   ),

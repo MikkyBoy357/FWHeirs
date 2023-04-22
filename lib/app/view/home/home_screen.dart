@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
-            body: profileProvider.myProfileInfo.isAgent == "0"
+            body: profileProvider.myProfileInfo.isAgent == "2"
                 ? tabList[position]
                 : tabList2[position],
             bottomNavigationBar: bottomNavigationBar(),
@@ -109,10 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List<Widget>.generate(
-                profileProvider.myProfileInfo.isAgent == "0"
+                profileProvider.myProfileInfo.isAgent == "2"
                     ? itemLists.length
                     : itemLists2.length, (index) {
-              ModelItem modelItem = profileProvider.myProfileInfo.isAgent == "0"
+              ModelItem modelItem = profileProvider.myProfileInfo.isAgent == "2"
                   ? itemLists[index]
                   : itemLists2[index];
               return GestureDetector(

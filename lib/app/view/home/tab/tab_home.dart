@@ -117,7 +117,7 @@ class _TabHomeState extends State<TabHome> {
                                               Colors.black, 1,
                                               fontWeight: FontWeight.w600),
                                           getCustomFont(
-                                              "₦${investmentProvider.totalWorth}"
+                                              "₦${investmentProvider.totalWorth}\u20A6"
                                                   .valueWithComma,
                                               24,
                                               redColor,
