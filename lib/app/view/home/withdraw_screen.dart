@@ -188,7 +188,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                               children: [
                                 getMediumCustomFont(
                                   context,
-                                  "₦${modelTrend.amount}",
+                                  "₦${modelTrend.amount}".valueWithComma,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 getVerSpace(FetchPixels.getPixelHeight(3)),
@@ -292,7 +292,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
             fontWeight: FontWeight.w400,
           ),
           getVerSpace(FetchPixels.getPixelHeight(6)),
-          getCustomFont(totalBalance, 18, redColor, 1,
+          getCustomFont(totalBalance.valueWithComma, 18, redColor, 1,
               fontWeight: FontWeight.w600),
           getVerSpace(FetchPixels.getPixelHeight(20)),
           getButtonWithIcon(context, Theme.of(context).scaffoldBackgroundColor,

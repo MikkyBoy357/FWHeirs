@@ -1,20 +1,38 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fwheirs/app/models/broker_model.dart';
+import 'package:fwheirs/app/models/due_revenue_model.dart';
 import 'package:fwheirs/app/models/investment_model.dart';
 import 'package:fwheirs/app/models/package_model.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pinput/pinput.dart';
 
 import '../../../base/constant.dart';
 import '../../../dependency_injection/locator.dart';
 import '../../../local_storage/local_db.dart';
 import '../../../widgets/error_dialog.dart';
 import '../../../widgets/loading_dialog.dart';
+import '../../models/revenue_transaction_model.dart';
 
 class InvestmentProvider extends ChangeNotifier {
   int totalWorth = 0;
 
   int minVest = 0;
   int maxVest = 0;
+
+  // File? proofImageFile;
+  // Pick Image
+  bool? loading;
+
+  // File mediaUrl;
+  File? croppedImage;
+  File? imageFile;
+  File? sampleImage;
+  String? imageName;
+  String? imageUrl;
+  final picker = ImagePicker();
 
   List<InvestmentModel> investments = [];
   List<BrokerModel> brokers = [];
@@ -23,10 +41,14 @@ class InvestmentProvider extends ChangeNotifier {
   PackageModel selectedPackage = PackageModel();
   List<String> packagesNames = [];
   List<PackageModel> packages = [];
+  List<DueRevenueModel> dueRevenues = [];
+  List<RevenueTransactionModel> revenueTransactions = [];
 
   // Upscale Investment
   GlobalKey<FormState> upscaleFormKey = GlobalKey<FormState>();
   TextEditingController upscaleAmountController = TextEditingController();
+
+  TextEditingController paidAmountController = TextEditingController();
 
   // Create Investment Package
   GlobalKey<FormState> createPlanFormKey = GlobalKey<FormState>();
@@ -35,6 +57,15 @@ class InvestmentProvider extends ChangeNotifier {
   TextEditingController packageController = TextEditingController();
   TextEditingController durationController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+
+  void changeNotifiers() {
+    notifyListeners();
+  }
+
+  void initPaidAmount() {
+    paidAmountController.setText(dueRevenues[0].dueRevenue ?? "0");
+    notifyListeners();
+  }
 
   void setMinMaxVest() {
     minVest = int.parse(selectedPackage.minVest ?? "0");
@@ -51,6 +82,58 @@ class InvestmentProvider extends ChangeNotifier {
     }
     totalWorth = _total;
     notifyListeners();
+  }
+
+  // Future<void> cropImage(PickedFile? image) async {
+  //   try {
+  //     croppedImage = (await ImageCropper().cropImage(
+  //       sourcePath: image!.path,
+  //       maxHeight: 120,
+  //       maxWidth: 120,
+  //     )) as File?;
+  //     imageFile = croppedImage;
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  pickImage({bool camera = false, BuildContext? context}) async {
+    loading = true;
+    ImageSource imageSource;
+    if (camera) {
+      imageSource = ImageSource.camera;
+    } else {
+      imageSource = ImageSource.gallery;
+    }
+    notifyListeners();
+    try {
+      print('Picking Image');
+      XFile? pickedFile = await ImagePicker().pickImage(source: imageSource);
+      imageFile = File(pickedFile?.path ?? "");
+      print(pickedFile?.path);
+      // print('Cropping Image...');
+      // await cropImage(pickedFile);
+      // print('Image Cropping Done!!');
+      // pickedFile = null;
+      // print('=====> ${imageFile!.path}');
+      // print('Uploading Image... Please Wait...');
+      // imageName = basename(imageFile!.path);
+      // await storage.ref().child('profilePic/$imageName').putFile(imageFile!);
+      // print('Image Upload Done!');
+      // imageUrl =
+      //     await storage.ref().child('profilePic/$imageName').getDownloadURL();
+      // print('IMAGE URL: $imageUrl');
+      // usersRef.doc(Constants.uid).update(
+      //   {"photoUrl": imageUrl ?? ""},
+      // );
+      notifyListeners();
+    } catch (e) {
+      loading = false;
+      notifyListeners();
+      // showInSnackBar('Cancelled', context);
+      print(e);
+      print('Cancelled');
+    }
   }
 
   Future<void> getInvestments(BuildContext context) async {
@@ -361,6 +444,88 @@ class InvestmentProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> submitRevenue(
+    BuildContext context, {
+    required InvestmentModel investment,
+  }) async {
+    try {
+      print('Submit Revenue...');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return LoadingDialog();
+        },
+      );
+      Dio dio = Dio();
+      var formData = FormData.fromMap({
+        'proof': await MultipartFile.fromFile(
+          imageFile?.path ?? "",
+          filename: "${imageFile?.path.split(Platform.pathSeparator).last}",
+        ),
+        'mintid': "${investment.id}",
+        'amount': '${paidAmountController.text}',
+      });
+      print(
+          "FileName => ${imageFile?.path.split(Platform.pathSeparator).last}");
+      print({
+        'proof': await MultipartFile.fromFile(
+          imageFile?.path ?? "",
+          filename: "${imageFile?.path.split(Platform.pathSeparator).last}",
+        ),
+        'mintid': "${investment.id}",
+        'amount': '${paidAmountController.text}',
+      });
+      dio.options.headers["Authorization"] =
+          "Bearer ${locator<AppDataBaseService>().getTokenString()}";
+      var response = await dio.post(
+        "${Constant.liveUrl}/revenue",
+        data: formData,
+        options: Options(
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization':
+                'Bearer ${locator<AppDataBaseService>().getTokenString()}',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Methods": "GET, POST",
+            "Access-Control-Allow-Credentials": "true",
+          },
+        ),
+      );
+      print("Revenue Submitted Successfully");
+      print("Revenue Submission Response => ${response.data}");
+      imageFile = null;
+      // investments = response.data['data'];
+      notifyListeners();
+      Navigator.of(context, rootNavigator: true).pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return SuccessDialog(
+            text: "${response.data['message']}",
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).pop(context);
+              Constant.backToPrev(context);
+            },
+          );
+        },
+      );
+    } on DioError catch (e) {
+      print("Error => $e");
+      print(e.message);
+      Navigator.of(context, rootNavigator: true).pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(
+            text: 'error: ${e.response?.data['message']}',
+          );
+        },
+      );
+    }
+  }
+
   void setBrokersNames() {
     brokersNames.clear();
     for (BrokerModel broker in brokers) {
@@ -516,6 +681,112 @@ class InvestmentProvider extends ChangeNotifier {
         builder: (context) {
           return ErrorDialog(
             text: 'error: ${e.message}',
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> getDueRevenue(BuildContext context, {required String id}) async {
+    try {
+      print('Getting Due Revenue...');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return LoadingDialog();
+        },
+      );
+      Dio dio = Dio();
+      dio.options.headers["Authorization"] =
+          "Bearer ${locator<AppDataBaseService>().getTokenString()}";
+      print("${Constant.liveUrl}/due-revenue/$id");
+      var response = await dio.get(
+        "${Constant.liveUrl}/due-revenue/$id",
+        options: Options(
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization':
+                'Bearer ${locator<AppDataBaseService>().getTokenString()}',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Methods": "GET, POST",
+            "Access-Control-Allow-Credentials": "true",
+          },
+        ),
+      );
+      print("DueRevenue Gotten Successfully");
+      print("GetDueRevenue Response => ${response.data}");
+      List tempRevenues = response.data['data'];
+      dueRevenues.clear();
+      for (var rev in tempRevenues) {
+        dueRevenues.add(DueRevenueModel.fromJson(rev));
+      }
+      print("DueRevenues List => $dueRevenues");
+      notifyListeners();
+      Navigator.of(context, rootNavigator: true).pop(context);
+    } on DioError catch (e) {
+      print("Error => $e");
+      print(e.message);
+      Navigator.of(context, rootNavigator: true).pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(
+            text: 'error: ${e.message}',
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> getRevenueTransactions(BuildContext context) async {
+    try {
+      print('Getting RevenueTransactions...');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return LoadingDialog();
+        },
+      );
+      Dio dio = Dio();
+      dio.options.headers["Authorization"] =
+          "Bearer ${locator<AppDataBaseService>().getTokenString()}";
+      print("${Constant.liveUrl}/revenue");
+      var response = await dio.get(
+        "${Constant.liveUrl}/revenue",
+        options: Options(
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization':
+                'Bearer ${locator<AppDataBaseService>().getTokenString()}',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Methods": "GET, POST",
+            "Access-Control-Allow-Credentials": "true",
+          },
+        ),
+      );
+      print("RevenueTransactions Gotten Successfully");
+      print("GetRevenueTransactions Response => ${response.data}");
+      List tempRevenues = response.data['data'];
+      revenueTransactions.clear();
+      for (var rev in tempRevenues) {
+        revenueTransactions.add(RevenueTransactionModel.fromJson(rev));
+      }
+      print("RevenueTransactions List => $revenueTransactions");
+      notifyListeners();
+      Navigator.of(context, rootNavigator: true).pop(context);
+    } on DioError catch (e) {
+      print("Error => $e");
+      print(e.message);
+      Navigator.of(context, rootNavigator: true).pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(
+            text: 'error: ${e.response?.data['message']}',
           );
         },
       );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fwheirs/app/models/investment_model.dart';
+import 'package:fwheirs/app/view/home/revenue_transactions_screen.dart';
 import 'package:fwheirs/app/view_models/investment_providers/investment_provider.dart';
 import 'package:fwheirs/base/color_data.dart';
 import 'package:fwheirs/base/widget_utils.dart';
@@ -9,7 +10,7 @@ import '../../../base/constant.dart';
 import '../../../base/resizer/fetch_pixels.dart';
 import '../../../widgets/name_text_field.dart';
 
-class SubmitRevenueScreen extends StatelessWidget {
+class SubmitRevenueScreen extends StatefulWidget {
   final InvestmentModel investment;
   const SubmitRevenueScreen({
     Key? key,
@@ -17,8 +18,23 @@ class SubmitRevenueScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SubmitRevenueScreen> createState() => _SubmitRevenueScreenState();
+}
+
+class _SubmitRevenueScreenState extends State<SubmitRevenueScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Provider.of<InvestmentProvider>(context, listen: false)
+          .getDueRevenue(context, id: widget.investment.id ?? "");
+      Provider.of<InvestmentProvider>(context, listen: false).initPaidAmount();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(investment.package);
+    print(widget.investment.package);
     return Consumer<InvestmentProvider>(
       builder: (context, InvestmentProvider investmentProvider, _) {
         return Scaffold(
@@ -41,7 +57,9 @@ class SubmitRevenueScreen extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Constant.navigatePush(context, RevenueTransactionsScreen());
+                },
                 icon: Icon(
                   Icons.info_outline,
                   color: redColor,
@@ -57,13 +75,51 @@ class SubmitRevenueScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   getVerSpace(20),
-                  getMediumCustomFont(context, "Expected amount: ₦333"),
+                  getMediumCustomFont(context,
+                      "Expected amount: ₦${investmentProvider.dueRevenues[0].dueRevenue ?? 0}"),
                   getMediumCustomFont(context, "Enter paid amount"),
                   getVerSpace(20),
                   NumberTextField(
                     hintText:
-                        "${int.parse(investment.vestedAmount ?? "0") + 1} - ${investmentProvider.maxVest}",
-                    controller: investmentProvider.upscaleAmountController,
+                        "${int.parse(widget.investment.vestedAmount ?? "0") + 1} - ${investmentProvider.maxVest}",
+                    controller: investmentProvider.paidAmountController,
+                    onChanged: (val) {
+                      investmentProvider.changeNotifiers();
+                    },
+                  ),
+                  getVerSpace(20),
+                  GestureDetector(
+                    onTap: () {
+                      investmentProvider.pickImage();
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: blueColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: getMediumCustomFont(context, "Upload Proof Image"),
+                    ),
+                  ),
+                  getVerSpace(20),
+                  Builder(
+                    builder: (context) {
+                      print(investmentProvider.imageFile);
+                      if (investmentProvider.imageFile != null) {
+                        return Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: blueColor,
+                            image: DecorationImage(
+                              image: FileImage(investmentProvider.imageFile!),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return SizedBox();
+                      }
+                    },
                   ),
                 ],
               ),
@@ -74,11 +130,15 @@ class SubmitRevenueScreen extends StatelessWidget {
             child: terminateAccountButton(
               context,
               label: "Submit",
-              color: Colors.green,
+              color:
+                  ((investmentProvider.paidAmountController.text.length < 4) &&
+                          investmentProvider.imageFile != null)
+                      ? Colors.grey
+                      : Colors.green,
               onTap: () {
-                investmentProvider.upscaleInvestment(
+                investmentProvider.submitRevenue(
                   context,
-                  investment: investment,
+                  investment: widget.investment,
                 );
               },
             ),

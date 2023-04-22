@@ -1,6 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fwheirs/app/data/data_file.dart';
+import 'package:fwheirs/app/models/banner_model.dart';
 import 'package:fwheirs/app/models/investment_model.dart';
 import 'package:fwheirs/app/models/model_news.dart';
 import 'package:fwheirs/app/view/home/create_plan_screen.dart';
@@ -16,6 +19,7 @@ import 'package:fwheirs/base/resizer/fetch_pixels.dart';
 import 'package:fwheirs/base/widget_utils.dart';
 import 'package:fwheirs/main.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/model_portfolio.dart';
 import '../../../models/model_trend.dart';
@@ -125,10 +129,89 @@ class _TabHomeState extends State<TabHome> {
                                     getVerSpace(FetchPixels.getPixelHeight(19)),
                                     SizedBox(
                                       height: FetchPixels.getPixelHeight(160),
-                                      child: buildPageView(),
+                                      child: CarouselSlider.builder(
+                                        options: CarouselOptions(
+                                          // autoPlay: true,
+                                          aspectRatio: 11.2 / 9,
+                                          viewportFraction: 1.0,
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          height: 160,
+                                          onPageChanged: (index, reason) {
+                                            setState(() {
+                                              profileProvider.selectedBanner =
+                                                  index;
+                                              profileProvider.changeNotifiers();
+                                            });
+                                          },
+                                        ),
+                                        itemCount: 3,
+                                        itemBuilder: (BuildContext context,
+                                            int itemIndex, int pageViewIndex) {
+                                          BannerModel currentBanner =
+                                              profileProvider
+                                                  .banners[itemIndex];
+
+                                          return GestureDetector(
+                                            onTap: () async {
+                                              print(currentBanner);
+                                              String url =
+                                                  currentBanner.link ?? "";
+                                              if (await canLaunchUrl(
+                                                  Uri.parse(url))) {
+                                                launchUrl(Uri.parse(url));
+                                              } else {
+                                                print(currentBanner.link);
+                                              }
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 15.0),
+                                              decoration: BoxDecoration(
+                                                color: Colors.amber,
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    currentBanner.image ?? "",
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                    getVerSpace(FetchPixels.getPixelHeight(17)),
-                                    indicator(),
+                                    getVerSpace(FetchPixels.getPixelHeight(15)),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: DotsIndicator(
+                                        dotsCount:
+                                            profileProvider.banners.length,
+                                        position: profileProvider.selectedBanner
+                                            .toDouble(),
+                                        decorator: DotsDecorator(
+                                          size: Size.square(9.0),
+                                          activeColor: redColor,
+                                          activeShape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                          ),
+                                          activeSize: Size(16.0, 8.0),
+                                        ),
+                                      ),
+                                    ),
+                                    // getVerSpace(FetchPixels.getPixelHeight(19)),
+                                    // SizedBox(
+                                    //   height: FetchPixels.getPixelHeight(160),
+                                    //   child: buildPageView(),
+                                    // ),
+                                    // getVerSpace(FetchPixels.getPixelHeight(17)),
+                                    // indicator(),
                                     getVerSpace(FetchPixels.getPixelHeight(24)),
                                     getPaddingWidget(
                                       EdgeInsets.symmetric(
@@ -186,7 +269,7 @@ class _TabHomeState extends State<TabHome> {
                                                   ),
                                                 ),
                                                 getMediumCustomFont(context,
-                                                    "No Investments yet")
+                                                    "No Minting Plans yet")
                                               ],
                                             ),
                                           );
@@ -600,6 +683,7 @@ class _TabHomeState extends State<TabHome> {
       onPageChanged: (value) {
         setState(() {
           selectedPage.value = value;
+          print(value);
         });
       },
       itemCount: 3,

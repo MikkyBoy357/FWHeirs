@@ -108,6 +108,7 @@ Widget getMediumCustomFont(
   double? fontSize,
   Color? fontColor,
   FontWeight? fontWeight,
+  TextDecoration? textDecoration,
 }) {
   return Text(
     text,
@@ -115,6 +116,7 @@ Widget getMediumCustomFont(
           color: fontColor,
           fontSize: fontSize,
           fontWeight: fontWeight,
+          decoration: textDecoration,
         ),
     softWrap: true,
     textScaleFactor: FetchPixels.getTextScale(),

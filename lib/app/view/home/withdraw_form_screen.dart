@@ -98,7 +98,9 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
                   },
                   value: referralsProvider.payoutIdController.text.isNotEmpty
                       ? referralsProvider.payoutIdController.text
-                      : referralsProvider.payoutAccounts[0].id,
+                      : referralsProvider.payoutAccounts.isNotEmpty
+                          ? referralsProvider.payoutAccounts[0].id
+                          : "0",
                 ),
               ],
             ),

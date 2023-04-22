@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fwheirs/app/models/banner_model.dart';
 import 'package:fwheirs/app/models/my_profile_model.dart';
 import 'package:fwheirs/app/models/wallet_model.dart';
 
@@ -13,11 +14,19 @@ class ProfileProvider extends ChangeNotifier {
   MyProfileModel myProfileInfo = MyProfileModel();
   WalletModel myWallet = WalletModel();
 
+  int selectedBanner = 0;
+
+  List<BannerModel> banners = [];
+
   // Edit Profile Info
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
+
+  void changeNotifiers() {
+    notifyListeners();
+  }
 
   Future<void> getProfileInfo(BuildContext context) async {
     try {
@@ -92,6 +101,58 @@ class ProfileProvider extends ChangeNotifier {
       myProfileInfo = MyProfileModel.fromJson(profile);
       print("myProfileInfo => $myProfileInfo");
       // investments = response.data['data'];
+      notifyListeners();
+      Navigator.of(context, rootNavigator: true).pop(context);
+    } on DioError catch (e) {
+      print("Error => $e");
+      print(e.message);
+      Navigator.of(context, rootNavigator: true).pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorDialog(
+            text: 'error: ${e.message}',
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> getBanners(BuildContext context) async {
+    try {
+      print('Getting Banners...');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return LoadingDialog();
+        },
+      );
+      Dio dio = Dio();
+      dio.options.headers["Authorization"] =
+          "Bearer ${locator<AppDataBaseService>().getTokenString()}";
+      var response = await dio.get(
+        "${Constant.liveUrl}/banner",
+        options: Options(
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization':
+                'Bearer ${locator<AppDataBaseService>().getTokenString()}',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Methods": "GET, POST",
+            "Access-Control-Allow-Credentials": "true",
+          },
+        ),
+      );
+      print("Banners Gotten Successfully");
+      print("GetBanners Response => ${response.data}");
+      List tempBanners = response.data['data'];
+      banners.clear();
+      for (var banner in tempBanners) {
+        banners.add(BannerModel.fromJson(banner));
+      }
+      print("Banners List => $banners");
       notifyListeners();
       Navigator.of(context, rootNavigator: true).pop(context);
     } on DioError catch (e) {

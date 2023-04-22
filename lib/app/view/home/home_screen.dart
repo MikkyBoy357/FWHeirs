@@ -62,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .getBrokers(context);
       Provider.of<InvestmentProvider>(context, listen: false)
           .getPackages(context);
+      Provider.of<ProfileProvider>(context, listen: false).getBanners(context);
       Provider.of<ReferralsProvider>(context, listen: false).getBanks(context);
       Provider.of<ReferralsProvider>(context, listen: false)
           .getPayoutAccounts(context);

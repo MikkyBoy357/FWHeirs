@@ -15,7 +15,9 @@ class LoadingDialog extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),
                   child: SpinKitFadingCircle(
-                    color: Colors.white,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.grey,
                     size: 50.0,
                   ),
                 ),
