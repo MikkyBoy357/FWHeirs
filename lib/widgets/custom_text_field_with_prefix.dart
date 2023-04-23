@@ -72,7 +72,7 @@ class _CustomTextFieldWithPrefixState extends State<CustomTextFieldWithPrefix> {
           ),
           child: Padding(
             padding: const EdgeInsets.only(
-              left: 15.0,
+              left: 10.0,
               right: 10,
             ),
             child: Center(
@@ -81,13 +81,13 @@ class _CustomTextFieldWithPrefixState extends State<CustomTextFieldWithPrefix> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         widget.prefixWidget,
                         Container(
                           width: (widget.width ??
                                   MediaQuery.of(context).size.width) -
-                              150,
+                              200,
                           child: TextFormField(
                             autovalidateMode: AutovalidateMode.disabled,
                             textCapitalization: TextCapitalization.sentences,

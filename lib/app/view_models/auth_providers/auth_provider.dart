@@ -15,6 +15,8 @@ class AuthProvider extends ChangeNotifier {
   // GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   // GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
+  String countryCode = "+234";
+
   // Forgot Password
   TextEditingController changeOTPController = TextEditingController();
   TextEditingController changePasswordController = TextEditingController();
@@ -37,6 +39,11 @@ class AuthProvider extends ChangeNotifier {
   TextEditingController passwordController2 = TextEditingController();
 
   void changeNotifiers() async {
+    notifyListeners();
+  }
+
+  void changeCountryCode(String val) {
+    countryCode = val;
     notifyListeners();
   }
 
@@ -95,6 +102,15 @@ class AuthProvider extends ChangeNotifier {
         );
       } else {
         print(e.response?.statusCode);
+        print(e.response?.data);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ErrorDialog(
+              text: '${e.response?.data['message']}',
+            );
+          },
+        ).then((value) => Navigator.of(context).pop(context));
       }
     }
   }
@@ -112,6 +128,7 @@ class AuthProvider extends ChangeNotifier {
       var body = {
         "firstname": firstNameController.text,
         "lastname": lastNameController.text,
+        "countryCode": countryCode,
         "phone": phoneNumberController.text,
         "referral": refCodeController.text,
         "email": emailController2.text,
