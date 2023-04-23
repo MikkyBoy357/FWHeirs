@@ -34,7 +34,7 @@ class _RevenueTransactionsScreenState extends State<RevenueTransactionsScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              "Revenue Transactions",
+              "Subscriptions",
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
@@ -138,7 +138,7 @@ class _RevenueTransactionsScreenState extends State<RevenueTransactionsScreen> {
                               children: [
                                 getMediumCustomFont(
                                   context,
-                                  "₦${modelTrend.amount}",
+                                  "Paid Amount: ₦${modelTrend.amount}",
                                   fontWeight: FontWeight.w600,
                                 ),
                                 getVerSpace(FetchPixels.getPixelHeight(3)),
@@ -152,7 +152,7 @@ class _RevenueTransactionsScreenState extends State<RevenueTransactionsScreen> {
                                     borderRadius: BorderRadius.circular(9),
                                   ),
                                   child: Text(
-                                    "${modelTrend.status}",
+                                    "${modelTrend.status == "0" ? "PENDING" : "APPROVED"}",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14),

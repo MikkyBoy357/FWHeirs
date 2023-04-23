@@ -63,7 +63,7 @@ class _TabMarketState extends State<TabMarket> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: getCustomFont(
-              "Agent",
+              "Partner",
               22,
               Theme.of(context).textTheme.bodyLarge!.color!,
               1,
@@ -101,7 +101,7 @@ class _TabMarketState extends State<TabMarket> {
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.symmetric(horizontal: 30),
                         child: Text(
-                          "Join our agent program to earn some money when you refer people to our platform.",
+                          "Join our partner program to earn some money when you refer people to our platform.",
                           style: TextStyle(
                             fontSize: 16,
                             fontStyle: FontStyle.normal,
@@ -130,7 +130,7 @@ class _TabMarketState extends State<TabMarket> {
                         children: [
                           getMediumCustomFont(
                             context,
-                            "Here is your agent code:",
+                            "Here is your partner code:",
                           ),
                           SizedBox(height: 20),
                           Container(

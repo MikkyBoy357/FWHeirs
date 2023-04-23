@@ -188,7 +188,8 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                               children: [
                                 getMediumCustomFont(
                                   context,
-                                  "₦${modelTrend.amount}".valueWithComma,
+                                  "Amount: ₦${modelTrend.amount}"
+                                      .valueWithComma,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 getVerSpace(FetchPixels.getPixelHeight(3)),
@@ -300,6 +301,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
             Constant.navigatePush(context, WithdrawFormScreen());
           }, 15,
               weight: FontWeight.w400,
+              insetsGeometrypadding: EdgeInsets.symmetric(vertical: 10),
               borderRadius:
                   BorderRadius.circular(FetchPixels.getPixelHeight(12)),
               buttonHeight: FetchPixels.getPixelHeight(48),

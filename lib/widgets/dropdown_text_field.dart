@@ -19,6 +19,8 @@ class DropDownTextField extends StatelessWidget {
   final bool hasPrefixImage;
   final Function(Object?)? onChanged;
   final value;
+  final VoidCallback? onPressed;
+
   const DropDownTextField({
     Key? key,
     required this.dropDownList,
@@ -30,6 +32,7 @@ class DropDownTextField extends StatelessWidget {
     this.obscureText = false,
     this.value,
     this.prefixImage,
+    this.onPressed,
     required this.hasPrefixImage,
   }) : super(key: key);
 
@@ -70,7 +73,7 @@ class DropDownTextField extends StatelessWidget {
                       CupertinoIcons.chevron_down,
                       size: 20,
                     ),
-                    onPressed: null,
+                    onPressed: onPressed,
                   ),
                   hint: Text(hintText),
                   style: TextStyle(
@@ -144,6 +147,8 @@ class PayoutAccountDropDownTextField extends StatelessWidget {
   final bool hasPrefixImage;
   final Function(Object?)? onChanged;
   final value;
+  final VoidCallback? onPressed;
+
   const PayoutAccountDropDownTextField({
     Key? key,
     required this.dropDownList,
@@ -156,6 +161,7 @@ class PayoutAccountDropDownTextField extends StatelessWidget {
     this.value,
     this.prefixImage,
     required this.hasPrefixImage,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -194,7 +200,7 @@ class PayoutAccountDropDownTextField extends StatelessWidget {
                       CupertinoIcons.chevron_down,
                       size: 20,
                     ),
-                    onPressed: null,
+                    onPressed: onPressed,
                   ),
                   hint: Text(hintText),
                   style: TextStyle(

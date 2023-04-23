@@ -40,7 +40,7 @@ class _SubmitRevenueScreenState extends State<SubmitRevenueScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              "Submit Revenue",
+              "Pay Subscription",
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
@@ -76,12 +76,13 @@ class _SubmitRevenueScreenState extends State<SubmitRevenueScreen> {
                 children: [
                   getVerSpace(20),
                   getMediumCustomFont(context,
-                      "Expected amount: ₦${investmentProvider.dueRevenues[0].dueRevenue ?? 0}"),
+                      "Expected amount: ₦${investmentProvider.dueRevenues.isNotEmpty ? (investmentProvider.dueRevenues[0].dueRevenue ?? 0) : 0}"),
                   getMediumCustomFont(context, "Enter paid amount"),
                   getVerSpace(20),
                   NumberTextField(
-                    hintText:
-                        "${int.parse(widget.investment.vestedAmount ?? "0") + 1} - ${investmentProvider.maxVest}",
+                    hintText: "Paid Amount",
+                    // hintText:
+                    //     "${int.parse(widget.investment.vestedAmount ?? "0") + 1} - ${investmentProvider.maxVest}",
                     controller: investmentProvider.paidAmountController,
                     onChanged: (val) {
                       investmentProvider.changeNotifiers();

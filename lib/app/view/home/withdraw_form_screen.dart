@@ -8,6 +8,7 @@ import '../../../base/constant.dart';
 import '../../../base/resizer/fetch_pixels.dart';
 import '../../../base/widget_utils.dart';
 import '../../../widgets/dropdown_text_field.dart';
+import '../../../widgets/error_dialog.dart';
 
 class WithdrawFormScreen extends StatefulWidget {
   const WithdrawFormScreen({Key? key}) : super(key: key);
@@ -74,33 +75,49 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
                   controller: referralsProvider.amountController,
                 ),
                 getVerSpace(20),
-                PayoutAccountDropDownTextField(
-                  title: "Select Payout Bank",
-                  hasPrefixImage: false,
-                  controller: referralsProvider.payoutIdController,
-                  hintText: 'Select Package',
-                  dropDownList: referralsProvider.payoutAccountIds,
-                  onChanged: (newValue) {
-                    setState(() {
-                      // _armorcDues = newValue;
-                      referralsProvider.payoutIdController.text =
-                          newValue.toString();
-                      print("newPackage => $newValue");
-                      referralsProvider
-                          .setSelectedPayoutAccount(newValue.toString());
-                      print(
-                          "SelectedPackage => ${referralsProvider.selectedPayoutAccount.id}");
-                      // print(amorcDuesDropDown.indexOf(newValue));
-                      // var index = amorcDuesDropDown.indexOf(newValue);
-                      // payment.changeDuesAmount(index);
-                      // payment.calculateTotal();
-                    });
+                GestureDetector(
+                  onTap: () {
+                    print(referralsProvider.payoutAccounts);
+                    if (referralsProvider.payoutAccounts.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ErrorDialog(
+                            text: "There are no Payout accounts yet",
+                          );
+                        },
+                      );
+                    }
                   },
-                  value: referralsProvider.payoutIdController.text.isNotEmpty
-                      ? referralsProvider.payoutIdController.text
-                      : referralsProvider.payoutAccounts.isNotEmpty
-                          ? referralsProvider.payoutAccounts[0].id
-                          : "0",
+                  child: PayoutAccountDropDownTextField(
+                    title: "Select Payout Bank",
+                    hasPrefixImage: false,
+                    controller: referralsProvider.payoutIdController,
+                    hintText: 'Select Bank',
+                    dropDownList: referralsProvider.payoutAccountIds,
+                    onPressed: () {},
+                    onChanged: (newValue) {
+                      setState(() {
+                        // _armorcDues = newValue;
+                        referralsProvider.payoutIdController.text =
+                            newValue.toString();
+                        print("newPackage => $newValue");
+                        referralsProvider
+                            .setSelectedPayoutAccount(newValue.toString());
+                        print(
+                            "SelectedPackage => ${referralsProvider.selectedPayoutAccount.id}");
+                        // print(amorcDuesDropDown.indexOf(newValue));
+                        // var index = amorcDuesDropDown.indexOf(newValue);
+                        // payment.changeDuesAmount(index);
+                        // payment.calculateTotal();
+                      });
+                    },
+                    value: referralsProvider.payoutIdController.text.isNotEmpty
+                        ? referralsProvider.payoutIdController.text
+                        : referralsProvider.payoutAccounts.isNotEmpty
+                            ? referralsProvider.payoutAccounts[0].id
+                            : "0",
+                  ),
                 ),
               ],
             ),

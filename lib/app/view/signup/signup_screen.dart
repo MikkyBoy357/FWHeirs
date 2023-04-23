@@ -102,7 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         NameTextField(
                           isOptional: true,
                           controller: authProvider.refCodeController,
-                          hintText: "Agent Code (Optional)",
+                          hintText: "Partner Code (Optional)",
                           title: "Agent Code",
                           onChanged: (String newVal) {
                             authProvider.changeNotifiers();

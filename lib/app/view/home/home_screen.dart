@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
+      Provider.of<ProfileProvider>(context, listen: false).getBanners(context);
       Provider.of<ProfileProvider>(context, listen: false)
           .getProfileInfo(context);
       Provider.of<InvestmentProvider>(context, listen: false)
@@ -62,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
           .getBrokers(context);
       Provider.of<InvestmentProvider>(context, listen: false)
           .getPackages(context);
-      Provider.of<ProfileProvider>(context, listen: false).getBanners(context);
       Provider.of<ReferralsProvider>(context, listen: false).getBanks(context);
       Provider.of<ReferralsProvider>(context, listen: false)
           .getPayoutAccounts(context);
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
-            body: profileProvider.myProfileInfo.isAgent == "2"
+            body: profileProvider.myProfileInfo.isAgent == "1"
                 ? tabList[position]
                 : tabList2[position],
             bottomNavigationBar: bottomNavigationBar(),
@@ -109,10 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List<Widget>.generate(
-                profileProvider.myProfileInfo.isAgent == "2"
+                profileProvider.myProfileInfo.isAgent == "1"
                     ? itemLists.length
                     : itemLists2.length, (index) {
-              ModelItem modelItem = profileProvider.myProfileInfo.isAgent == "2"
+              ModelItem modelItem = profileProvider.myProfileInfo.isAgent == "1"
                   ? itemLists[index]
                   : itemLists2[index];
               return GestureDetector(

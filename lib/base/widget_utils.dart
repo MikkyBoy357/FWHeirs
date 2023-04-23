@@ -108,6 +108,8 @@ Widget getMediumCustomFont(
   double? fontSize,
   Color? fontColor,
   FontWeight? fontWeight,
+  FontStyle? fontStyle,
+  TextAlign? textAlign,
   TextDecoration? textDecoration,
 }) {
   return Text(
@@ -118,7 +120,9 @@ Widget getMediumCustomFont(
           fontWeight: fontWeight,
           decoration: textDecoration,
           fontFamily: "",
+          fontStyle: fontStyle,
         ),
+    textAlign: textAlign,
     softWrap: true,
     textScaleFactor: FetchPixels.getTextScale(),
   );
@@ -265,7 +269,7 @@ Widget getButtonWithIcon(BuildContext context, Color bgColor, String text,
       margin: insetsGeometry,
       padding: insetsGeometrypadding,
       width: buttonWidth,
-      height: buttonHeight,
+      // height: 60,
       decoration: getButtonDecoration(
         bgColor,
         borderRadius: borderRadius,

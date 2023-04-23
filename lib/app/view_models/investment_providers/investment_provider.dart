@@ -368,16 +368,18 @@ class InvestmentProvider extends ChangeNotifier {
       String upscaleString = upscaleAmountController.text.replaceAll(",", "");
       int upscaleInt = int.parse(upscaleString);
       print("Amount =>  $upscaleString");
-      if (upscaleInt < (int.parse(investment.vestedAmount ?? "0") + 1) ||
-          upscaleInt > maxVest) {
+      // if (upscaleInt < (int.parse(investment.vestedAmount ?? "0") + 1) ||
+      //     upscaleInt > maxVest) {
+      if (upscaleInt <= 0) {
         return showDialog(
           context: context,
           builder: (context) {
             return ErrorDialog(
-              text: "Error: Invalid Amount\n\n"
-                      "Minimum: ${int.parse(investment.vestedAmount ?? "0") + 1}\n"
-                      "Maximum: $maxVest"
-                  .valueWithComma,
+              // text: "Error: Invalid Amount\n\n"
+              //         "Minimum: ${int.parse(investment.vestedAmount ?? "0") + 1}\n"
+              //         "Maximum: $maxVest"
+              //     .valueWithComma,
+              text: "Amount should be greater than 0",
             );
           },
         );

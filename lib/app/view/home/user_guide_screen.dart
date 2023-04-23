@@ -90,7 +90,7 @@ class _UserGuideScreenState extends State<UserGuideScreen> {
                 ),
                 getHorSpace(5),
                 getMediumCustomFont(context,
-                    "Trading Password: ${currentBroker.tradingPassword}"),
+                    "Default Password: ${widget.investment.defaultPassword ?? "Not Available"}"),
               ],
             ),
             getVerSpace(10),

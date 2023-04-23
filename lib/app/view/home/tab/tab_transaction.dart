@@ -96,7 +96,7 @@ class _TabTransactionState extends State<TabTransaction> {
                           // priceAlertWidget(),
                           terminateAccountButton(
                             context,
-                            label: "Submit Revenue",
+                            label: "Pay Subscription",
                             color: Colors.green,
                             onTap: () {
                               Constant.navigatePush(
@@ -228,7 +228,7 @@ class _TabTransactionState extends State<TabTransaction> {
               fontWeight: FontWeight.w600),
           getVerSpace(FetchPixels.getPixelHeight(20)),
           getButtonWithIcon(context, Theme.of(context).scaffoldBackgroundColor,
-              "${widget.investment.broker} User's Guide", Colors.black, () {
+              "${widget.investment.broker} Guide", Colors.black, () {
             Constant.navigatePush(
               context,
               UserGuideScreen(
@@ -236,6 +236,7 @@ class _TabTransactionState extends State<TabTransaction> {
               ),
             );
           }, 15,
+              insetsGeometrypadding: EdgeInsets.symmetric(vertical: 10),
               weight: FontWeight.w400,
               borderRadius:
                   BorderRadius.circular(FetchPixels.getPixelHeight(12)),
@@ -320,7 +321,9 @@ class _TabTransactionState extends State<TabTransaction> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          color: const Color(0xFFE7F9EF),
+                          color: (widget.investment.profitPercentage ?? 0) < 0
+                              ? Colors.redAccent.withOpacity(0.2)
+                              : Color(0xFFE7F9EF),
                           borderRadius: BorderRadius.circular(
                               FetchPixels.getPixelHeight(21))),
                       padding: EdgeInsets.symmetric(
@@ -328,10 +331,25 @@ class _TabTransactionState extends State<TabTransaction> {
                           vertical: FetchPixels.getPixelHeight(1)),
                       child: Row(
                         children: [
-                          getSvgImage("down.svg"),
-                          getHorSpace(FetchPixels.getPixelHeight(4)),
-                          getCustomFont('23.4%', 15, successColor, 1,
-                              fontWeight: FontWeight.w400)
+                          Icon(
+                            (widget.investment.profitPercentage ?? 0) < 0
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_drop_up,
+                            size: 30,
+                            color: (widget.investment.profitPercentage ?? 0) < 0
+                                ? redColor
+                                : successColor,
+                          ),
+                          getHorSpace(FetchPixels.getPixelHeight(2)),
+                          getCustomFont(
+                              '${widget.investment.profitPercentage}%',
+                              15,
+                              (widget.investment.profitPercentage ?? 0) < 0
+                                  ? redColor
+                                  : successColor,
+                              1,
+                              fontWeight: FontWeight.w400),
+                          getHorSpace(FetchPixels.getPixelHeight(5)),
                         ],
                       ),
                     )

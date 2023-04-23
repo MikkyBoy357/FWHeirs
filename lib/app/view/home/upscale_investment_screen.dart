@@ -56,8 +56,8 @@ class UpscaleInvestmentScreen extends StatelessWidget {
                   ),
                   getVerSpace(10),
                   NumberTextField(
-                    hintText:
-                        "${int.parse(investment.vestedAmount ?? "0") + 1} - ${investmentProvider.maxVest}",
+                    // hintText:
+                    //     "${int.parse(investment.vestedAmount ?? "0") + 1} - ${investmentProvider.maxVest}",
                     controller: investmentProvider.upscaleAmountController,
                   ),
                 ],

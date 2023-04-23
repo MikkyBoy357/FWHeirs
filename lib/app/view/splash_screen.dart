@@ -41,9 +41,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return WillPopScope(
         child: Scaffold(
           body: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
             color: redColor,
             child: Center(
-              child: Image.asset("assets/images/fwheirsappp_white.png"),
+              child: Image.asset("assets/images/fwheirswhite.png"),
             ),
           ),
         ),
