@@ -59,11 +59,13 @@ class NumberTextField extends StatelessWidget {
       hintText: hintText,
       controller: controller,
       validateFunction: Validations.validateNumber,
-      textInputType: TextInputType.number,
+      textInputType:
+          TextInputType.numberWithOptions(decimal: false, signed: false),
       textInputFormatters: [
         isAmountField
             ? NumericTextFormatter()
             : LengthLimitingTextInputFormatter(maxLength),
+        FilteringTextInputFormatter(new RegExp('[ -,.-]'), allow: false),
         LengthLimitingTextInputFormatter(20),
       ],
       onChange: onChanged,

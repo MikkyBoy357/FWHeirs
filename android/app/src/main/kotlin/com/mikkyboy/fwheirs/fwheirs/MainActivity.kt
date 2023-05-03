@@ -1,4 +1,4 @@
-package com.mikkyboy.fwheirs.fwheirs
+package com.fwheirs
 
 import io.flutter.embedding.android.FlutterActivity
 

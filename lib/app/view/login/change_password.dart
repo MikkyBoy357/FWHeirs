@@ -63,7 +63,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           fontSize: 24, fontWeight: FontWeight.w700),
                       getVerSpace(FetchPixels.getPixelHeight(10)),
                       getMediumCustomFont(context,
-                          "Please enter the OTP that was sent to your email and new password for change your password.",
+                          "Please enter the OTP that was sent to your email and new password to change your password.",
                           fontSize: 15, fontWeight: FontWeight.w400),
                       getVerSpace(FetchPixels.getPixelHeight(30)),
                       Column(

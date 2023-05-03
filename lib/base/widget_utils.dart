@@ -294,7 +294,7 @@ Widget getButtonWithIcon(BuildContext context, Color bgColor, String text,
                 //   fontSize: fontsize,
                 // ),
                 Container(
-                  width: MediaQuery.of(context).size.width - 135,
+                  width: MediaQuery.of(context).size.width / 1.5,
                   child: Text(
                     text,
                     overflow: TextOverflow.fade,

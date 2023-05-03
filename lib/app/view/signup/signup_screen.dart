@@ -1,4 +1,3 @@
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fwheirs/app/view/login/login_screen.dart';
 import 'package:fwheirs/app/view_models/auth_providers/auth_provider.dart';
@@ -11,6 +10,7 @@ import 'package:fwheirs/widgets/email_text_field.dart';
 import 'package:fwheirs/widgets/password_field.dart';
 import 'package:fwheirs/widgets/phone_text_field.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../base/color_data.dart';
 import '../../../widgets/name_text_field.dart';
@@ -144,10 +144,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             getHorSpace(FetchPixels.getPixelWidth(10)),
-                            getMediumCustomFont(
-                              context,
-                              "I agree with Terms & Privacy",
-                              fontWeight: FontWeight.w400,
+                            Row(
+                              children: [
+                                getMediumCustomFont(
+                                  context,
+                                  "I agree with the ",
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    launchUrl(Uri.parse(
+                                        "https://fwheirs.com/terms.html"));
+                                  },
+                                  child: getMediumCustomFont(
+                                    context,
+                                    "Terms & Privacy",
+                                    fontWeight: FontWeight.w400,
+                                    fontColor: blueColor,
+                                    textDecoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

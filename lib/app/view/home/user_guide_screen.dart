@@ -116,9 +116,12 @@ class _UserGuideScreenState extends State<UserGuideScreen> {
                 ),
                 getHorSpace(5),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     print("Android Link: ${currentBroker.androidLink}");
-                    launchUrl(Uri.parse("${currentBroker.androidLink}"));
+                    await launchUrl(
+                      Uri.parse("${currentBroker.androidLink}"),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                   child: getMediumCustomFont(
                     context,
@@ -140,11 +143,39 @@ class _UserGuideScreenState extends State<UserGuideScreen> {
                 GestureDetector(
                   onTap: () {
                     print("iOS Link: ${currentBroker.iosLink}");
-                    launchUrl(Uri.parse("${currentBroker.iosLink}"));
+                    launchUrl(
+                      Uri.parse("${currentBroker.iosLink}"),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                   child: getMediumCustomFont(
                     context,
                     "iOS Mobile App",
+                    fontColor: Colors.blue,
+                    textDecoration: TextDecoration.underline,
+                  ),
+                ),
+              ],
+            ),
+            getVerSpace(10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 7,
+                ),
+                getHorSpace(5),
+                GestureDetector(
+                  onTap: () {
+                    print("Web Link: ${currentBroker.webLink}");
+                    launchUrl(
+                      Uri.parse("${currentBroker.webLink}"),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  },
+                  child: getMediumCustomFont(
+                    context,
+                    "Visit Website",
                     fontColor: Colors.blue,
                     textDecoration: TextDecoration.underline,
                   ),

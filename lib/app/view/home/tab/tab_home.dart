@@ -129,7 +129,9 @@ class _TabHomeState extends State<TabHome> {
                                     ),
                                     getVerSpace(FetchPixels.getPixelHeight(19)),
                                     SizedBox(
-                                      height: FetchPixels.getPixelHeight(160),
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              5.5,
                                       child: CarouselSlider.builder(
                                         options: CarouselOptions(
                                           // autoPlay: true,
@@ -137,7 +139,10 @@ class _TabHomeState extends State<TabHome> {
                                           viewportFraction: 1.0,
                                           clipBehavior:
                                               Clip.antiAliasWithSaveLayer,
-                                          height: 160,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              5.5,
                                           onPageChanged: (index, reason) {
                                             setState(() {
                                               profileProvider.selectedBanner =

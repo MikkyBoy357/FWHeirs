@@ -328,6 +328,9 @@ class InvestmentProvider extends ChangeNotifier {
             text: "${response.data['message']}",
             onTap: () {
               Navigator.of(context, rootNavigator: true).pop(context);
+              Constant.backToPrev(context);
+              getInvestments(context);
+              Navigator.of(context, rootNavigator: true).pop(context);
             },
           );
         },
@@ -340,7 +343,7 @@ class InvestmentProvider extends ChangeNotifier {
         context: context,
         builder: (context) {
           return ErrorDialog(
-            text: 'error: ${e.message}',
+            text: 'error: ${e.response?.data['message']}',
           );
         },
       );
@@ -394,7 +397,10 @@ class InvestmentProvider extends ChangeNotifier {
         },
       );
       Dio dio = Dio();
-      var body = {"invest_id": investment.id.toString(), "amount": 500000};
+      var body = {
+        "invest_id": investment.id.toString(),
+        "amount": int.parse(upscaleAmountController.text)
+      };
       print(body);
       dio.options.headers["Authorization"] =
           "Bearer ${locator<AppDataBaseService>().getTokenString()}";

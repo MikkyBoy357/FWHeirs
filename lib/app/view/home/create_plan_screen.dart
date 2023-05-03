@@ -156,8 +156,8 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
                       ),
                       getVerSpace(5),
                       NumberTextField(
-                        hintText:
-                            "${investmentProvider.minVest} - ${investmentProvider.minVest}",
+                        // hintText:
+                        //     "${investmentProvider.minVest} - ${investmentProvider.minVest}",
                         controller: investmentProvider.amountController,
                       ),
                     ],

@@ -8,7 +8,7 @@
 PRODUCT_NAME = fwheirs
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.mikkyboy.fwheirs.fwheirs
+PRODUCT_BUNDLE_IDENTIFIER = com.fwheirs
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.mikkyboy.fwheirs. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.fwheirs. All rights reserved.

@@ -273,8 +273,8 @@ class AuthProvider extends ChangeNotifier {
         },
       );
       var body = {
-        "otp": "759863",
-        "password": "123457",
+        "otp": changeOTPController.text,
+        "password": changePasswordController.text,
         "token": resetToken,
       };
       print(body);
@@ -292,6 +292,8 @@ class AuthProvider extends ChangeNotifier {
           return SuccessDialog(
             onTap: () {
               Navigator.of(context).pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
             text: "${response.data['message']}",
           );
